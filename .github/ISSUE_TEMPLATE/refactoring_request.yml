@@ -1,7 +1,7 @@
 name: 🛠 리팩토링 제안
 description: 코드나 디렉토리를 리팩토링하고 싶을 때 사용하세요
 title: "🛠 제목"
-labels: ["refactoring", "documentation"]
+labels: ["refactor", "documentation"]
 assignees: []
 
 body:
