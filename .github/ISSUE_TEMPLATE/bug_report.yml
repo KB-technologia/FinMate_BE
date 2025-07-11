@@ -1,0 +1,26 @@
+name: 🐞 버그 신고
+description: 버그를 제보할 때 사용해주세요
+title: "🐞 제목"
+labels: ["bug"]
+assignees: []
+
+body:
+  - type: textarea
+    attributes:
+      label: 버그 개요
+      description: 어떤 상황에서 발생한 버그인지 작성해주세요.(가능하면 Given-When-Then 형식으로 서술해주세요.)
+      placeholder: 
+
+  - type: textarea
+    attributes:
+      label: 작업 상세 내용
+      description: 구체적인 작업 내용을 단계별로 작성해주세요.
+      placeholder: |
+        1. Todo
+        - [ ] 
+        - [ ] 
+
+  - type: textarea
+    attributes:
+      label: 참고 자료 (선택 사항)
+      description: 관련 문서, 링크, 레퍼런스 등이 있다면 적어주세요.
