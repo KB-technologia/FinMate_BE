@@ -3,6 +3,7 @@ description: 코드나 디렉토리를 리팩토링하고 싶을 때 사용하�
 title: "🛠 제목"
 labels: ["refactor", "documentation"]
 assignees: []
+projects: "KB-technologia/1"
 
 body:
   - type: textarea
