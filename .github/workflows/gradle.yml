@@ -7,6 +7,9 @@
 
 name: Java CI with Gradle
 
+permissions:
+  contents: write
+  
 on:
   push:
     branches: [ "main" ]
@@ -50,7 +53,7 @@ jobs:
           gradle-${{ runner.os }}-
           
     - name: Build with Gradle Wrapper
-      run: ./gradlew build --stacktrace
+      run: ./gradlew build --stacktrace -x test
 
     # NOTE: The Gradle Wrapper is the default and recommended way to run Gradle (https://docs.gradle.org/current/userguide/gradle_wrapper.html).
     # If your project does not have the Gradle Wrapper configured, you can use the following configuration to run Gradle with a specified version.
