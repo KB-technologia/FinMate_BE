@@ -30,6 +30,11 @@ jobs:
 
     # Configure Gradle for optimal use in GitHub Actions, including caching of downloaded dependencies.
     # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
+    - name: Debug working directory
+      run: |
+        pwd
+        ls -al
+        ls -al ./gradlew || echo "gradlew not found"
 
     - name: Cache Gradle
       uses: actions/cache@v4
@@ -42,7 +47,7 @@ jobs:
           gradle-${{ runner.os }}-
           
     - name: Build with Gradle Wrapper
-      run: ./gradlew build
+      run: ./gradlew build --stacktrace
 
     # NOTE: The Gradle Wrapper is the default and recommended way to run Gradle (https://docs.gradle.org/current/userguide/gradle_wrapper.html).
     # If your project does not have the Gradle Wrapper configured, you can use the following configuration to run Gradle with a specified version.
