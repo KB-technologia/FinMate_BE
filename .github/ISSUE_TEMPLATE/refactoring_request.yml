@@ -1,0 +1,35 @@
+name: 🛠 리팩토링 제안
+description: 코드나 디렉토리를 리팩토링하고 싶을 때 사용하세요
+title: "🛠 제목"
+labels: ["refactor", "documentation"]
+assignees: []
+projects: "KB-technologia/1"
+
+body:
+  - type: textarea
+    attributes: 
+      label: 리팩토링 설명
+      description: "리팩터링이 필요한 이유와 리팩터링할 부분을 설명해 주세요."
+      placeholder: 예) 로그인 로직이 복잡하여 가독성이 떨어지고, 유지보수가 어렵습니다.
+    
+  - type: textarea
+    attributes:
+      label: 작업 상세 내용
+      description: 구체적인 작업 내용을 단계별로 작성해주세요.
+      placeholder: |
+        1. todo
+        - [ ] todo
+        - [ ] todo
+    
+  - type: input
+    attributes:
+      label: 예상 기간
+      description: 리팩토링에 걸릴 것으로 예상되는 기간을 입력해주세요.
+      placeholder: 예) 3일, 1주
+
+  - type: textarea
+    attributes:
+      label: 참고 자료 (선택 사항)
+      description: 관련 문서, 링크, 레퍼런스 등이 있다면 적어주세요.
+      placeholder: 예) Figma 링크, API 명세서 등
+    

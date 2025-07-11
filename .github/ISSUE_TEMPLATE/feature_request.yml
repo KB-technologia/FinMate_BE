@@ -1,0 +1,35 @@
+name: ✨ 기능 제안
+description: 새로운 기능을 제안하고 싶을 때 사용하세요
+title: "[깃이모지] 제목"
+labels: ["enhancement"]
+assignees: []
+projects: "KB-technologia/1"
+
+body:
+  - type: textarea
+    attributes:
+      label: 개요
+      description: 개발하려는 기능의 개요를 작성해주세요.
+      placeholder: 예) 사용자 로그인 기능
+
+  - type: textarea
+    attributes:
+      label: 작업 상세 내용
+      description: 구체적인 작업 내용을 단계별로 작성해주세요.
+      placeholder: |
+        1. 사용자 입력값 유효성 검사
+        - [ ] 이메일 중복 확인
+        - [ ] 비밀번호 길이 확인
+        2. DB 연동
+
+  - type: input
+    attributes:
+      label: 예상 기간
+      description: 개발에 걸릴 것으로 예상되는 기간을 입력해주세요.
+      placeholder: 예) 3일, 1주
+
+  - type: textarea
+    attributes:
+      label: 참고 자료 (선택 사항)
+      description: 관련 문서, 링크, 레퍼런스 등이 있다면 적어주세요.
+      placeholder: 예) Figma 링크, API 명세서 등
