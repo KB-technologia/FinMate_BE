@@ -24,6 +24,12 @@ public class ServletConfig implements WebMvcConfigurer {
         registry
                 .addResourceHandler("/resources/**")     // url이 /resources/로 시작하는 모든 경로
                 .addResourceLocations("/resources/");    // webapp/resources/경로로 매핑
+
+        //스웨거 설정
+        registry.addResourceHandler("swagger-ui.html")
+                .addResourceLocations("classpath:/META-INF/resources/");
+        registry.addResourceHandler("/webjars/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
 
     // jsp view resolver 설정
@@ -41,8 +47,7 @@ public class ServletConfig implements WebMvcConfigurer {
     //	Servlet 3.0 파일 업로드 사용시
     @Bean
     public MultipartResolver multipartResolver() {
-        StandardServletMultipartResolver resolver = new StandardServletMultipartResolver();
-        return resolver;
+        return new StandardServletMultipartResolver();
     }
 
 
