@@ -1,4 +1,4 @@
-package org.scoula.exception;
+package org.finmate.exception;
 
 
 import lombok.extern.log4j.Log4j2;

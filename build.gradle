@@ -3,7 +3,7 @@ plugins {
     id 'war'
 }
 
-group 'org.scoula'
+group 'org.finmate'
 version '1.0-SNAPSHOT'
 
 repositories {

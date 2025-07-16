@@ -1,4 +1,4 @@
-package org.scoula.config;
+package org.finmate.config;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;

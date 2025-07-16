@@ -1,4 +1,4 @@
-package org.scoula.controller;
+package org.finmate.controller;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;

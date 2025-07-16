@@ -1,4 +1,4 @@
-package org.scoula.config;
+package org.finmate.config;
 
 import lombok.extern.log4j.Log4j2;
 import org.apache.ibatis.session.SqlSession;

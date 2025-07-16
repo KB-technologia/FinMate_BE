@@ -1,4 +1,4 @@
-package org.scoula.config;
+package org.finmate.config;
 
 
 import org.springframework.context.annotation.Bean;
@@ -14,8 +14,8 @@ import org.springframework.web.servlet.view.JstlView;
 
 @EnableWebMvc
 @ComponentScan(basePackages = {
-        "org.scoula.exception",
-        "org.scoula.controller"
+        "org.finmate.exception",
+        "org.finmate.controller"
 })
 public class ServletConfig implements WebMvcConfigurer {
 

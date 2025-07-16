@@ -1,4 +1,4 @@
-package org.scoula.mapper;
+package org.finmate.mapper;
 
 import org.apache.ibatis.annotations.Select;
 

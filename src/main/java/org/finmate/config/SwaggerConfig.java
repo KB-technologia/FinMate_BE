@@ -1,4 +1,4 @@
-package org.scoula.config;
+package org.finmate.config;
 
 
 import org.springframework.context.annotation.Bean;
