@@ -79,3 +79,20 @@ $git checkout -b feature/board-details
 
 ---
 
+### 💡 이슈 작성 팁
+
+- 이슈 마지막 줄 그림
+
+<img width="777" height="135" alt="image" src="https://github.com/user-attachments/assets/41737f70-caf5-45fb-b205-a793f58eb4aa" />
+
+- `assignee` -> 자기 자신 혹은 같이 하시는분 등록
+- `label & issue type` -> 이슈의 타입 또는 속성(예시 : 개발일 경우 enhancement)
+
+<img width="424" height="642" alt="image" src="https://github.com/user-attachments/assets/0d7e5462-1cd2-4ef3-84d9-fc41e633478e" />
+
+- 여기서 프로젝트에 자세한 내용 기입
+- `priority` -> 우선순위(낮을 수록 우선순위가 높음)
+- `size` -> 개발 기능의 크기
+- `estimate` -> 개발 작업 예측량 ex) 3h 3d
+- `iteration` -> 스프린트, 짧은 기간 동안 목표를 정해 집중해서 작업하는 개발 주기
+- `start & end day` -> 개발 기간
