@@ -65,11 +65,11 @@
 ### 로컬 실행
 ```
 # 프로젝트 클론
-git clone https://github.com/your-org/finmate-backend.git
-cd finmate-backend
+git clone https://github.com/KB-technologia/FinMate_BE.git
+cd FinMate_BE
 
 # DB 세팅
-# (MySQL에 schema.sql 실행)
+# (MySQL에 database.sql 실행)
 
 # 빌드 및 실행
 ./gradlew build
@@ -80,7 +80,7 @@ java -jar build/libs/finmate-backend.jar
 - DB 접속 정보
 - OpenAI API 키
 - 외부 API 키들
-- `.env` 파일 또는 환경에 설정
+- `.env` 파일 또는 로컬 환경에 설정
 
 # 📄 API 문서
 Swagger UI: `/swagger-ui.html`
