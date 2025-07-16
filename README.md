@@ -62,18 +62,16 @@
 
 
 # 📁 설치 및 실행
-
-# 프로젝트 클론
+### 로컬 실행
 ```
+# 프로젝트 클론
 git clone https://github.com/your-org/finmate-backend.git
 cd finmate-backend
-```
 
 # DB 세팅
 # (MySQL에 schema.sql 실행)
 
 # 빌드 및 실행
-```
 ./gradlew build
 java -jar build/libs/finmate-backend.jar
 ```
