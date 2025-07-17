@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/product")
@@ -23,6 +25,16 @@ public class ProductController {
     private final ProductService productService;
 
     //TODO: 전체 상품 API 구현
+    @ApiOperation(value = "금융 상품 전체 보기", notes = "전체 금융 상품을 불러오는 API")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "성공적으로 요청이 처리되었습니다.", response = ProductDTO.class),
+            @ApiResponse(code = 400, message = "잘못된 요청입니다."),
+            @ApiResponse(code = 500, message = "서버에서 오류가 발생했습니다.")
+    })
+    @GetMapping
+    public ResponseEntity<List<ProductDTO<?>>> getAllProducts() {
+        return ResponseEntity.ok(productService.getAllProducts());
+    }
 
     @ApiOperation(value = "금융 상품 상세 보기", notes = "금융 상품 ID로 상세 정보를 불러오는 API")
     @ApiResponses(value = {

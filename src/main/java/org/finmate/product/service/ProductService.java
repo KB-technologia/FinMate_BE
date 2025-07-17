@@ -1,8 +1,11 @@
 package org.finmate.product.service;
 
 import org.finmate.product.dto.ProductDTO;
-import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 public interface ProductService {
     ProductDTO getProductDetail(Long id);
+
+    List<ProductDTO<?>> getAllProducts();
 }
