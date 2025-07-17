@@ -4,7 +4,6 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="org.finmate.member.mapper.MyPageMapper">
-
     <select id="findMyPageInfo" resultType="org.finmate.member.dto.MyPageResponseDto">
         SELECT
             u.account_id AS accountId,
@@ -15,5 +14,14 @@
                  JOIN animal_character ac ON ui.animal_id = ac.id
         WHERE u.id = #{userId}
     </select>
+
+    <update id="updateMyPageInfo">
+        UPDATE user
+        SET
+            password = #{password},
+            email = #{email},
+            birth = #{birth}
+        WHERE id = #{userId}
+    </update>
 
 </mapper>
