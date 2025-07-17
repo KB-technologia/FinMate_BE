@@ -18,6 +18,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @PropertySource({"classpath:/application.properties"})
+@ComponentScan(basePackages = {"org.finmate.product.service"})
 @MapperScan(basePackages = {
         "org.finmate.assessment.mapper",
 })
