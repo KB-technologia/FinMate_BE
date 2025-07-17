@@ -14,6 +14,8 @@ ext {
     junitVersion = '5.10.2'
     springVersion = '5.3.37'
     lombokVersion = '1.18.30'
+
+    springSecurityVersion='5.8.13'
 }
 
 sourceCompatibility = '1.17'
@@ -81,6 +83,12 @@ dependencies {
     //Swagger 의존성 추가
     implementation 'io.springfox:springfox-swagger2:2.9.2'
     implementation 'io.springfox:springfox-swagger-ui:2.9.2'
+
+    // 보안
+    implementation("org.springframework.security:spring-security-web:${springSecurityVersion}")
+    implementation("org.springframework.security:spring-security-config:${springSecurityVersion}")
+    implementation("org.springframework.security:spring-security-core:${springSecurityVersion}")
+    implementation("org.springframework.security:spring-security-taglibs:${springSecurityVersion}")
 
 
     // 테스트
