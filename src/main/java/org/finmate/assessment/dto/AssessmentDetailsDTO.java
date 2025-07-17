@@ -13,7 +13,7 @@ public class AssessmentDetailsDTO {
     private String content;
 
     @ApiModelProperty(value = "점수", example = "2")
-    private int score;
+    private Integer score;
 
     @ApiModelProperty(value = "태그", example = "균형형")
     private String tag;
