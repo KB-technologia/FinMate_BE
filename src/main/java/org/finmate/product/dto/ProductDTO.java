@@ -91,15 +91,12 @@ public class ProductDTO<T> {
 
         switch (vo.getProductType()) {
             case DEPOSIT -> {
-                log.info(1);
                 return builder.detail(vo.getDeposit()).build();
             }
             case SAVINGS -> {
-                log.info(vo.getSavings());
                 return builder.detail(vo.getSavings()).build();
             }
             case FUND -> {
-                log.info(vo.getFund());
                 return builder.detail(vo.getFund()).build();
             }
             default -> throw new IllegalArgumentException("Unknown type");
