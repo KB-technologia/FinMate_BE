@@ -132,9 +132,9 @@
             f.return_rate_6m AS f_return_rate_6m
 
         FROM financial_product p
-                 LEFT JOIN product_deposit d ON p.id = d.id
-                 LEFT JOIN product_savings s ON p.id = s.id
-                 LEFT JOIN product_fund f ON p.id = f.id
+                 LEFT JOIN product_deposit d ON p.id = d.product_id
+                 LEFT JOIN product_savings s ON p.id = s.product_id
+                 LEFT JOIN product_fund f ON p.id = f.product_id
         WHERE p.id = #{id}
     </select>
 
