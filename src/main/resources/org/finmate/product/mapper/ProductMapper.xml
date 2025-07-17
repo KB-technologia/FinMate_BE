@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.finmate.product.mapper.ProductMapper">
+
+    <resultMap id="ProductWithType" type="ProductVO">
+        <!-- ProductVO -->
+        <id property="id" column="p_id"/>
+        <result property="name" column="p_name"/>
+        <result property="bankName" column="p_bank_name"/>
+        <result property="productType" column="p_product_type"/>
+        <result property="riskLevel" column="p_risk_level"/>
+        <result property="expectedReturn" column="p_expected_return"/>
+        <result property="minAmount" column="p_min_amount"/>
+        <result property="maxAmount" column="p_max_amount"/>
+        <result property="term" column="p_term"/>
+        <result property="createdAt" column="p_created_at"/>
+        <result property="updatedAt" column="p_updated_at"/>
+        <result property="adventureScore" column="p_adventure_score"/>
+        <result property="valueTag" column="p_value_tag"/>
+        <result property="speedTag" column="p_speed_tag"/>
+        <result property="strategyTag" column="p_strategy_tag"/>
+        <result property="minFinanceScore" column="p_min_finance_score"/>
+
+        <!-- DepositVO -->
+        <association property="deposit" javaType="DepositVO" columnPrefix="d_">
+            <id property="id" column="id"/>
+            <result property="productId" column="product_id"/>
+            <result property="interestRate" column="interest_rate"/>
+            <result property="isFlexible" column="is_flexible"/>
+            <result property="earlyWithdrawalPenalty" column="early_withdrawal_penalty"/>
+            <result property="interestType" column="interest_type"/>
+            <result property="baseRate" column="base_rate"/>
+            <result property="bonusRate" column="bonus_rate"/>
+            <result property="compoundingPeriod" column="compounding_period"/>
+        </association>
+
+        <!-- SavingsVO -->
+        <association property="savings" javaType="SavingsVO" columnPrefix="s_">
+            <id property="id" column="id"/>
+            <result property="productId" column="product_id"/>
+            <result property="interestRate" column="interest_rate"/>
+            <result property="isFlexible" column="is_flexible"/>
+            <result property="paymentCycle" column="payment_cycle"/>
+            <result property="maxMonthlyPayment" column="max_monthly_payment"/>
+            <result property="earlyWithdrawalPenalty" column="early_withdrawal_penalty"/>
+            <result property="interestType" column="interest_type"/>
+            <result property="baseRate" column="base_rate"/>
+            <result property="bonusRate" column="bonus_rate"/>
+            <result property="compoundingPeriod" column="compounding_period"/>
+        </association>
+
+        <!-- FundVO -->
+        <association property="fund" javaType="FundVO" columnPrefix="f_">
+            <id property="id" column="id"/>
+            <result property="productId" column="product_id"/>
+            <result property="fundType" column="fund_type"/>
+            <result property="manager" column="manager"/>
+            <result property="inceptionDate" column="inception_date"/>
+            <result property="nav" column="nav"/>
+            <result property="aum" column="aum"/>
+            <result property="expenseRatio" column="expense_ratio"/>
+            <result property="sharpeRatio" column="sharpe_ratio"/>
+            <result property="regions" column="regions"/>
+            <result property="sectors" column="sectors"/>
+            <result property="redemptionPeriod" column="redemption_period"/>
+            <result property="riskGrade" column="risk_grade"/>
+            <result property="returnRate1m" column="return_rate_1m"/>
+            <result property="returnRate3m" column="return_rate_3m"/>
+            <result property="returnRate6m" column="return_rate_6m"/>
+        </association>
+    </resultMap>
+    <select id="getProductDetail" resultMap="ProductWithType">
+
+        SELECT
+            p.id AS p_id,
+            p.name AS p_name,
+            p.bank_name AS p_bank_name,
+            p.product_type AS p_product_type,
+            p.risk_level AS p_risk_level,
+            p.expected_return AS p_expected_return,
+            p.min_amount AS p_min_amount,
+            p.max_amount AS p_max_amount,
+            p.term AS p_term,
+            p.created_at AS p_created_at,
+            p.updated_at AS p_updated_at,
+            p.adventure_score AS p_adventure_score,
+            p.value_tag AS p_value_tag,
+            p.speed_tag AS p_speed_tag,
+            p.strategy_tag AS p_strategy_tag,
+            p.min_finance_score AS p_min_finance_score,
+
+            d.id AS d_id,
+            d.product_id AS d_product_id,
+            d.interest_rate AS d_interest_rate,
+            d.is_flexible AS d_is_flexible,
+            d.early_withdrawal_penalty AS d_early_withdrawal_penalty,
+            d.interest_type AS d_interest_type,
+            d.base_rate AS d_base_rate,
+            d.bonus_rate AS d_bonus_rate,
+            d.compounding_period AS d_compounding_period,
+
+            s.id AS s_id,
+            s.product_id AS s_product_id,
+            s.interest_rate AS s_interest_rate,
+            s.is_flexible AS s_is_flexible,
+            s.payment_cycle AS s_payment_cycle,
+            s.max_monthly_payment AS s_max_monthly_payment,
+            s.early_withdrawal_penalty AS s_early_withdrawal_penalty,
+            s.interest_type AS s_interest_type,
+            s.base_rate AS s_base_rate,
+            s.bonus_rate AS s_bonus_rate,
+            s.compounding_period AS s_compounding_period,
+
+            f.id AS f_id,
+            f.product_id AS f_product_id,
+            f.fund_type AS f_fund_type,
+            f.manager AS f_manager,
+            f.inception_date AS f_inception_date,
+            f.nav AS f_nav,
+            f.aum AS f_aum,
+            f.expense_ratio AS f_expense_ratio,
+            f.sharpe_ratio AS f_sharpe_ratio,
+            f.regions AS f_regions,
+            f.sectors AS f_sectors,
+            f.redemption_period AS f_redemption_period,
+            f.risk_grade AS f_risk_grade,
+            f.return_rate_1m AS f_return_rate_1m,
+            f.return_rate_3m AS f_return_rate_3m,
+            f.return_rate_6m AS f_return_rate_6m
+
+        FROM financial_product p
+                 LEFT JOIN product_deposit d ON p.id = d.product_id
+                 LEFT JOIN product_savings s ON p.id = s.product_id
+                 LEFT JOIN product_fund f ON p.id = f.product_id
+        WHERE p.id = #{id}
+    </select>
+
+
+</mapper>
