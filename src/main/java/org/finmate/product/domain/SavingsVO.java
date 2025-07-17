@@ -22,6 +22,4 @@ public class SavingsVO {
     private Double bonusRate;
     private CompoundingPeriod compoundingPeriod;
 
-    //product 1:1
-    private ProductVO product;
 }

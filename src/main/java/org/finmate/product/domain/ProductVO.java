@@ -29,6 +29,10 @@ public class ProductVO {
     private String strategyTag;
     private Integer minFinanceScore;
 
+    private DepositVO deposit;
+    private SavingsVO savings;
+    private FundVO fund;
+
     public static ProductVO of(String name, String bankName, ProductType productType) {
         return builder()
                 .name(name)

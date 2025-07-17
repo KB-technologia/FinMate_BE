@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Data
 @Builder
@@ -30,6 +29,4 @@ public class FundVO {
     private Double returnRate1m;
     private Double returnRate3m;
     private Double returnRate6m;
-
-    private ProductVO product;
 }
