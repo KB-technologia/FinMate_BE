@@ -1,4 +1,4 @@
-package org.finmate.auth.security.config;
+package org.finmate.security.config;
 
 import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 
