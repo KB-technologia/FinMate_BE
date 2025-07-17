@@ -30,6 +30,7 @@ import javax.sql.DataSource;
         "org.finmate.assessment.service",
         "org.finmate.product.service"
 })
+
 public class RootConfig {
     @Value("${jdbc.driver}")
     String driver;
