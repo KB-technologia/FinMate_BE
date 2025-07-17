@@ -1,5 +1,7 @@
 package org.finmate.product.mapper;
 
-public interface ProductMapper {
+import org.finmate.product.domain.ProductVO;
 
+public interface ProductMapper {
+    ProductVO getProductDetail(Long id);
 }
