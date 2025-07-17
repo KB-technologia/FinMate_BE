@@ -18,7 +18,6 @@ import org.springframework.web.servlet.view.JstlView;
         "org.finmate.controller",
         "org.finmate.assessment.controller",
         "org.finmate.product.controller"
-
 })
 public class ServletConfig implements WebMvcConfigurer {
 
