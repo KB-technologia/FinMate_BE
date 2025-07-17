@@ -26,10 +26,6 @@ import javax.sql.DataSource;
         "org.finmate.product.mapper"
 
 })
-@ComponentScan(basePackages={
-        "org.finmate.assessment.service",
-        "org.finmate.product.service"
-})
 
 public class RootConfig {
     @Value("${jdbc.driver}")
