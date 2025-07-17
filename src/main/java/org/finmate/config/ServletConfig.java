@@ -15,7 +15,10 @@ import org.springframework.web.servlet.view.JstlView;
 @EnableWebMvc
 @ComponentScan(basePackages = {
         "org.finmate.exception",
-        "org.finmate.controller"
+        "org.finmate.controller",
+        "org.finmate.member.controller",
+        "org.finmate.member.service",
+        "org.finmate.member.mapper"
 })
 public class ServletConfig implements WebMvcConfigurer {
 
