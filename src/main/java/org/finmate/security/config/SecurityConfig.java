@@ -21,6 +21,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception{
         http.addFilterBefore(encodingFilter(), CsrfFilter.class);
+
+        // 경로별 접근 권한 설정
+        http.authorizeRequests()
+                .antMatchers("/security/all").permitAll()
+                .antMatchers("/security/admin").access("hasRole('ROLE_ADMIN')")
+                .antMatchers("/security/member").access("hasAnyRole('ROLE_MEMBER', 'ROLE_ADMIN')");
     }
 
 }
