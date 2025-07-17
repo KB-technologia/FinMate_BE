@@ -7,4 +7,7 @@
     <settings>
         <setting name="mapUnderscoreToCamelCase" value="true"/>
     </settings>
+    <typeAliases>
+        <package name="org.finmate.product.domain" />
+    </typeAliases>
 </configuration>
