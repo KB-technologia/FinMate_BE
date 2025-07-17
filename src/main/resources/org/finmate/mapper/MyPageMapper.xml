@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.finmate.member.mapper.MyPageMapper">
+
+    <select id="findMyPageInfo" resultType="org.finmate.member.dto.MyPageResponseDto">
+        SELECT
+            u.account_id AS accountId,
+            u.email,
+            DATE_FORMAT(u.birth, '%Y-%m-%d') AS birth
+        FROM user u
+                 JOIN user_info ui ON u.id = ui.user_id
+                 JOIN animal_character ac ON ui.animal_id = ac.id
+        WHERE u.id = #{userId}
+    </select>
+
+</mapper>
