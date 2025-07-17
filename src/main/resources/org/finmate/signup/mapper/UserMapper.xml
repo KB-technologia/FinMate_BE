@@ -1,0 +1,8 @@
+<mapper namespace="org.finmate.mapper.UserMapper">
+
+    <insert id="insertUser" parameterType="org.finmate.signup.domain.UserVO">
+        INSERT INTO user (name, account_id, email, password, birth, provider, create_at)
+        VALUES (#{name}, #{accountId}, #{email}, #{password}, #{birth}, #{provider}, #{createAt})
+    </insert>
+
+</mapper>
