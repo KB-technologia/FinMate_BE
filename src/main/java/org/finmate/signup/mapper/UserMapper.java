@@ -6,4 +6,4 @@ import org.finmate.signup.domain.UserVO;
 @Mapper
 public interface UserMapper {
     void insertUser(UserVO userVO);
-}
+}//
