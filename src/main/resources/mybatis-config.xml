@@ -9,5 +9,6 @@
     </settings>
     <typeAliases>
         <package name="org.finmate.product.domain" />
+        <package name="org.finmate.signup.domain" />
     </typeAliases>
 </configuration>
