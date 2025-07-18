@@ -2,7 +2,6 @@ package org.finmate.portfolio.mapper;
 
 import org.finmate.portfolio.domain.PortfolioVO;
 
-import java.util.List;
 
 public interface PortfolioMapper {
 
