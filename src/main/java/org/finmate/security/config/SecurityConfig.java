@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
@@ -26,6 +27,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private LoginFailureHandler loginFailureHandler;
+    @Autowired
+    private LogoutSuccessHandler logoutSuccessHandler;
 
     // 문자셋 필터
     public CharacterEncodingFilter encodingFilter(){
@@ -51,6 +54,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .loginProcessingUrl("/security/login")
             .successHandler(loginSuccessHandler)
             .failureHandler(loginFailureHandler);
+
+        http.logout()
+                .logoutUrl("/security/logout")
+                .logoutSuccessHandler(logoutSuccessHandler)
+                .invalidateHttpSession(true)
+                .deleteCookies("remember-me", "JSESSIONID");
 
 
     }
