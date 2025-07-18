@@ -4,7 +4,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="org.finmate.member.mapper.MyPageMapper">
-    <select id="findMyPageInfo" resultType="org.finmate.member.dto.MyPageResponseDto">
+
+    <select id="findMyPageInfo" resultType="org.finmate.member.domain.MyPageVO">
         SELECT
             u.account_id AS accountId,
             u.email,
@@ -19,8 +20,8 @@
         UPDATE user
         SET
             password = #{password},
-            email = #{email},
-            birth = #{birth}
+            email = #{vo.email},
+            birth = #{vo.birth}
         WHERE id = #{userId}
     </update>
 

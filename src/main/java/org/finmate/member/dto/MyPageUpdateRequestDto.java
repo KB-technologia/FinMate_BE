@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
-import org.finmate.member.domain.MyPage;
+import org.finmate.member.domain.MyPageVO;
 
 @Getter
 @Setter
@@ -20,7 +20,7 @@ public class MyPageUpdateRequestDto {
     @ApiModelProperty(value = "수정할 생년월일", example = "1995-05-01")
     private String birth;
 
-    public MyPage toDomainWithAccountId(String accountId) {
-        return new MyPage(accountId, this.email, this.birth);
+    public MyPageVO toDomainWithAccountId(String accountId) {
+        return new MyPageVO(accountId, this.email, this.birth);
     }
 }

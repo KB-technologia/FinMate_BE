@@ -18,7 +18,7 @@ import org.springframework.web.servlet.view.JstlView;
         "org.finmate.controller",
         "org.finmate.member.controller",
         "org.finmate.member.service",
-        "org.finmate.member.mapper"
+        "org.finmate.member.mapper",
 
         "org.finmate.product.controller"
 })

@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import org.finmate.member.domain.MyPage;
+import org.finmate.member.domain.MyPageVO;
 
 @Getter
 @Builder
@@ -22,11 +22,11 @@ public class MyPageResponseDto {
     @ApiModelProperty(value = "생년월일", example = "1990-01-01")
     private String birth;
 
-    public static MyPageResponseDto from(MyPage myPage) {
+    public static MyPageResponseDto from(MyPageVO myPageVO) {
         return MyPageResponseDto.builder()
-                .accountId(myPage.getAccountId())
-                .email(myPage.getEmail())
-                .birth(myPage.getBirth())
+                .accountId(myPageVO.getAccountId())
+                .email(myPageVO.getEmail())
+                .birth(myPageVO.getBirth())
                 .build();
     }
 }
