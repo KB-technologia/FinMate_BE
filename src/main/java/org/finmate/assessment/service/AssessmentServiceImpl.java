@@ -15,12 +15,18 @@ public class AssessmentServiceImpl implements AssessmentService{
 
     @Override
     public List<AssessmentDTO> loadAssessment() {
-        return assessmentMapper.getList();
+
+        return assessmentMapper.getList()
+                .stream()
+                .map(AssessmentDTO::toDTO)
+                .toList();
+
     }
 
     @Override
     public void resultAssessment(Long userId, List<Integer> choice) {
 
         // 유저 저장
+
     }
 }

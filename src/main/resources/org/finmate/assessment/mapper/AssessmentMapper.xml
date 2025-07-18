@@ -6,14 +6,14 @@
 <mapper namespace="org.finmate.assessment.mapper.AssessmentMapper">
 
     <!-- 1) resultMap -->
-    <resultMap id="AssessmentMap" type="org.finmate.assessment.dto.AssessmentDTO">
+    <resultMap id="AssessmentMap" type="org.finmate.assessment.domain.AssessmentVO">
         <!-- 부모 -->
         <id     property="id"       column="a_id"/>
         <result property="question" column="question"/>
 
         <!-- 자식 목록 -->
         <collection property="choices"
-                    ofType="org.finmate.assessment.dto.AssessmentDetailsDTO">
+                    ofType="org.finmate.assessment.domain.AssessmentDetailsVO">
             <id     property="id"      column="d_id"/>
             <result property="content" column="content"/>
             <result property="score"   column="score"/>
