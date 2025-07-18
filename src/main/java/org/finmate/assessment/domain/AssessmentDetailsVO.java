@@ -2,18 +2,20 @@ package org.finmate.assessment.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @Getter
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class AssessmentDetailsVO {
 
-    private final Long id;
+    private Long id;
 
-    private final String content;
+    private String content;
 
-    private final int score;
+    private Integer score;
 
-    private final String tag;
+    private String tag;
 
 }

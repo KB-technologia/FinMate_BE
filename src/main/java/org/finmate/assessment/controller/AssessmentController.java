@@ -10,6 +10,7 @@ import org.finmate.assessment.dto.AssessmentDTO;
 import org.finmate.assessment.service.AssessmentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,18 +20,18 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/api/assessment")
-@Api(tags = "투자 성향 테스트 API")
+@Api(tags = "투자 성향 진단 테스트 API")
 public class AssessmentController {
 
 
     private final AssessmentService assessmentService;
 
     @ApiOperation(
-            value = "진단 문항 조회",
-            notes = "스토리텔링 기반 설문 문항 리스트를 반환합니다."
+            value = "테스트 문항 조회",
+            notes = "스토리텔링 기반 진단 테스트 문항들을 반환합니다."
     )
     @ApiResponses({
-            @ApiResponse(code = 200, message = "정상적으로 진단 문항을 조회했습니다.",
+            @ApiResponse(code = 200, message = "정상적으로 테스트 문항을 조회했습니다.",
                     response = AssessmentDTO.class, responseContainer = "List"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
@@ -39,4 +40,10 @@ public class AssessmentController {
 
         return ResponseEntity.ok(assessmentService.loadAssessment());
     }
+
+
+//    @PostMapping("")
+//    public
+
+
 }

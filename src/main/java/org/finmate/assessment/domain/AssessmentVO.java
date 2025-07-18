@@ -1,17 +1,20 @@
 package org.finmate.assessment.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
 @Getter
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class AssessmentVO {
 
-    private final Long id;
+    private Long id;
 
-    private final List<AssessmentDetailsVO> choices;
+    private List<AssessmentDetailsVO> choices;
 
-    private final String question;
+    private String question;
 }
