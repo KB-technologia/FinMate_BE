@@ -1,9 +1,9 @@
-package org.finmate.signup.controller;
+package org.finmate.member.controller;
 
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
-import org.finmate.signup.dto.SignupRequestDto;
-import org.finmate.signup.service.SignupService;
+import org.finmate.member.dto.SignupRequestDTO;
+import org.finmate.member.service.SignupService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +21,7 @@ public class SignupController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     @PostMapping(value = "/join", produces = "text/plain;charset=UTF-8")
-    public ResponseEntity<String> join(@RequestBody SignupRequestDto dto) {
+    public ResponseEntity<String> join(@RequestBody SignupRequestDTO dto) {
         signupService.signup(dto);
         return ResponseEntity.ok("회원가입 성공");
     }

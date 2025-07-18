@@ -1,7 +1,7 @@
-package org.finmate.signup.mapper;
+package org.finmate.member.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.finmate.signup.domain.UserVO;
+import org.finmate.member.domain.UserVO;
 
 @Mapper
 public interface UserMapper {

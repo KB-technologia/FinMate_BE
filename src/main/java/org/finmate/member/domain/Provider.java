@@ -1,4 +1,4 @@
-package org.finmate.signup.domain;
+package org.finmate.member.domain;
 
 public enum Provider {
     LOCAL, KAKAO

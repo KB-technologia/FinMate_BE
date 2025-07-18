@@ -1,15 +1,13 @@
-package org.finmate.signup.domain;
+package org.finmate.member.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
+
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserVO {

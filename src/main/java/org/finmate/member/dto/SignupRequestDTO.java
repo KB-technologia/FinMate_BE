@@ -1,18 +1,15 @@
-package org.finmate.signup.dto;
+package org.finmate.member.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @ApiModel(value = "회원가입 요청", description = "회원가입 시 필요한 사용자 정보 DTO")
-public class SignupRequestDto {
+public class SignupRequestDTO {
 
     @ApiModelProperty(value = "사용자 이름", example = "홍길동")
     private String name;
