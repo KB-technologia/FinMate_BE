@@ -8,6 +8,11 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
 
+/**
+ * 오픈AI API 관련 클래스
+ * @author ckdwlsrh
+ * @version 1.0
+*/
 @Component
 public class OpenAiApi {
 
@@ -16,6 +21,12 @@ public class OpenAiApi {
     @Value("${openai.apikey}") String apiKey;
     @Value("${openai.url}") String apiUrl;
 
+    /**
+     * OPEN AI API 호출
+     * @param input AI에게 보낼 자연어 메세지
+     * @return 보낸 메세지에 대한 답변
+     * @see OpenAiResponseDTO
+     * */
     public OpenAiResponseDTO callResponses(String input) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
