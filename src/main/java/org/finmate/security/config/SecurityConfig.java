@@ -1,5 +1,8 @@
 package org.finmate.security.config;
 
+import org.finmate.auth.handler.LoginFailureHandler;
+import org.finmate.auth.handler.LoginSuccessHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -17,6 +20,13 @@ import javax.servlet.http.HttpServletResponse;
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private LoginSuccessHandler loginSuccessHandler;
+
+    @Autowired
+    private LoginFailureHandler loginFailureHandler;
+
     // 문자셋 필터
     public CharacterEncodingFilter encodingFilter(){
         CharacterEncodingFilter encodingFilter = new CharacterEncodingFilter();
@@ -39,35 +49,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // 임시 테스트용
         http.formLogin()
             .loginProcessingUrl("/security/login")
-            .successHandler(successHandler())
-            .failureHandler(failureHandler());
+            .successHandler(loginSuccessHandler)
+            .failureHandler(loginFailureHandler);
 
 
     }
 
-    @Bean
-    public AuthenticationSuccessHandler successHandler() {
-        return (request, response, authentication) -> {
-            response.setStatus(HttpServletResponse.SC_OK);
-            response.setContentType("application/json;charset=UTF-8");
-            response.getWriter().write("{\"message\": \"로그인 성공\", \"user\": \"" + authentication.getName() + "\"}");
-        };
-    }
-
-    @Bean
-    public AuthenticationFailureHandler failureHandler() {
-        return (request, response, exception) -> {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setContentType("application/json;charset=UTF-8");
-            String message = "로그인 실패: ";
-            if (exception instanceof BadCredentialsException) {
-                message += "아이디 또는 비밀번호가 틀렸습니다.";
-            } else {
-                message += exception.getMessage();
-            }
-            response.getWriter().write("{\"error\": \"" + message + "\"}");
-        };
-    }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception{
