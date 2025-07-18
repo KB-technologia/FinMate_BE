@@ -7,6 +7,7 @@ import org.finmate.signup.domain.UserVO;
 import org.finmate.signup.domain.Provider;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Service
@@ -21,8 +22,8 @@ public class SignupService {
         user.setAccountId(dto.getAccountId());
         user.setEmail(dto.getEmail());
         user.setPassword(dto.getPassword());
-        user.setBirth(dto.getBirth());
-        user.setProvider(Provider.LOCAL); // 무조건 LOCAL
+        user.setBirth(LocalDate.parse(dto.getBirth()));
+        user.setProvider(Provider.LOCAL); // 일반 회원가입은 무조건 LOCAL
         user.setCreateAt(LocalDateTime.now());
 
         userMapper.insertUser(user);

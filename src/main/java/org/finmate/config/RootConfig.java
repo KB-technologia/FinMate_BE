@@ -18,9 +18,10 @@ import javax.sql.DataSource;
 
 @Configuration
 @PropertySource({"classpath:/application.properties"})
-@ComponentScan(basePackages = {"org.finmate.product.service"})
+@ComponentScan(basePackages = {"org.finmate.product.service", "org.finmate.signup.service"})
 @MapperScan(basePackages = {
-        "org.finmate.product.mapper"
+        "org.finmate.product.mapper",
+        "org.finmate.signup.mapper"
 })
 public class RootConfig {
     @Value("${jdbc.driver}")
