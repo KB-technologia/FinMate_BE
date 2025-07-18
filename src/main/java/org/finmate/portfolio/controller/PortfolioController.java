@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
-import org.finmate.portfolio.domain.PortfolioVO;
+import org.finmate.portfolio.dto.PortfolioApiResponse;
 import org.finmate.portfolio.dto.PortfolioDTO;
 import org.finmate.portfolio.service.PortfolioService;
 import org.springframework.http.ResponseEntity;
@@ -25,9 +25,9 @@ public class PortfolioController {
 
     @ApiOperation(value = "재무 포트폴리오 등록", notes = "사용자의 재무 포트폴리오를 등록")
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody PortfolioDTO dto) {
+    public ResponseEntity<PortfolioApiResponse<Long>> create(@RequestBody PortfolioDTO dto) {
         portfolioService.createPortfolio(dto);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(new PortfolioApiResponse<>("재무 포트폴리오 등록 완료", dto.getId()));
     }
 
     @ApiOperation(value = "재무 포트폴리오 조회", notes = "userId로 재무 포트폴리오를 조회")
@@ -39,16 +39,15 @@ public class PortfolioController {
 
     @ApiOperation(value = "재무 포트폴리오 수정", notes = "재무 포트폴리오 수정")
     @PatchMapping
-    public ResponseEntity<Void> update(@RequestBody PortfolioDTO dto) {
+    public ResponseEntity<PortfolioApiResponse<Long>> update(@RequestBody PortfolioDTO dto) {
         portfolioService.updatePortfolio(dto);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(new PortfolioApiResponse<>("재무 포트폴리오 수정 완료", dto.getId()));
     }
 
     @ApiOperation(value = "재무 포트폴리오 삭제", notes = "userId로 재무 포트폴리오를 삭제")
     @DeleteMapping
-    public ResponseEntity<Void> delete(@RequestParam Long userId) {
+    public ResponseEntity<PortfolioApiResponse<Long>> delete(@RequestParam Long userId) {
         portfolioService.deletePortfolioByUserId(userId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(new PortfolioApiResponse<>("포트폴리오 삭제 완료", userId));
     }
-
 }
