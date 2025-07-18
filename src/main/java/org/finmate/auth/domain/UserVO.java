@@ -21,6 +21,6 @@ public class UserVO {
     private String email;
     private String password;
     private LocalDate birth;
-    private Provider provider;
+    private LoginProvider provider;
     private LocalDateTime createAt;
 }

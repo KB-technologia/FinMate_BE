@@ -1,6 +1,6 @@
 package org.finmate.auth.domain;
 
-public enum Provider {
+public enum LoginProvider {
     LOCAL,
     KAKAO
 }
