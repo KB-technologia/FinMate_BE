@@ -25,7 +25,8 @@ import javax.sql.DataSource;
 })
 @ComponentScan(basePackages={
         "org.finmate.assessment.service",
-        "org.finmate.product.service"
+        "org.finmate.product.service",
+        "org.finmate.common.util"
 
 })
 
