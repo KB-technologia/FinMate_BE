@@ -36,12 +36,38 @@
         ORDER BY a.id, d.id
     </select>
 
-
-    <select id="getDetailsById" resultType="org.finmate.assessment.dto.AssessmentDetailsDTO">
+    <!-- 선택지 점수 추출 -->
+    <select id="getDetailsById" resultType="org.finmate.assessment.domain.AssessmentDetailsVO">
         SELECT id, content, score, tag
         FROM assessment_details
         WHERE id = #{id}
     </select>
 
-
+    <!-- userinfo 에 설문 결과 저장 -->
+    <insert id="insertUserInfo" parameterType="org.finmate.member.domain.UserInfoVO">
+        INSERT INTO user_info (
+        user_id,
+        animal_id,
+        exp,
+        profile_summary,
+        adventure_score,
+        value_tag,
+        speed_tag,
+        strategy_tag,
+        finance_score,
+        updated_at
+        )
+        VALUES (
+        #{userId},
+        #{animalId},
+        #{exp},
+        #{profileSummary},
+        #{adventureScore},
+        #{valueTag},
+        #{speedTag},
+        #{strategyTag},
+        #{financeScore},
+        #{updatedAt}
+        )
+    </insert>
 </mapper>

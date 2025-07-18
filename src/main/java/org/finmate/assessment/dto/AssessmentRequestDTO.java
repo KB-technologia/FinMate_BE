@@ -5,12 +5,14 @@ import lombok.Data;
 import java.util.List;
 
 @Data
+
+// 사용자로부터 테스트 선택지를 받기 위한 DTO
 public class AssessmentRequestDTO {
 
     /**
      * userId는 추후 토큰 형식으로 리팩토링 필요
     **/
 
-    private Long userId;
-    private List<Long> answers;
+    private Long userId; // 사용자 ID
+    private List<Long> answers; // 사용자가 선택한 선택지들
 }
