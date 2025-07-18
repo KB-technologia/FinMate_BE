@@ -10,6 +10,8 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
@@ -24,11 +26,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private LoginSuccessHandler loginSuccessHandler;
-
     @Autowired
     private LoginFailureHandler loginFailureHandler;
     @Autowired
     private LogoutSuccessHandler logoutSuccessHandler;
+
+    @Bean
+    public PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
 
     // 문자셋 필터
     public CharacterEncodingFilter encodingFilter(){
@@ -70,12 +76,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         //테스트용 계정
         auth.inMemoryAuthentication()
                 .withUser("admin")
-                .password("{noop}1234") // 암호화 안 한 평문 비밀번호 "1234" (테스트용)
-                .roles("ADMIN", "MEMBER");
-        auth.inMemoryAuthentication()
+                .password(passwordEncoder().encode("1234")) // 암호화
+                .roles("ADMIN", "MEMBER")
+                .and()
                 .withUser("member")
-                .password("{noop}1234")
-                .roles("MEMBER");
+                .password(passwordEncoder().encode("1234")) // 암호화
+                .roles("MEMBER")
+                .and()
+                .passwordEncoder(passwordEncoder());
 
     }
 
