@@ -72,8 +72,9 @@
             <result property="returnRate6m" column="return_rate_6m"/>
         </association>
     </resultMap>
-    <select id="getAllProducts" resultMap="ProductWithType">
-        SELECT
+
+    <!-- 공통 SELECT Column 절 -->
+    <sql id="productSelectColumns">
             p.id AS p_id,
             p.name AS p_name,
             p.bank_name AS p_bank_name,
@@ -129,79 +130,30 @@
             f.return_rate_1m AS f_return_rate_1m,
             f.return_rate_3m AS f_return_rate_3m,
             f.return_rate_6m AS f_return_rate_6m
+    </sql>
 
+    <!-- 공통 JOIN 절 -->
+    <sql id="productJoin">
         FROM financial_product p
                  LEFT JOIN product_deposit d ON p.id = d.product_id
                  LEFT JOIN product_savings s ON p.id = s.product_id
                  LEFT JOIN product_fund f ON p.id = f.product_id
-        ORDER BY p.id
+    </sql>
+
+    <!-- 전체 상품 조회 -->
+    <select id="getAllProduct" resultMap="ProductWithType">
+        SELECT
+        <include refid="productSelectColumns"></include>
+        <include refid="productJoin"></include>
+            ORDER BY p.id
     </select>
 
+    <!-- 상품 상세 조회 -->
     <select id="getProductDetail" resultMap="ProductWithType">
-
         SELECT
-            p.id AS p_id,
-            p.name AS p_name,
-            p.bank_name AS p_bank_name,
-            p.product_type AS p_product_type,
-            p.risk_level AS p_risk_level,
-            p.expected_return AS p_expected_return,
-            p.min_amount AS p_min_amount,
-            p.max_amount AS p_max_amount,
-            p.term AS p_term,
-            p.created_at AS p_created_at,
-            p.updated_at AS p_updated_at,
-            p.adventure_score AS p_adventure_score,
-            p.value_tag AS p_value_tag,
-            p.speed_tag AS p_speed_tag,
-            p.strategy_tag AS p_strategy_tag,
-            p.min_finance_score AS p_min_finance_score,
-
-            d.id AS d_id,
-            d.product_id AS d_product_id,
-            d.interest_rate AS d_interest_rate,
-            d.is_flexible AS d_is_flexible,
-            d.early_withdrawal_penalty AS d_early_withdrawal_penalty,
-            d.interest_type AS d_interest_type,
-            d.base_rate AS d_base_rate,
-            d.bonus_rate AS d_bonus_rate,
-            d.compounding_period AS d_compounding_period,
-
-            s.id AS s_id,
-            s.product_id AS s_product_id,
-            s.interest_rate AS s_interest_rate,
-            s.is_flexible AS s_is_flexible,
-            s.payment_cycle AS s_payment_cycle,
-            s.max_monthly_payment AS s_max_monthly_payment,
-            s.early_withdrawal_penalty AS s_early_withdrawal_penalty,
-            s.interest_type AS s_interest_type,
-            s.base_rate AS s_base_rate,
-            s.bonus_rate AS s_bonus_rate,
-            s.compounding_period AS s_compounding_period,
-
-            f.id AS f_id,
-            f.product_id AS f_product_id,
-            f.fund_type AS f_fund_type,
-            f.manager AS f_manager,
-            f.inception_date AS f_inception_date,
-            f.nav AS f_nav,
-            f.aum AS f_aum,
-            f.expense_ratio AS f_expense_ratio,
-            f.sharpe_ratio AS f_sharpe_ratio,
-            f.regions AS f_regions,
-            f.sectors AS f_sectors,
-            f.redemption_period AS f_redemption_period,
-            f.risk_grade AS f_risk_grade,
-            f.return_rate_1m AS f_return_rate_1m,
-            f.return_rate_3m AS f_return_rate_3m,
-            f.return_rate_6m AS f_return_rate_6m
-
-        FROM financial_product p
-                 LEFT JOIN product_deposit d ON p.id = d.product_id
-                 LEFT JOIN product_savings s ON p.id = s.product_id
-                 LEFT JOIN product_fund f ON p.id = f.product_id
-        WHERE p.id = #{id}
+        <include refid="productSelectColumns"></include>
+        <include refid="productJoin"></include>
+            WHERE p.id = #{id}
     </select>
-
 
 </mapper>
