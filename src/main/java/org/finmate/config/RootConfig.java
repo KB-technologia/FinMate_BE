@@ -21,12 +21,14 @@ import javax.sql.DataSource;
 
 @MapperScan(basePackages = {
         "org.finmate.assessment.mapper",
-        "org.finmate.product.mapper"
+        "org.finmate.product.mapper",
+        "org.finmate.portfolio.mapper"
 })
 @ComponentScan(basePackages={
         "org.finmate.assessment.service",
         "org.finmate.product.service",
-        "org.finmate.common.util"
+        "org.finmate.common.util",
+        "org.finmate.portfolio.service"
 
 })
 
