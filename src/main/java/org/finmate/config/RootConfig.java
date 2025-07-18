@@ -20,6 +20,7 @@ import javax.sql.DataSource;
 @PropertySource({"classpath:/application.properties"})
 
 @MapperScan(basePackages = {
+        "org.finmate.member.mapper",
         "org.finmate.assessment.mapper",
         "org.finmate.product.mapper",
         "org.finmate.portfolio.mapper"
@@ -27,9 +28,9 @@ import javax.sql.DataSource;
 @ComponentScan(basePackages={
         "org.finmate.assessment.service",
         "org.finmate.product.service",
+        "org.finmate.member.service",
         "org.finmate.common.util",
         "org.finmate.portfolio.service"
-
 })
 
 public class RootConfig {
