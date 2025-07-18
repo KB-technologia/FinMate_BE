@@ -27,7 +27,10 @@ public class PortfolioController {
     @PostMapping
     public ResponseEntity<PortfolioApiResponse<Long>> create(@RequestBody PortfolioDTO dto) {
         portfolioService.createPortfolio(dto);
-        return ResponseEntity.ok(new PortfolioApiResponse<>("재무 포트폴리오 등록 완료", dto.getId()));
+        return ResponseEntity.ok(PortfolioApiResponse.<Long>builder()
+                .message("재무 포트폴리오 등록 완료")
+                .data(dto.getId())
+                .build());
     }
 
     @ApiOperation(value = "재무 포트폴리오 조회", notes = "userId로 재무 포트폴리오를 조회")
@@ -41,13 +44,23 @@ public class PortfolioController {
     @PatchMapping
     public ResponseEntity<PortfolioApiResponse<Long>> update(@RequestBody PortfolioDTO dto) {
         portfolioService.updatePortfolio(dto);
-        return ResponseEntity.ok(new PortfolioApiResponse<>("재무 포트폴리오 수정 완료", dto.getId()));
+        return ResponseEntity.ok(
+                PortfolioApiResponse.<Long>builder()
+                        .message("재무 포트폴리오 수정 완료")
+                        .data(dto.getId())
+                        .build()
+        );
     }
 
     @ApiOperation(value = "재무 포트폴리오 삭제", notes = "userId로 재무 포트폴리오를 삭제")
     @DeleteMapping
     public ResponseEntity<PortfolioApiResponse<Long>> delete(@RequestParam Long userId) {
         portfolioService.deletePortfolioByUserId(userId);
-        return ResponseEntity.ok(new PortfolioApiResponse<>("포트폴리오 삭제 완료", userId));
+        return ResponseEntity.ok(
+                PortfolioApiResponse.<Long>builder()
+                        .message("포트폴리오 삭제 완료")
+                        .data(userId)
+                        .build()
+        );
     }
 }
