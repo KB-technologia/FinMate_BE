@@ -52,7 +52,6 @@ public class RootConfig {
     public SqlSessionFactory sqlSessionFactory() throws Exception {
         SqlSessionFactoryBean sqlSessionFactory = new SqlSessionFactoryBean();
         sqlSessionFactory.setConfigLocation(applicationContext.getResource("classpath:/mybatis-config.xml"));
-        sqlSessionFactory.setMapperLocations(applicationContext.getResources("classpath*:org/finmate/mapper/**/*.xml"));
         sqlSessionFactory.setDataSource(dataSource());
 
         return sqlSessionFactory.getObject();
