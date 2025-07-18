@@ -1,6 +1,5 @@
 package org.finmate.portfolio.service;
 
-import org.finmate.portfolio.domain.PortfolioVO;
 import org.finmate.portfolio.dto.PortfolioDTO;
 
 public interface PortfolioService {
