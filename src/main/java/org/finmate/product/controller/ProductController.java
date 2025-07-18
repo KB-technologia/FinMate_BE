@@ -24,7 +24,6 @@ import java.util.List;
 public class ProductController {
     private final ProductService productService;
 
-    //TODO: 전체 상품 API 구현
     @ApiOperation(value = "금융 상품 전체 보기", notes = "전체 금융 상품을 불러오는 API")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "성공적으로 요청이 처리되었습니다.", response = ProductDTO.class),

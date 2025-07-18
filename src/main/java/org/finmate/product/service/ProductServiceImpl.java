@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class ProductServiceImpl implements ProductService {
     private final ProductMapper productMapper;
 
-    //TODO: 서비스 구현
+    //TODO: 필터링 서비스 구현
 
     @Override
     public List<ProductDTO<?>> getAllProducts() {
