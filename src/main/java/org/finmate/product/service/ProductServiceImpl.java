@@ -9,15 +9,26 @@ import org.finmate.product.dto.ProductDTO;
 import org.finmate.product.mapper.ProductMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Log4j2
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
     private final ProductMapper productMapper;
 
-    private final OpenAiApi openAiApi;
-    //TODO: 서비스 구현
 
+    private final OpenAiApi openAiApi;
+    //TODO: 필터링 서비스 구현
+
+    @Override
+    public List<ProductDTO<?>> getAllProducts() {
+        return productMapper.getAllProducts()
+                .stream()
+                .map(ProductDTO::from)
+                .collect(Collectors.toList());
+    }
 
     @Override
     public ProductDTO<?> getProductDetail(Long id) {
