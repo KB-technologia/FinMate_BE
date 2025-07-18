@@ -96,17 +96,3 @@ dependencies {
 test {
     useJUnitPlatform()
 }
-
-sourceSets {
-    main {
-        resources {
-            srcDirs = ['src/main/resources']
-            include '**/*'
-        }
-    }
-}
-
-// MapperTemplate namespace empty
-processResources {
-    exclude 'org/finmate/mapper/MapperTemplate.xml'
-}
