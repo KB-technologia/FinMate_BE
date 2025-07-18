@@ -3,34 +3,63 @@ package org.finmate.exception;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 
-@ControllerAdvice
+@RestControllerAdvice
 @Log4j2
 public class CommonExceptionAdvice {
 
     @ExceptionHandler(Exception.class)
-    public String except(Exception ex, Model model) {
+    public ResponseEntity<ErrorResponse> handleCommonException(Exception ex, HttpServletRequest request) {
 
         log.error("Exception ......." + ex.getMessage());
-        model.addAttribute("exception", ex);
-        log.error(model);
-        return "error_page";
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(
+                        ErrorResponse.builder()
+                                .error("Internal Server Error")
+                                .message(ex.getMessage())
+                                .path(request.getRequestURI())
+                                .timestamp(LocalDateTime.now())
+                                .build()
+                );
     }
 
 
     @ExceptionHandler(NoHandlerFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String handle404(HttpServletRequest request, Model model, NoHandlerFoundException ex) {
-        log.error(ex);
-        model.addAttribute("uri", request.getRequestURI());
-        return "custom404";
+    public ResponseEntity<ErrorResponse> handle404(HttpServletRequest request, NoHandlerFoundException ex) {
+
+        log.error("Exception ......." + ex.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(
+                        ErrorResponse.builder()
+                                .error("Not Found")
+                                .message(ex.getMessage())
+                                .path(request.getRequestURI())
+                                .timestamp(LocalDateTime.now())
+                                .build()
+                );
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ErrorResponse> handleTypeMismatch(HttpServletRequest request, MethodArgumentTypeMismatchException ex) {
+        log.error("Type Mismatch", ex);
+        return ResponseEntity.badRequest().body(
+                ErrorResponse.builder()
+                        .error("Bad Request")
+                        .message("Invalid parameter: " + ex.getName())
+                        .path(request.getRequestURI())
+                        .timestamp(LocalDateTime.now())
+                        .build()
+        );
     }
 
 }
