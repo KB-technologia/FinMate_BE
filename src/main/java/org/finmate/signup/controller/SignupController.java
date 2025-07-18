@@ -20,9 +20,10 @@ public class SignupController {
             @ApiResponse(code = 200, message = "회원가입 성공"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    @PostMapping("/join")
+    @PostMapping(value = "/join", produces = "text/plain;charset=UTF-8")
     public ResponseEntity<String> join(@RequestBody SignupRequestDto dto) {
         signupService.signup(dto);
         return ResponseEntity.ok("회원가입 성공");
     }
+
 }
