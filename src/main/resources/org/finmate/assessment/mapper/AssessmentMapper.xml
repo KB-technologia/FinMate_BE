@@ -51,28 +51,38 @@
             keyProperty="id"
             keyColumn="id">
         INSERT INTO user_info (
-        user_id,
-        animal_id,
-        exp,
-        profile_summary,
-        adventure_score,
-        value_tag,
-        speed_tag,
-        strategy_tag,
-        finance_score,
-        updated_at
+            user_id,
+            animal_id,
+            exp,
+            profile_summary,
+            adventure_score,
+            value_tag,
+            speed_tag,
+            strategy_tag,
+            finance_score,
+            updated_at
         )
         VALUES (
-        #{userId},
-        #{animalId},
-        #{exp},
-        #{profileSummary},
-        #{adventureScore},
-        #{valueTag},
-        #{speedTag},
-        #{strategyTag},
-        #{financeScore},
-        #{updatedAt}
+            #{userId},
+            #{animalId},
+            #{exp},
+            #{profileSummary},
+            #{adventureScore},
+            #{valueTag},
+            #{speedTag},
+            #{strategyTag},
+            #{financeScore},
+            #{updatedAt}
         )
+        ON DUPLICATE KEY UPDATE
+            animal_id       = VALUES(animal_id),
+            exp             = VALUES(exp),
+            profile_summary = VALUES(profile_summary),
+            adventure_score = VALUES(adventure_score),
+            value_tag       = VALUES(value_tag),
+            speed_tag       = VALUES(speed_tag),
+            strategy_tag    = VALUES(strategy_tag),
+            finance_score   = VALUES(finance_score),
+            updated_at      = NOW()
     </insert>
 </mapper>
