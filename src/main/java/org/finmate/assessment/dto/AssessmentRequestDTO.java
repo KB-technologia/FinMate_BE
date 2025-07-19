@@ -14,5 +14,5 @@ public class AssessmentRequestDTO {
     **/
 
     private Long userId; // 사용자 ID
-    private List<Long> answers; // 사용자가 선택한 선택지들
+    private List<Integer> choices; // 사용자가 선택한 선택지들
 }

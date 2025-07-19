@@ -2,8 +2,10 @@ package org.finmate.assessment.service;
 
 
 import org.finmate.assessment.dto.AssessmentDTO;
+import org.finmate.member.dto.UserInfoDTO;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface AssessmentService {
 
@@ -11,5 +13,5 @@ public interface AssessmentService {
     List<AssessmentDTO> loadAssessment();
 
     // POST
-    void resultAssessment(Long userId, List<Integer> choice);
+    Optional<UserInfoDTO> resultAssessment(Long userId, List<Integer> choice);
 }

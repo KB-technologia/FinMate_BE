@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Log4j2
 @RestController
@@ -48,8 +49,11 @@ public class AssessmentController {
      * 투자 성향 테스트 결과 user_info 반환 및 저장
      */
     @PostMapping("")
-    public ResponseEntity<UserInfoDTO> resultAssessment(@RequestBody AssessmentRequestDTO){
+    public ResponseEntity<UserInfoDTO> resultAssessment(@RequestBody AssessmentRequestDTO requestDTO){
+        Long userId = requestDTO.getUserId();
+        List<Integer> choices = requestDTO.getChoices();
 
+        return ResponseEntity.of(assessmentService.resultAssessment(userId, choices));
     }
 
 

@@ -44,7 +44,12 @@
     </select>
 
     <!-- userinfo 에 설문 결과 저장 -->
-    <insert id="insertUserInfo" parameterType="org.finmate.member.domain.UserInfoVO">
+    <insert
+            id="insertUserInfo"
+            parameterType="org.finmate.member.domain.UserInfoVO"
+            useGeneratedKeys="true"
+            keyProperty="id"
+            keyColumn="id">
         INSERT INTO user_info (
         user_id,
         animal_id,

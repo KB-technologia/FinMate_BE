@@ -1,18 +1,21 @@
 package org.finmate.member.domain;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class CharacterVO {
 
-    private String animal_name;
+    private Long animalId;
+    private String animalName;
 
-    private String animal_image;
-    private String animal_image2;
-    private String animal_image3;
-    private String animal_image4;
+    private String animalImage1;
+    private String animalImage2;
+    private String animalImage3;
+    private String animalImage4;
 }
