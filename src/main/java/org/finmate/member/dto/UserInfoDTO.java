@@ -48,4 +48,24 @@ public class UserInfoDTO {
                 .updatedAt(vo.getUpdatedAt())
                 .build();
     }
+
+    /**
+     * DTO -> VO
+     */
+    public UserInfoVO toVO(){
+        return UserInfoVO
+                .builder()
+                .id(id)
+                .userId(userId)
+                .animalId(animalId)
+                .exp(exp)
+                .profileSummary(profileSummary)
+                .adventureScore(adventureScore)
+                .valueTag(valueTag)
+                .speedTag(speedTag)
+                .strategyTag(strategyTag)
+                .financeScore(financeScore)
+                .updatedAt(updatedAt)
+                .build();
+    }
 }

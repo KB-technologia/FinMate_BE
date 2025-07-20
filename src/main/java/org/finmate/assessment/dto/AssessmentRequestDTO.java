@@ -13,7 +13,7 @@ import java.util.List;
 public class AssessmentRequestDTO {
 
     /**
-     * userId는 추후 토큰 형식으로 리팩토링 필요
+     * userId는 추후 토큰 형식으로 리팩토링 예정
     **/
 
     @ApiModelProperty(value = "사용자 ID", example = "1")

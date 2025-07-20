@@ -6,7 +6,7 @@
 <mapper namespace="org.finmate.member.mapper.AnimalCharacterMapper">
 
     <select id="getCharacterById" resultType="org.finmate.member.domain.AnimalCharacterVO">
-        SELECT u.id, animal_name, animal_image_1, animal_image_2, animal_image_3, animal_image_4
+        SELECT c.id, animal_name, animal_image_1, animal_image_2, animal_image_3, animal_image_4
         FROM animal_character c
         JOIN user_info u ON c.id = u.animal_id
         WHERE u.user_id = #{userId}

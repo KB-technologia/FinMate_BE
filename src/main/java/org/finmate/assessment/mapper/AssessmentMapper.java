@@ -18,7 +18,4 @@ public interface AssessmentMapper {
 
     // 각 선택지에 따른 점수 추출
     AssessmentDetailsVO getDetailsById(Long id);
-
-    // user_info 테이블에 저장
-    void insertUserInfo(UserInfoVO userInfo);
 }

@@ -7,6 +7,10 @@ import java.util.Optional;
 
 public interface AnimalCharacterService {
 
-    Optional<AnimalCharacterDTO> getCharacterById(Long id);
+    // 캐릭터 조회
+    Optional<AnimalCharacterDTO> getCharacterById(Long userId);
+
+    // 캐릭터 변경
+    Optional<AnimalCharacterDTO> changeCharacterById(Long userId, Long characterId);
 
 }

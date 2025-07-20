@@ -8,6 +8,7 @@ import org.finmate.member.domain.enums.SpeedTag;
 import org.finmate.member.domain.enums.StrategyTag;
 import org.finmate.member.domain.enums.ValueTag;
 import org.finmate.member.dto.UserInfoDTO;
+import org.finmate.member.mapper.UserInfoMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,7 @@ import java.util.Random;
 public class AssessmentServiceImpl implements AssessmentService{
 
     private final AssessmentMapper assessmentMapper;
+    private final UserInfoMapper userInfoMapper;
 
     @Override
     public List<AssessmentDTO> loadAssessment() {
@@ -93,7 +95,7 @@ public class AssessmentServiceImpl implements AssessmentService{
                 .updatedAt(LocalDateTime.now())
                 .build();
 
-        assessmentMapper.insertUserInfo(userInfoVO);
+        userInfoMapper.insertUserInfo(userInfoVO);
         return Optional.ofNullable(UserInfoDTO.toDTO(userInfoVO));
     }
 }
