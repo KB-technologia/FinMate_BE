@@ -1,4 +1,4 @@
-package org.finmate.auth.handler;
+package org.finmate.security.handler;
 
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.stereotype.Component;

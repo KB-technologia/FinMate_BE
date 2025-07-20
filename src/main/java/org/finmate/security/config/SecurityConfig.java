@@ -2,14 +2,14 @@ package org.finmate.security.config;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.finmate.auth.handler.LoginFailureHandler;
-import org.finmate.auth.handler.LoginSuccessHandler;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.finmate.security.filter.JwtUsernamePasswordAuthenticationFilter;
+import org.finmate.security.handler.LoginFailureHandler;
+import org.finmate.security.handler.LoginSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -19,16 +19,12 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.filter.CorsFilter;
-
-import javax.servlet.http.HttpServletResponse;
 
 @Log4j2
 @EnableWebSecurity
@@ -38,6 +34,8 @@ import javax.servlet.http.HttpServletResponse;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
+    private final LoginSuccessHandler loginSuccessHandler;
+    private final LoginFailureHandler loginFailureHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder(){
@@ -81,11 +79,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // Http 보안 설정 (JWT 기반)
     @Override
     public void configure(HttpSecurity http) throws Exception{
-        //한글 인코딩 필터 설정
-        http.addFilterBefore(encodingFilter(), CsrfFilter.class);
+        //jwt 인증 필터 등록 (기존 필터 앞)
+        JwtUsernamePasswordAuthenticationFilter jwtFilter = new JwtUsernamePasswordAuthenticationFilter(authenticationManagerBean(), loginSuccessHandler, loginFailureHandler);
 
-        // 경로별 접근 권한 설정
-        http.httpBasic().disable() // 기본 HTTP 인증비활성화
+        http.addFilterBefore(encodingFilter(), CsrfFilter.class) // 한글 인코딩 필터 설정
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class) // 추가된 필터
+                .httpBasic().disable() // 기본 HTTP 인증비활성화
                 .csrf().disable()  // CSRF 비활성화
                 .formLogin().disable()  // formLogin 비활성화- 관련 필터 해제
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS); // 세션 생성 모드 설정

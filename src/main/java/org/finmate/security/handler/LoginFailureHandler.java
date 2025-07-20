@@ -1,4 +1,4 @@
-package org.finmate.auth.handler;
+package org.finmate.security.handler;
 
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
