@@ -5,14 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.finmate.member.domain.CharacterVO;
+import org.finmate.member.domain.AnimalCharacterVO;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @ApiModel(description = "캐릭터 DTO")
-public class CharacterDTO {
+public class AnimalCharacterDTO {
 
     private String animalName;
 
@@ -21,8 +21,8 @@ public class CharacterDTO {
     private String animalImage3;
     private String animalImage4;
 
-    public static CharacterDTO toDTO(CharacterVO vo) {
-        return CharacterDTO.builder()
+    public static AnimalCharacterDTO toDTO(AnimalCharacterVO vo) {
+        return AnimalCharacterDTO.builder()
                 .animalName(vo.getAnimalName())
                 .animalImage1(vo.getAnimalImage1())
                 .animalImage2(vo.getAnimalImage2())

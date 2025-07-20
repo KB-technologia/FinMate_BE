@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CharacterVO {
+public class AnimalCharacterVO {
 
     private Long animalId;
     private String animalName;

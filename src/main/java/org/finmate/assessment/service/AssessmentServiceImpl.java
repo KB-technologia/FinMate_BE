@@ -3,13 +3,11 @@ package org.finmate.assessment.service;
 import lombok.RequiredArgsConstructor;
 import org.finmate.assessment.dto.AssessmentDTO;
 import org.finmate.assessment.mapper.AssessmentMapper;
-import org.finmate.member.domain.CharacterVO;
 import org.finmate.member.domain.UserInfoVO;
 import org.finmate.member.domain.enums.SpeedTag;
 import org.finmate.member.domain.enums.StrategyTag;
 import org.finmate.member.domain.enums.ValueTag;
 import org.finmate.member.dto.UserInfoDTO;
-import org.finmate.member.mapper.CharacterMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
