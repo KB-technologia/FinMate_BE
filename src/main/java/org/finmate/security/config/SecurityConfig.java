@@ -1,15 +1,19 @@
 package org.finmate.security.config;
 
+import lombok.RequiredArgsConstructor;
 import org.finmate.auth.handler.LoginFailureHandler;
 import org.finmate.auth.handler.LoginSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -22,14 +26,16 @@ import javax.servlet.http.HttpServletResponse;
 
 @EnableWebSecurity
 @Configuration
+@RequiredArgsConstructor
+@ComponentScan(basePackages = {"org.finmate.auth.service", "org.finmate.auth", "org.finmate.security"})
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private LoginSuccessHandler loginSuccessHandler;
-    @Autowired
-    private LoginFailureHandler loginFailureHandler;
-    @Autowired
-    private LogoutSuccessHandler logoutSuccessHandler;
+
+    private final LoginSuccessHandler loginSuccessHandler;
+    private final LoginFailureHandler loginFailureHandler;
+    private final LogoutSuccessHandler logoutSuccessHandler;
+    private final UserDetailsService userDetailsService;
+
 
     @Bean
     public PasswordEncoder passwordEncoder(){
@@ -73,18 +79,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception{
-        //테스트용 계정
-        auth.inMemoryAuthentication()
-                .withUser("admin")
-                .password(passwordEncoder().encode("1234")) // 암호화
-                .roles("ADMIN", "MEMBER")
-                .and()
-                .withUser("member")
-                .password(passwordEncoder().encode("1234")) // 암호화
-                .roles("MEMBER")
-                .and()
+        auth.userDetailsService(userDetailsService)
                 .passwordEncoder(passwordEncoder());
 
     }
 
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception{
+        return super.authenticationManagerBean();
+    }
 }
