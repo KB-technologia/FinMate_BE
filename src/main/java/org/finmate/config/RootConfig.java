@@ -15,12 +15,16 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 import javax.sql.DataSource;
+import java.util.Locale;
 
 @Configuration
 @PropertySource({"classpath:/application.properties"})
-@ComponentScan(basePackages = {"org.finmate.product.service","org.finmate.auth.handler"})
+@ComponentScan(basePackages = {"org.finmate.product.service",
+                                "org.finmate.security.handler",
+                                "org.finmate.auth.mapper"})
 @MapperScan(basePackages = {
-        "org.finmate.product.mapper"
+        "org.finmate.product.mapper",
+        "org.finmate.auth.mapper"
 })
 public class RootConfig {
     @Value("${jdbc.driver}")

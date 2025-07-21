@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.finmate.auth.mapper.UserMapper">
+
+    <select id="selectByAccountId" resultType="org.finmate.auth.domain.UserVO">
+        SELECT
+            id,
+            name,
+            account_id AS accountId,
+            email,
+            password,
+            birth,
+            provider,
+            created_at AS createdAt
+        FROM user
+        WHERE account_id = #{accountId}
+    </select>
+
+</mapper>
