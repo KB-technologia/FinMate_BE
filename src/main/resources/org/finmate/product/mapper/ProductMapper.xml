@@ -143,16 +143,16 @@
     <!-- 전체 상품 조회 -->
     <select id="getAllProducts" resultType="org.finmate.product.domain.ProductVO" resultMap="ProductWithType">
         SELECT
-        <include refid="productSelectColumns"></include>
-        <include refid="productJoin"></include>
+        <include refid="productSelectColumns" />
+        <include refid="productJoin" />
             ORDER BY p.id
     </select>
 
     <!-- 상품 상세 조회 -->
     <select id="getProductDetail" resultMap="ProductWithType">
         SELECT
-        <include refid="productSelectColumns"></include>
-        <include refid="productJoin"></include>
+        <include refid="productSelectColumns" />
+        <include refid="productJoin" />
             WHERE p.id = #{id}
     </select>
 
