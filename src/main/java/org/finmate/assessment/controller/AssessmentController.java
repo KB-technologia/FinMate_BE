@@ -5,20 +5,21 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 import org.finmate.assessment.dto.AssessmentDTO;
+import org.finmate.assessment.dto.AssessmentRequestDTO;
 import org.finmate.assessment.service.AssessmentService;
+import org.finmate.member.dto.UserInfoDTO;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
+@Log4j2
 @RestController
 @RequiredArgsConstructor
-@Slf4j
 @RequestMapping("/api/assessment")
 @Api(tags = "투자 성향 진단 테스트 API")
 public class AssessmentController {
@@ -26,6 +27,10 @@ public class AssessmentController {
 
     private final AssessmentService assessmentService;
 
+    /**
+     * 질문 리스트 반환
+     */
+    @GetMapping("")
     @ApiOperation(
             value = "테스트 문항 조회",
             notes = "스토리텔링 기반 진단 테스트 문항들을 반환합니다."
@@ -35,15 +40,21 @@ public class AssessmentController {
                     response = AssessmentDTO.class, responseContainer = "List"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    @GetMapping("")
     public ResponseEntity<List<AssessmentDTO>> getList(){
 
         return ResponseEntity.ok(assessmentService.loadAssessment());
     }
 
+    /**
+     * 투자 성향 테스트 결과 user_info 반환 및 저장
+     */
+    @PostMapping("")
+    public ResponseEntity<UserInfoDTO> resultAssessment(@RequestBody AssessmentRequestDTO requestDTO){
+        Long userId = requestDTO.getUserId();
+        List<Integer> choices = requestDTO.getChoices();
 
-//    @PostMapping("")
-//    public
+        return ResponseEntity.of(assessmentService.resultAssessment(userId, choices));
+    }
 
 
 }
