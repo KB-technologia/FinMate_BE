@@ -20,6 +20,7 @@ public class EmailAuthService {
     private final EmailAuthMapper emailAuthMapper;
     private final JavaMailSender mailSender;
 
+    //이메일 인증 코드 전송 - 회원가입 / 마이페이지 에서 공통 사용
     public String sendAuthCode(String email) {
         String uuid = UUID.randomUUID().toString();
         String authCode = String.valueOf((int)(Math.random() * 900000) + 100000); // 6자리
@@ -35,7 +36,6 @@ public class EmailAuthService {
 
         emailAuthMapper.insertAuthCode(auth);
 
-        // 📩 HTML 이메일로 전송
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
@@ -80,7 +80,7 @@ public class EmailAuthService {
     """.formatted(authCode);
     }
 
-
+    // 인증 코드 검증 - 회원가입 / 마이페이지에서 공통 사용
     public boolean verifyCode(String uuid, String inputCode) {
         EmailAuthVO auth = emailAuthMapper.findByUuid(uuid);
         if (auth == null || auth.getIsVerified()) return false;
