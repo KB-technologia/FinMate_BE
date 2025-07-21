@@ -35,8 +35,7 @@ import org.springframework.web.filter.CorsFilter;
 @EnableWebSecurity
 @Configuration
 @RequiredArgsConstructor
-@ComponentScan(basePackages = {"org.finmate.auth.service", "org.finmate.auth", "org.finmate.security"})
-@MapperScan(basePackages = {"org.finmate.auth.mapper"})
+@ComponentScan(basePackages = {"org.finmate.security"})
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;

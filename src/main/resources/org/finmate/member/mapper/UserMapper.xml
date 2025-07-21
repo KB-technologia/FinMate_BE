@@ -7,8 +7,13 @@
 
 
 <insert id="insertUser" parameterType="org.finmate.member.domain.UserVO">
-        INSERT INTO user (name, account_id, email, password, birth, provider, create_at)
-        VALUES (#{name}, #{accountId}, #{email}, #{password}, #{birth}, #{provider}, #{createAt})
+        INSERT INTO user (name, account_id, email, password, birth, provider)
+        VALUES (#{name}, #{accountId}, #{email}, #{password}, #{birth}, #{provider})
     </insert>
+    <select id="selectByAccountId" resultType="org.finmate.member.domain.UserVO">
+        SELECT *
+        FROM user
+        WHERE account_id = #{accountId}
+    </select>
 
 </mapper>

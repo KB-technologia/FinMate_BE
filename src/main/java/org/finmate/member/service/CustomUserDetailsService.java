@@ -1,11 +1,10 @@
-package org.finmate.auth.service;
+package org.finmate.member.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.finmate.auth.domain.CustomUser;
-import org.finmate.auth.domain.LoginProvider;
-import org.finmate.auth.domain.UserVO;
-import org.finmate.auth.mapper.UserMapper;
+import org.finmate.member.domain.CustomUser;
+import org.finmate.member.domain.UserVO;
+import org.finmate.member.mapper.UserMapper;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

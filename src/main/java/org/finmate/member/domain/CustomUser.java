@@ -1,4 +1,4 @@
-package org.finmate.auth.domain;
+package org.finmate.member.domain;
 
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
