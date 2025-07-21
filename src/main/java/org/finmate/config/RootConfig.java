@@ -16,23 +16,26 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
+import java.util.Locale;
 
 @Configuration
 @EnableTransactionManagement
 @PropertySource({"classpath:/application.properties"})
-
 @MapperScan(basePackages = {
         "org.finmate.member.mapper",
         "org.finmate.assessment.mapper",
         "org.finmate.product.mapper",
-        "org.finmate.portfolio.mapper"
+        "org.finmate.portfolio.mapper",
+        "org.finmate.quiz.mapper"
 })
 @ComponentScan(basePackages={
         "org.finmate.assessment.service",
         "org.finmate.product.service",
         "org.finmate.member.service",
         "org.finmate.common.util",
-        "org.finmate.portfolio.service"
+        "org.finmate.portfolio.service",
+        "org.finmate.security.handler",
+        "org.finmate.quiz.service"
 })
 
 public class RootConfig {

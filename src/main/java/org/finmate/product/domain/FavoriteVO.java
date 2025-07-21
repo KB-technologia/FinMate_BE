@@ -1,17 +1,14 @@
 package org.finmate.product.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.finmate.product.dto.ProductDTO;
 
 import java.util.List;
 
 @Getter
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class FavoriteVO {
 
     private Long id;
@@ -19,4 +16,5 @@ public class FavoriteVO {
     private Long userId;
 
     private List<ProductVO> productVOList;
+
 }
