@@ -6,6 +6,6 @@ import java.util.Optional;
 
 public interface QuizMapper {
     public QuizVO selectRandomQuiz();
-    public Optional<QuizVO> selectQuiz(Long quizId);
+    public QuizVO selectQuiz(Long quizId);
 }
 

@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface ProductMapper {
     List<ProductVO> getAllProducts();
 
-    Optional<ProductVO> getProductDetail(Long id);
+    ProductVO getProductDetail(Long id);
 
     List<ProductReviewVO> getProductReviewByProductId(Long productId);
 
