@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.finmate.member.mapper.UserInfoMapper">
+
+    <select id="getUserInfoById" resultType="org.finmate.member.domain.UserInfoVO">
+        SELECT
+            id,
+            user_id,
+            animal_id,
+            exp,
+            profile_summary,
+            adventure_score,
+            value_tag,
+            speed_tag,
+            strategy_tag,
+            finance_score,
+            updated_at
+        FROM user_info
+        WHERE id = #{userId}
+    </select>
+    <!-- userinfo 에 설문 결과 저장 -->
+    <insert
+            id="insertUserInfo"
+            parameterType="org.finmate.member.domain.UserInfoVO"
+            useGeneratedKeys="true"
+            keyProperty="id"
+            keyColumn="id">
+        INSERT INTO user_info (
+            user_id,
+            animal_id,
+            exp,
+            profile_summary,
+            adventure_score,
+            value_tag,
+            speed_tag,
+            strategy_tag,
+            finance_score,
+            updated_at
+        )
+        VALUES (
+                   #{userId},
+                   #{animalId},
+                   #{exp},
+                   #{profileSummary},
+                   #{adventureScore},
+                   #{valueTag},
+                   #{speedTag},
+                   #{strategyTag},
+                   #{financeScore},
+                   #{updatedAt}
+               )
+            ON DUPLICATE KEY UPDATE
+                                 animal_id       = VALUES(animal_id),
+                                 exp             = VALUES(exp),
+                                 profile_summary = VALUES(profile_summary),
+                                 adventure_score = VALUES(adventure_score),
+                                 value_tag       = VALUES(value_tag),
+                                 speed_tag       = VALUES(speed_tag),
+                                 strategy_tag    = VALUES(strategy_tag),
+                                 finance_score   = VALUES(finance_score),
+                                 updated_at      = NOW()
+    </insert>
+</mapper>
+

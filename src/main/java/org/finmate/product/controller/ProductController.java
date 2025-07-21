@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.finmate.product.dto.ProductComparisonResultDTO;
 import org.finmate.product.dto.ProductDTO;
+import org.finmate.product.dto.ProductReviewDTO;
+import org.finmate.product.dto.ReviewIdResponse;
 import org.finmate.product.service.ProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -60,5 +62,52 @@ public class ProductController {
         return ResponseEntity.ok(productService.getProductDetail(id));
     }
 
+    @ApiOperation(value = "금융 상품 리뷰 보기", notes = "금융 상품 ID로 금융 상품 리븊 불러오는 API")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "성공적으로 요청이 처리되었습니다.", response = ProductReviewDTO.class),
+            @ApiResponse(code = 400, message = "잘못된 요청입니다."),
+            @ApiResponse(code = 500, message = "서버에서 오류가 발생했습니다.")
+    })
+    @GetMapping("/{id}/review")
+    public ResponseEntity<List<ProductReviewDTO>> getProductReviews(
+            @ApiParam(value = "상품 ID", required = true, example = "1")
+            @PathVariable Long id
+    ) {
+        return ResponseEntity.ok(productService.getProductReviews(id));
+    }
 
+    @ApiOperation(value = "금융 상품 리뷰 등록", notes = "금융 상품에 대한 리뷰를 등록하는 API")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "성공적으로 요청이 처리되었습니다.", response = ReviewIdResponse.class),
+            @ApiResponse(code = 400, message = "잘못된 요청입니다."),
+            @ApiResponse(code = 500, message = "서버에서 오류가 발생했습니다.")
+    })
+    @PostMapping("/{id}/review")
+    public ResponseEntity<ReviewIdResponse> insertProductReview(
+            @ApiParam(value = "상품 ID", required = true, example = "1")
+            @PathVariable Long id,
+            @RequestBody ProductReviewDTO review
+//            , @AuthenticationPrincipal CustomUserDetails user
+    ) {
+        review.setProductId(id);
+        //TODO:유저 아이디 주입
+        Long resultId = productService.insertProductReview(review);
+        return ResponseEntity.ok(new ReviewIdResponse(resultId));
+    }
+
+    @ApiOperation(value = "금융 상품 리뷰 삭제", notes = "자신이 등록한 리뷰 삭제 API")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "성공적으로 요청이 처리되었습니다.", response = ReviewIdResponse.class),
+            @ApiResponse(code = 400, message = "잘못된 요청입니다."),
+            @ApiResponse(code = 500, message = "서버에서 오류가 발생했습니다.")
+    })
+    @DeleteMapping("/{id}/review")
+    public ResponseEntity<ReviewIdResponse> deleteProductReview(
+            @ApiParam(value = "상품 ID", required = true, example = "1")
+            @PathVariable Long id
+            //            , @AuthenticationPrincipal CustomUserDetails user
+    ) {
+        //TODO:유저 아이디 주입
+        return ResponseEntity.ok(new ReviewIdResponse(productService.deleteProductReview(id, 1L)));
+    }
 }

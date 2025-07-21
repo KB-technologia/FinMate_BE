@@ -139,12 +139,23 @@
                  LEFT JOIN product_savings s ON p.id = s.product_id
                  LEFT JOIN product_fund f ON p.id = f.product_id
     </sql>
+    <insert id="insertProductReview">
+        INSERT INTO review(product_id, user_id, rating, ease_of_signup, content, image_url, writer)
+        VALUES (#{productId}, #{userId},#{rating}, #{easeOfSignup}, #{content}, #{imageUrl}, #{writer})
+        <selectKey resultType="Long" keyProperty="id" keyColumn="id" order="AFTER">
+            select last_insert_id()
+        </selectKey>
+    </insert>
+    <delete id="deleteProductReview">
+        DELETE FROM review
+               WHERE id = #{productId} and user_id = #{userId}
+    </delete>
 
     <!-- 전체 상품 조회 -->
     <select id="getAllProducts" resultType="org.finmate.product.domain.ProductVO" resultMap="ProductWithType">
         SELECT
-        <include refid="productSelectColumns" />
-        <include refid="productJoin" />
+        <include refid="productSelectColumns"></include>
+        <include refid="productJoin"></include>
             ORDER BY p.id
     </select>
 
@@ -197,6 +208,10 @@
             <when test="sortOrder == 'asc'">ASC</when>
             <otherwise>DESC</otherwise>
         </choose>
+    </select>
+    <select id="getProductReviewByProductId" resultType="ProductReviewVO">
+        SELECT * FROM review
+        WHERE product_id = #{productId}
     </select>
 
 </mapper>

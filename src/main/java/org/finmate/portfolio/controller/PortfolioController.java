@@ -14,10 +14,9 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@Log4j2
 @RequestMapping("/api/member/portfolio")
 @RequiredArgsConstructor
-@Slf4j
+@Log4j2
 @Api(tags = "재무 포트폴리오 API")
 public class PortfolioController {
 
