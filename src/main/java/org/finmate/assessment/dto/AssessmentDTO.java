@@ -3,13 +3,11 @@ package org.finmate.assessment.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.finmate.assessment.domain.AssessmentVO;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,12 +31,12 @@ public class AssessmentDTO {
     /**
      * VO → DTO 변환
      */
-    public static AssessmentDTO toDTO(AssessmentVO vo) {
+    public static AssessmentDTO from(AssessmentVO vo) {
         return AssessmentDTO.builder()
                 .id(vo.getId())
                 .question(vo.getQuestion())
                 .choices(vo.getChoices().stream()
-                        .map(AssessmentDetailsDTO::toDTO)
+                        .map(AssessmentDetailsDTO::from)
                         .collect(Collectors.toList()))
                 .build();
     }

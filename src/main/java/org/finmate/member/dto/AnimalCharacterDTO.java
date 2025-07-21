@@ -30,7 +30,7 @@ public class AnimalCharacterDTO {
     @ApiModelProperty(value = "동물 캐릭터 이미지 경로4")
     private String animalImage4;
 
-    public static AnimalCharacterDTO toDTO(AnimalCharacterVO vo) {
+    public static AnimalCharacterDTO from(AnimalCharacterVO vo) {
         return AnimalCharacterDTO.builder()
                 .animalName(vo.getAnimalName())
                 .animalImage1(vo.getAnimalImage1())

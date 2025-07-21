@@ -52,7 +52,7 @@ public class UserInfoDTO {
     /**
      * VO -> DTO
      */
-    public static UserInfoDTO toDTO(UserInfoVO vo){
+    public static UserInfoDTO from(UserInfoVO vo){
         return UserInfoDTO.builder()
                 .id(vo.getId())
                 .userId(vo.getUserId())

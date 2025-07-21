@@ -49,17 +49,17 @@ public class ProductReviewDTO {
                 .build();
     }
 
-    public static ProductReviewVO toVO(ProductReviewDTO dto) {
+    public ProductReviewVO toVO() {
         return ProductReviewVO.builder()
-                .id(dto.getId())
-                .productId(dto.getProductId())
-                .userId(dto.getUserId())
-                .rating(dto.getRating())
-                .easeOfSignup(dto.getEaseOfSignup())
-                .content(dto.getContent())
-                .imageUrl(dto.getImageUrl())
-                .writer(dto.getWriter())
-                .createdAt(dto.getCreatedAt())
+                .id(id)
+                .productId(productId)
+                .userId(userId)
+                .rating(rating)
+                .easeOfSignup(easeOfSignup)
+                .content(content)
+                .imageUrl(imageUrl)
+                .writer(writer)
+                .createdAt(createdAt)
                 .build();
     }
 }

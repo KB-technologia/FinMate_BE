@@ -29,7 +29,7 @@ public class AssessmentServiceImpl implements AssessmentService{
 
         return assessmentMapper.getList()
                 .stream()
-                .map(AssessmentDTO::toDTO)
+                .map(AssessmentDTO::from)
                 .toList();
 
     }
@@ -96,6 +96,6 @@ public class AssessmentServiceImpl implements AssessmentService{
                 .build();
 
         userInfoMapper.insertUserInfo(userInfoVO);
-        return Optional.ofNullable(UserInfoDTO.toDTO(userInfoVO));
+        return Optional.ofNullable(UserInfoDTO.from(userInfoVO));
     }
 }
