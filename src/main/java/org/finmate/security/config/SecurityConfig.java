@@ -2,6 +2,7 @@ package org.finmate.security.config;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.finmate.security.filter.JwtAuthenticationFilter;
 import org.finmate.security.filter.JwtUsernamePasswordAuthenticationFilter;
 import org.finmate.security.handler.LoginFailureHandler;
 import org.finmate.security.handler.LoginSuccessHandler;
@@ -36,6 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
     private final LoginSuccessHandler loginSuccessHandler;
     private final LoginFailureHandler loginFailureHandler;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder(){
@@ -83,7 +85,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         JwtUsernamePasswordAuthenticationFilter jwtFilter = new JwtUsernamePasswordAuthenticationFilter(authenticationManagerBean(), loginSuccessHandler, loginFailureHandler);
 
         http.addFilterBefore(encodingFilter(), CsrfFilter.class) // 한글 인코딩 필터 설정
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class) // 추가된 필터
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class) //jwt 인증 필터
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class) // 로그인 인증 필터
                 .httpBasic().disable() // 기본 HTTP 인증비활성화
                 .csrf().disable()  // CSRF 비활성화
                 .formLogin().disable()  // formLogin 비활성화- 관련 필터 해제
