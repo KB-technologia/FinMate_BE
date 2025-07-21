@@ -26,6 +26,7 @@ import javax.sql.DataSource;
         "org.finmate.assessment.mapper",
         "org.finmate.product.mapper",
         "org.finmate.portfolio.mapper",
+        "org.finmate.quiz.mapper"
 })
 @ComponentScan(basePackages={
         "org.finmate.assessment.service",
@@ -33,6 +34,7 @@ import javax.sql.DataSource;
         "org.finmate.member.service",
         "org.finmate.common.util",
         "org.finmate.portfolio.service",
+        "org.finmate.quiz.service"
 })
 
 public class RootConfig {
