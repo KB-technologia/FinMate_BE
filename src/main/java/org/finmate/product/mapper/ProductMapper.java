@@ -1,6 +1,4 @@
 package org.finmate.product.mapper;
-
-
 import org.finmate.product.domain.FavoriteVO;
 import org.finmate.product.domain.ProductReviewVO;
 import org.finmate.product.domain.ProductVO;
