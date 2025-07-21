@@ -5,6 +5,8 @@ import lombok.extern.log4j.Log4j2;
 import org.finmate.security.filter.AuthenticationErrorFilter;
 import org.finmate.security.filter.JwtAuthenticationFilter;
 import org.finmate.security.filter.JwtUsernamePasswordAuthenticationFilter;
+import org.finmate.security.handler.CustomAccessDeniedHandler;
+import org.finmate.security.handler.CustomAuthenticationEntryPoint;
 import org.finmate.security.handler.LoginFailureHandler;
 import org.finmate.security.handler.LoginSuccessHandler;
 import org.springframework.context.annotation.Bean;
@@ -38,8 +40,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
     private final LoginSuccessHandler loginSuccessHandler;
     private final LoginFailureHandler loginFailureHandler;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final AuthenticationErrorFilter authenticationErrorFilter;
+
 
 
     @Bean
@@ -94,7 +100,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .httpBasic().disable() // 기본 HTTP 인증비활성화
                 .csrf().disable()  // CSRF 비활성화
                 .formLogin().disable()  // formLogin 비활성화- 관련 필터 해제
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS); // 세션 생성 모드 설정
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션 생성 모드 설정
+                .and()
+                .exceptionHandling() // 예외 처리 설정
+                .authenticationEntryPoint(customAuthenticationEntryPoint)
+                .accessDeniedHandler(customAccessDeniedHandler);
     }
 
 
