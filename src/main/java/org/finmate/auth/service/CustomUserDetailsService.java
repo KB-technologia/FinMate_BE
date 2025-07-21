@@ -29,6 +29,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         log.info("로그인 요청 아이디 : {}", username);
 
         UserVO user = userMapper.selectByAccountId(username);
+        log.info("****" + user);
 
         if(user == null){
             throw new UsernameNotFoundException(username + "은 존재하지 않는 사용자입니다.");

@@ -6,15 +6,7 @@
 <mapper namespace="org.finmate.auth.mapper.UserMapper">
 
     <select id="selectByAccountId" resultType="org.finmate.auth.domain.UserVO">
-        SELECT
-            id,
-            name,
-            account_id AS accountId,
-            email,
-            password,
-            birth,
-            provider,
-            created_at AS createdAt
+        SELECT *
         FROM user
         WHERE account_id = #{accountId}
     </select>

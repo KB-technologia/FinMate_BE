@@ -9,6 +9,7 @@ import org.finmate.security.handler.CustomAccessDeniedHandler;
 import org.finmate.security.handler.CustomAuthenticationEntryPoint;
 import org.finmate.security.handler.LoginFailureHandler;
 import org.finmate.security.handler.LoginSuccessHandler;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -35,6 +36,7 @@ import org.springframework.web.filter.CorsFilter;
 @Configuration
 @RequiredArgsConstructor
 @ComponentScan(basePackages = {"org.finmate.auth.service", "org.finmate.auth", "org.finmate.security"})
+@MapperScan(basePackages = {"org.finmate.auth.mapper"})
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
@@ -64,8 +66,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // AuthenticationManager 빈 등록
     @Bean
     @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
+    public AuthenticationManager authenticationManager() throws Exception {
+        return super.authenticationManager();
     }
 
     // cross origin 접근 허용
