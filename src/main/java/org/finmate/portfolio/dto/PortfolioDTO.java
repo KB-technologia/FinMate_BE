@@ -45,7 +45,7 @@ public class PortfolioDTO {
     @ApiModelProperty(value = "기타 비율", example="30.0")
     private Double otherRatio;
 
-    public static PortfolioDTO of(PortfolioVO vo) {
+    public static PortfolioDTO from(PortfolioVO vo) {
         return vo == null ? null : PortfolioDTO.builder()
                 .id(vo.getId())
                 .userId(vo.getUserId())

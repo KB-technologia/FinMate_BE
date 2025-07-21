@@ -20,7 +20,7 @@ public class QuizDTO {
     @ApiModelProperty(value = "퀴즈 문제")
     private String quiz;
 
-    public static QuizDTO of (QuizVO vo){
+    public static QuizDTO from(QuizVO vo){
         return vo == null? null : QuizDTO.builder()
                 .id(vo.getId())
                 .quiz(vo.getQuiz())

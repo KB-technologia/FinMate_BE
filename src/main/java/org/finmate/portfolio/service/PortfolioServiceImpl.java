@@ -29,7 +29,7 @@ public class PortfolioServiceImpl implements PortfolioService {
         if(vo== null){
             throw new NoSuchElementException("해당 사용자의 포트폴리오가 존재하지 않습니다.");
         }
-        return PortfolioDTO.of(vo);
+        return PortfolioDTO.from(vo);
     }
 
     @Override

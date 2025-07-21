@@ -9,7 +9,7 @@ import org.finmate.member.domain.MyPageVO;
 @Getter
 @Setter
 @ApiModel(description = "마이페이지 수정 요청 DTO")
-public class MyPageUpdateRequestDto {
+public class MyPageUpdateRequestDTO {
 
     @ApiModelProperty(value = "새 비밀번호", example = "newPassword123")
     private String password;

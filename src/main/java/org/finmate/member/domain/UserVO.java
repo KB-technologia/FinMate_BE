@@ -18,5 +18,5 @@ public class UserVO {
     private String password;
     private LocalDate birth;
     private Provider provider;
-    private LocalDateTime createAt;
+    private LocalDateTime createdAt;
 }

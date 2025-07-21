@@ -16,7 +16,7 @@ public class QuizServiceImpl implements QuizService {
 
     public QuizDTO getRandomQuiz(){
         QuizVO randomQuiz = quizMapper.selectRandomQuiz();
-        return QuizDTO.of(randomQuiz);
+        return QuizDTO.from(randomQuiz);
     }
 
     public String checkAnswer(QuizCheckRequestDTO dto) {

@@ -30,7 +30,7 @@ public class AssessmentDetailsDTO {
     private String tag;
 
 
-    public static AssessmentDetailsDTO toDTO(AssessmentDetailsVO vo){
+    public static AssessmentDetailsDTO from(AssessmentDetailsVO vo){
 
         return AssessmentDetailsDTO.builder()
                 .id(vo.getId())

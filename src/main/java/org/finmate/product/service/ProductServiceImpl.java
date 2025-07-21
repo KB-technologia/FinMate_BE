@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.finmate.common.util.OpenAiApi;
 import org.finmate.common.util.OpenAiDTO.OpenAiResponseDTO;
+import org.finmate.exception.NotFoundException;
 import org.finmate.product.domain.ProductReviewVO;
 import org.finmate.product.dto.ProductComparisonResultDTO;
 import org.finmate.product.dto.ProductDTO;
@@ -79,11 +80,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Long insertProductReview(ProductReviewDTO productReviewDTO) {
-        ProductReviewVO vo = ProductReviewDTO.toVO(productReviewDTO);
+        ProductReviewVO vo = productReviewDTO.toVO();
         int result = productMapper.insertProductReview(vo);
         if (result == 0) {
-            throw new RuntimeException();
-            //TODO: 예외처리 묶어서 정리하기
+            throw new NotFoundException("해당 글을 등록할 수 없습니다.");
         }
         return vo.getId();
     }
@@ -92,8 +92,7 @@ public class ProductServiceImpl implements ProductService {
     public Long deleteProductReview(Long id, Long userId) {
         int result = productMapper.deleteProductReview(id, userId);
         if (result == 0) {
-            throw new RuntimeException();
-            //TODO: 예외처리 묶어서 정리하기
+            throw new NotFoundException("해당 글을 삭제할 수 없습니다.");
         }
         return id;
     }
