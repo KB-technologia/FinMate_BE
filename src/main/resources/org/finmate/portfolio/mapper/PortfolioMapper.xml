@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.finmate.portfolio.mapper.PortfolioMapper">
+    <insert id="insertPortfolio">
+        INSERT INTO financial_portfolio (
+            user_id, age, total_assets, annual_income,
+            investment_profile, cash_ratio, bond_ratio,
+            equity_ratio, other_ratio
+        ) VALUES (
+        #{userId}, #{age}, #{totalAssets}, #{annualIncome},
+        #{investmentProfile}, #{cashRatio}, #{bondRatio},
+        #{equityRatio}, #{otherRatio}
+        )
+    </insert>
+
+    <select id="selectPortfolioByUserId" resultType="org.finmate.portfolio.domain.PortfolioVO">
+        SELECT * FROM financial_portfolio WHERE user_id = #{userId}
+    </select>
+
+    <update id="updatePortfolio">
+        UPDATE financial_portfolio SET
+            age = #{age},
+            total_assets = #{totalAssets},
+            annual_income = #{annualIncome},
+            investment_profile = #{investmentProfile},
+            cash_ratio = #{cashRatio},
+            bond_ratio = #{bondRatio},
+            equity_ratio = #{equityRatio},
+            other_ratio = #{otherRatio}
+        WHERE user_id = #{userId}
+    </update>
+
+    <delete id="deletePortfolioByUserId">
+        DELETE FROM financial_portfolio WHERE user_id = #{userId}
+    </delete>
+
+</mapper>

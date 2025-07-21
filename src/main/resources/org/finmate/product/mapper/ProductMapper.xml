@@ -72,9 +72,9 @@
             <result property="returnRate6m" column="return_rate_6m"/>
         </association>
     </resultMap>
-    <select id="getProductDetail" resultMap="ProductWithType">
 
-        SELECT
+    <!-- 공통 SELECT Column 절 -->
+    <sql id="productSelectColumns">
             p.id AS p_id,
             p.name AS p_name,
             p.bank_name AS p_bank_name,
@@ -130,13 +130,30 @@
             f.return_rate_1m AS f_return_rate_1m,
             f.return_rate_3m AS f_return_rate_3m,
             f.return_rate_6m AS f_return_rate_6m
+    </sql>
 
+    <!-- 공통 JOIN 절 -->
+    <sql id="productJoin">
         FROM financial_product p
                  LEFT JOIN product_deposit d ON p.id = d.product_id
                  LEFT JOIN product_savings s ON p.id = s.product_id
                  LEFT JOIN product_fund f ON p.id = f.product_id
-        WHERE p.id = #{id}
+    </sql>
+
+    <!-- 전체 상품 조회 -->
+    <select id="getAllProduct" resultMap="ProductWithType">
+        SELECT
+        <include refid="productSelectColumns"></include>
+        <include refid="productJoin"></include>
+            ORDER BY p.id
     </select>
 
+    <!-- 상품 상세 조회 -->
+    <select id="getProductDetail" resultMap="ProductWithType">
+        SELECT
+        <include refid="productSelectColumns"></include>
+        <include refid="productJoin"></include>
+            WHERE p.id = #{id}
+    </select>
 
 </mapper>

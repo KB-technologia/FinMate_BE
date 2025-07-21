@@ -19,11 +19,21 @@ import java.util.Locale;
 
 @Configuration
 @PropertySource({"classpath:/application.properties"})
-@ComponentScan(basePackages = {"org.finmate.product.service",
-                                "org.finmate.security.handler"})
 @MapperScan(basePackages = {
-        "org.finmate.product.mapper"
+        "org.finmate.member.mapper",
+        "org.finmate.assessment.mapper",
+        "org.finmate.product.mapper",
+        "org.finmate.portfolio.mapper",
 })
+@ComponentScan(basePackages={
+        "org.finmate.assessment.service",
+        "org.finmate.product.service",
+        "org.finmate.member.service",
+        "org.finmate.common.util",
+        "org.finmate.portfolio.service",
+        "org.finmate.security.handler",
+})
+
 public class RootConfig {
     @Value("${jdbc.driver}")
     String driver;
