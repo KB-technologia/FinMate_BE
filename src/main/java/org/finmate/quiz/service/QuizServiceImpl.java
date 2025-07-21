@@ -20,9 +20,9 @@ public class QuizServiceImpl implements QuizService {
     }
 
     public String checkAnswer(QuizCheckRequestDTO dto) {
-        QuizVO quiz = quizMapper.selectQuiz(dto.getQuizId());
-        log.info(quiz.isQuizAnswer());
-        log.info(dto.isAnswer());
+        QuizVO quiz = quizMapper.selectQuiz(dto.getQuizId())
+                .orElseThrow(() -> new RuntimeException("해당 퀴즈가 존재하지 않습니다."));
+
         if(quiz.isQuizAnswer() == dto.isAnswer()){
             return quiz.getCorrectAnswer();
         } else {
