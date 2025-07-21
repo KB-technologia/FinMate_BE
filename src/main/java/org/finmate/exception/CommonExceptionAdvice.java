@@ -34,7 +34,7 @@ public class CommonExceptionAdvice {
     }
 
 
-    @ExceptionHandler(NoHandlerFoundException.class)
+    @ExceptionHandler({NoHandlerFoundException.class, NotFoundException.class})
     public ResponseEntity<ErrorResponse> handle404(HttpServletRequest request, NoHandlerFoundException ex) {
 
         log.error("Exception ......." + ex.getMessage());

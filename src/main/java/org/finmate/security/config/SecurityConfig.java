@@ -9,12 +9,10 @@ import org.finmate.security.handler.CustomAccessDeniedHandler;
 import org.finmate.security.handler.CustomAuthenticationEntryPoint;
 import org.finmate.security.handler.LoginFailureHandler;
 import org.finmate.security.handler.LoginSuccessHandler;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -22,7 +20,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CsrfFilter;
@@ -35,8 +32,7 @@ import org.springframework.web.filter.CorsFilter;
 @EnableWebSecurity
 @Configuration
 @RequiredArgsConstructor
-@ComponentScan(basePackages = {"org.finmate.auth.service", "org.finmate.auth", "org.finmate.security"})
-@MapperScan(basePackages = {"org.finmate.auth.mapper"})
+@ComponentScan(basePackages = {"org.finmate.security"})
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;

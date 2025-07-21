@@ -3,7 +3,7 @@ package org.finmate.security.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.finmate.auth.domain.UserVO;
+import org.finmate.member.domain.UserVO;
 
 import java.util.List;
 
