@@ -1,5 +1,7 @@
 package org.finmate.product.mapper;
 import org.finmate.product.domain.FavoriteVO;
+
+import org.apache.ibatis.annotations.Param;
 import org.finmate.product.domain.ProductReviewVO;
 import org.finmate.product.domain.ProductVO;
 
@@ -18,13 +20,17 @@ public interface ProductMapper {
     // 즐겨찾기 삭제
     int deleteFavorite(Long favoriteId);
 
-    Optional<ProductVO> getProductDetail(Long id);
+
+    ProductVO getProductDetail(Long id);
 
     List<ProductReviewVO> getProductReviewByProductId(Long productId);
 
     int insertProductReview(ProductReviewVO productReviewVO);
 
-    int deleteProductReview(Long productId, Long userId);
+
+    int deleteProductReview(
+            @Param("productId") Long productId,
+            @Param("userId") Long userId);
 
 }
 

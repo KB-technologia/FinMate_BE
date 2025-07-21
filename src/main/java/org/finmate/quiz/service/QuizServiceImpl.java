@@ -8,6 +8,8 @@ import org.finmate.quiz.dto.QuizDTO;
 import org.finmate.quiz.mapper.QuizMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Log4j2
@@ -20,7 +22,7 @@ public class QuizServiceImpl implements QuizService {
     }
 
     public String checkAnswer(QuizCheckRequestDTO dto) {
-        QuizVO quiz = quizMapper.selectQuiz(dto.getQuizId())
+        QuizVO quiz = Optional.ofNullable(quizMapper.selectQuiz(dto.getQuizId()))
                 .orElseThrow(() -> new RuntimeException("해당 퀴즈가 존재하지 않습니다."));
 
         if(quiz.isQuizAnswer() == dto.isAnswer()){
