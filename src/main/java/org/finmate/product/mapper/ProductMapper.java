@@ -1,5 +1,6 @@
 package org.finmate.product.mapper;
 
+import org.apache.ibatis.annotations.Param;
 import org.finmate.product.domain.ProductReviewVO;
 import org.finmate.product.domain.ProductVO;
 
@@ -15,5 +16,7 @@ public interface ProductMapper {
 
     int insertProductReview(ProductReviewVO productReviewVO);
 
-    int deleteProductReview(Long productId, Long userId);
+    int deleteProductReview(
+            @Param("productId") Long productId,
+            @Param("userId") Long userId);
 }

@@ -148,7 +148,7 @@
     </insert>
     <delete id="deleteProductReview">
         DELETE FROM review
-               WHERE id = #{productId} and user_id = #{userId}
+               WHERE product_id = #{productId} and user_id = #{userId}
     </delete>
 
     <!-- 전체 상품 조회 -->
