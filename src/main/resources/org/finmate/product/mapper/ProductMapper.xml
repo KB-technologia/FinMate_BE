@@ -183,17 +183,17 @@
 
     <!-- SELECT 절 컬럼 정의 -->
     <sql id="favoriteProductSelect">
-        f.id AS f_id,
-        f.user_id AS f_user_id,
+        pfav.id AS f_id,
+        pfav.user_id AS f_user_id,
         <include refid="org.finmate.product.mapper.ProductMapper.productSelectColumns"/>
     </sql>
 
     <!-- JOIN 구문 정의 (FROM 제외) -->
     <sql id="favoriteProductJoin">
-        JOIN financial_product p ON p.id = f.product_id
+        JOIN financial_product p ON p.id = pfav.product_id
     LEFT JOIN product_deposit d ON p.id = d.product_id
     LEFT JOIN product_savings s ON p.id = s.product_id
-    LEFT JOIN product_fund pf ON p.id = pf.product_id
+    LEFT JOIN product_fund f ON p.id = f.product_id
     </sql>
 
     <!-- 즐겨찾기 목록 조회 -->
@@ -202,21 +202,21 @@
             resultMap="FavoriteWithProduct">
         SELECT
         <include refid="favoriteProductSelect"/>
-        FROM product_favorite f
+        FROM product_favorite pfav
         <include refid="favoriteProductJoin"/>
-        WHERE f.user_id = #{userId}
-        ORDER BY f.id
+        WHERE pfav.user_id = #{userId}
+        ORDER BY pfav.id
     </select>
 
     <!-- 즐겨찾기 등록 -->
     <insert id="enrollFavorite" parameterType="map">
-        INSERT INTO favorites (user_id, product_id)
+        INSERT INTO product_favorite (user_id, product_id)
         VALUES (#{userId}, #{productId})
     </insert>
 
     <!-- 즐겨찾기 삭제 -->
     <delete id="deleteFavorite" parameterType="long">
-        DELETE FROM favorites
+        DELETE FROM product_favorite
         WHERE id = #{favoriteId}
     </delete>
 </mapper>

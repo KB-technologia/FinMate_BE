@@ -1,14 +1,15 @@
 package org.finmate.product.controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.finmate.member.domain.CustomUser;
 import org.finmate.product.dto.FavoriteDTO;
 import org.finmate.product.dto.ProductDTO;
 import org.finmate.product.service.FavoriteService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,21 +29,38 @@ public class FavoriteController {
             @ApiResponse(code = 400, message = "잘못된 요청입니다."),
             @ApiResponse(code = 500, message = "서버에서 오류가 발생했습니다.")
     })
-    @GetMapping("{userId}")
-    public List<FavoriteDTO> getFavoriteList(@PathVariable Long userId) {
-        return favoriteService.getFavorites(userId);
+    @GetMapping
+    public ResponseEntity<List<FavoriteDTO>> getFavoriteList(
+            @AuthenticationPrincipal CustomUser user) {
+
+        Long userId = user.getUser().getId();
+        return ResponseEntity.ok(favoriteService.getFavorites(userId));
     }
 
     @ApiOperation(value = "즐겨찾기 등록", notes = "사용자가 특정 금융상품을 즐겨찾기에 등록합니다.")
     @PostMapping("/{productId}")
-    public void enrollFavorite(@RequestHeader("userId") Long userId,
-                               @PathVariable Long productId) {
+    public ResponseEntity<Void> enrollFavorite(
+            @AuthenticationPrincipal CustomUser user,
+            @ApiParam(value = "상품 ID", required = true, example = "1")
+            @PathVariable Long productId) {
+
+        Long userId = user.getUser().getId();
         favoriteService.enrollFavorite(userId, productId);
+
+        return ResponseEntity.noContent().build();
     }
 
     @ApiOperation(value = "즐겨찾기 삭제", notes = "즐겨찾기 ID로 등록된 항목을 삭제합니다.")
+    @ApiResponses({
+            @ApiResponse(code = 204, message = "즐겨찾기 삭제 성공"),
+            @ApiResponse(code = 404, message = "즐겨찾기 항목을 찾을 수 없음")
+    })
     @DeleteMapping("/{favoriteId}")
-    public void deleteFavorite(@PathVariable Long favoriteId) {
+    public ResponseEntity<Void> deleteFavorite(
+            @ApiParam(value = "즐겨찾기 ID", required = true, example = "1")
+            @PathVariable Long favoriteId
+    ) {
         favoriteService.deleteFavorite(favoriteId);
+        return ResponseEntity.noContent().build();
     }
 }
