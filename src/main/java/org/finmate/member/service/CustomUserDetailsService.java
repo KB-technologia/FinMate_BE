@@ -21,6 +21,7 @@ import java.util.List;
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final PasswordEncoder passwordEncoder;
+
     private final UserMapper userMapper;
 
     @Override

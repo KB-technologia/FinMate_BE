@@ -3,7 +3,7 @@ package org.finmate.security.handler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.finmate.member.domain.CustomUser;
-import org.finmate.auth.domain.UserVO;
+import org.finmate.member.domain.UserVO;
 import org.finmate.security.dto.AuthResultDTO;
 import org.finmate.security.dto.UserInfoDTO;
 import org.finmate.security.util.JsonResponse;
