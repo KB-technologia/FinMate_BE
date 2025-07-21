@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.finmate.common.util.OpenAiApi;
 import org.finmate.common.util.OpenAiDTO.OpenAiResponseDTO;
+import org.finmate.product.domain.ProductReviewVO;
 import org.finmate.product.dto.ProductComparisonResultDTO;
 import org.finmate.product.dto.ProductDTO;
+import org.finmate.product.dto.ProductReviewDTO;
 import org.finmate.product.mapper.ProductMapper;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +34,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO<?> getProductDetail(Long id) {
-        return ProductDTO.from(productMapper.getProductDetail(id));
+        return ProductDTO.from(productMapper.getProductDetail(id)
+                .orElseThrow(RuntimeException::new)
+        );
     }
 
     @Override
@@ -63,5 +67,34 @@ public class ProductServiceImpl implements ProductService {
                 .build();
 
         return result;
+    }
+
+    @Override
+    public List<ProductReviewDTO> getProductReviews(Long id) {
+        return productMapper.getProductReviewByProductId(id)
+                .stream()
+                .map(ProductReviewDTO::from)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Long insertProductReview(ProductReviewDTO productReviewDTO) {
+        ProductReviewVO vo = ProductReviewDTO.toVO(productReviewDTO);
+        int result = productMapper.insertProductReview(vo);
+        if (result == 0) {
+            throw new RuntimeException();
+            //TODO: 예외처리 묶어서 정리하기
+        }
+        return vo.getId();
+    }
+
+    @Override
+    public Long deleteProductReview(Long id, Long userId) {
+        int result = productMapper.deleteProductReview(id, userId);
+        if (result == 0) {
+            throw new RuntimeException();
+            //TODO: 예외처리 묶어서 정리하기
+        }
+        return id;
     }
 }
