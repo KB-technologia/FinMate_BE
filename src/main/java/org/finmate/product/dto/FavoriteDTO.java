@@ -6,8 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.finmate.product.domain.FavoriteVO;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -23,4 +25,17 @@ public class FavoriteDTO {
 
     @ApiModelProperty(value = "즐겨찾기한 상품")
     private List<ProductDTO<?>> productDTOList;
+
+    public static FavoriteDTO toDTO(FavoriteVO vo) {
+        List<ProductDTO<?>> dtoList = vo.getProductVOList().stream()
+                .map(pvo -> (ProductDTO<?>) ProductDTO.from(pvo))
+                .collect(Collectors.toList());
+
+        return FavoriteDTO.builder()
+                .id(vo.getId())
+                .userId(vo.getUserId())
+                .productDTOList(dtoList)
+                .build();
+    }
+
 }
