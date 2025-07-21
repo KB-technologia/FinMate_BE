@@ -29,4 +29,6 @@ public class QuizServiceImpl implements QuizService {
             return quiz.getWrongAnswer();
         }
     }
+
+    //TODO : 사용자가 정답을 맞췄을 시 경험치 지급 로직 추가
 }
