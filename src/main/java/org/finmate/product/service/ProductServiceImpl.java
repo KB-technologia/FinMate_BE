@@ -6,6 +6,7 @@ import org.finmate.common.util.OpenAiApi;
 import org.finmate.common.util.OpenAiDTO.OpenAiResponseDTO;
 import org.finmate.exception.NotFoundException;
 import org.finmate.product.domain.ProductReviewVO;
+import org.finmate.product.domain.ProductVO;
 import org.finmate.product.dto.ProductComparisonResultDTO;
 import org.finmate.product.dto.ProductDTO;
 import org.finmate.product.dto.ProductReviewDTO;
@@ -14,6 +15,7 @@ import org.finmate.product.mapper.ProductMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Log4j2
@@ -36,8 +38,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO<?> getProductDetail(Long id) {
-        return ProductDTO.from(productMapper.getProductDetail(id)
-                .orElseThrow(RuntimeException::new)
+        return ProductDTO.from(
+                Optional.ofNullable(productMapper.getProductDetail(id))
+                        .orElseThrow(() -> new NotFoundException("해당 상품이 존재하지 않습니다."))
         );
     }
 

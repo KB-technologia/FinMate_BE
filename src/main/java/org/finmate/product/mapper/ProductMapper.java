@@ -1,5 +1,6 @@
 package org.finmate.product.mapper;
 
+import org.apache.ibatis.annotations.Param;
 import org.finmate.product.domain.ProductReviewVO;
 import org.finmate.product.domain.ProductVO;
 import org.finmate.product.dto.ProductFilterDTO;
@@ -10,13 +11,17 @@ import java.util.Optional;
 public interface ProductMapper {
     List<ProductVO> getAllProducts();
 
-    Optional<ProductVO> getProductDetail(Long id);
+    ProductVO getProductDetail(Long id);
 
     List<ProductReviewVO> getProductReviewByProductId(Long productId);
 
     int insertProductReview(ProductReviewVO productReviewVO);
 
-    int deleteProductReview(Long productId, Long userId);
 
     List<ProductVO> getFilteredProductsByType(ProductFilterDTO filter);
+
+    int deleteProductReview(
+            @Param("productId") Long productId,
+            @Param("userId") Long userId);
+
 }

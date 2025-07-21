@@ -69,6 +69,7 @@ dependencies {
 
     // Jackson - Json 처리
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.4'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 
     // 데이터베이스
     implementation 'com.mysql:mysql-connector-j:8.1.0'

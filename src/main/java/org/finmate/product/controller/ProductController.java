@@ -3,12 +3,14 @@ package org.finmate.product.controller;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.finmate.member.domain.CustomUser;
 import org.finmate.product.dto.ProductComparisonResultDTO;
 import org.finmate.product.dto.ProductDTO;
 import org.finmate.product.dto.ProductReviewDTO;
 import org.finmate.product.dto.ReviewIdResponse;
 import org.finmate.product.service.ProductService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -86,11 +88,13 @@ public class ProductController {
     public ResponseEntity<ReviewIdResponse> insertProductReview(
             @ApiParam(value = "상품 ID", required = true, example = "1")
             @PathVariable Long id,
-            @RequestBody ProductReviewDTO review
-//            , @AuthenticationPrincipal CustomUserDetails user
+            @ApiParam(value = "등록할 금융 상품 리뷰 DTO", required = true)
+            @RequestBody ProductReviewDTO review,
+            @ApiParam(value = "유저 ID", required = true, example = "1")
+            @AuthenticationPrincipal CustomUser user
     ) {
         review.setProductId(id);
-        //TODO:유저 아이디 주입
+        review.setUserId(user.getUser().getId());
         Long resultId = productService.insertProductReview(review);
         return ResponseEntity.ok(new ReviewIdResponse(resultId));
     }
@@ -104,10 +108,10 @@ public class ProductController {
     @DeleteMapping("/{id}/review")
     public ResponseEntity<ReviewIdResponse> deleteProductReview(
             @ApiParam(value = "상품 ID", required = true, example = "1")
-            @PathVariable Long id
-            //            , @AuthenticationPrincipal CustomUserDetails user
+            @PathVariable Long id,
+            @ApiParam(value = "유저 ID", required = true, example = "1")
+            @AuthenticationPrincipal CustomUser user
     ) {
-        //TODO:유저 아이디 주입
-        return ResponseEntity.ok(new ReviewIdResponse(productService.deleteProductReview(id, 1L)));
+        return ResponseEntity.ok(new ReviewIdResponse(productService.deleteProductReview(id, user.getUser().getId())));
     }
 }
