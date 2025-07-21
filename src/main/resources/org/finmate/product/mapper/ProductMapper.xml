@@ -172,50 +172,49 @@
     </select>
 
     <!-- ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 즐겨찾기 관련 SQL ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ -->
-    <!-- 1) Favorite + Product 네스티드 매핑 -->
+    <!-- Favorite + Product 네스티드 매핑 -->
     <resultMap id="FavoriteWithProduct" type="org.finmate.product.domain.FavoriteVO">
-        <!-- 즐겨찾기 PK -->
         <id property="id" column="f_id"/>
-        <!-- 사용자 아이디 -->
         <result property="userId" column="f_user_id"/>
 
-        <!-- ProductMapper.ProductWithType 재사용 -->
         <association property="productVOList"
                      resultMap="org.finmate.product.mapper.ProductMapper.ProductWithType"/>
     </resultMap>
 
-    <!-- 2) SELECT 절 컬럼 구성 (즐겨찾기 + 상품 컬럼) -->
+    <!-- SELECT 절 컬럼 정의 -->
     <sql id="favoriteProductSelect">
-        f.id        AS f_id,
-        f.user_id   AS f_user_id,
+        f.id AS f_id,
+        f.user_id AS f_user_id,
         <include refid="org.finmate.product.mapper.ProductMapper.productSelectColumns"/>
     </sql>
 
-    <!-- 3) JOIN 구성 (즐겨찾기 + 상품 테이블 조인) -->
+    <!-- JOIN 구문 정의 (FROM 제외) -->
     <sql id="favoriteProductJoin">
-        FROM favorites f
         JOIN financial_product p ON p.id = f.product_id
-        <include refid="org.finmate.product.mapper.ProductMapper.productJoin"/>
+    LEFT JOIN product_deposit d ON p.id = d.product_id
+    LEFT JOIN product_savings s ON p.id = s.product_id
+    LEFT JOIN product_fund pf ON p.id = pf.product_id
     </sql>
 
-    <!-- 4) 즐겨찾기 조회 쿼리 -->
+    <!-- 즐겨찾기 목록 조회 -->
     <select id="getFavorites"
             parameterType="long"
             resultMap="FavoriteWithProduct">
         SELECT
         <include refid="favoriteProductSelect"/>
+        FROM product_favorite f
         <include refid="favoriteProductJoin"/>
         WHERE f.user_id = #{userId}
         ORDER BY f.id
     </select>
 
-    <!-- 5) 즐겨찾기 등록 -->
+    <!-- 즐겨찾기 등록 -->
     <insert id="enrollFavorite" parameterType="map">
         INSERT INTO favorites (user_id, product_id)
         VALUES (#{userId}, #{productId})
     </insert>
 
-    <!-- 6) 즐겨찾기 삭제 -->
+    <!-- 즐겨찾기 삭제 -->
     <delete id="deleteFavorite" parameterType="long">
         DELETE FROM favorites
         WHERE id = #{favoriteId}
