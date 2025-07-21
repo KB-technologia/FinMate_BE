@@ -23,6 +23,9 @@ public class SignupRequestDTO {
     @ApiModelProperty(value = "비밀번호", example = "1234abcd")
     private String password;
 
+    @ApiModelProperty(value = "비밀번호 확인", example = "1234abcd")
+    private String passwordConfirm;
+
     @ApiModelProperty(value = "생년월일", example = "2000-01-01")
     private String birth;
 }
