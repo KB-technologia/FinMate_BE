@@ -152,7 +152,7 @@
     </delete>
 
     <!-- 전체 상품 조회 -->
-    <select id="getAllProducts" resultMap="ProductWithType">
+    <select id="getAllProducts" resultType="org.finmate.product.domain.ProductVO" resultMap="ProductWithType">
         SELECT
         <include refid="productSelectColumns"></include>
         <include refid="productJoin"></include>
@@ -162,9 +162,52 @@
     <!-- 상품 상세 조회 -->
     <select id="getProductDetail" resultMap="ProductWithType">
         SELECT
+        <include refid="productSelectColumns" />
+        <include refid="productJoin" />
+            WHERE p.id = #{id}
+    </select>
+
+    <select id="getFilteredProductsByType"
+            resultMap="ProductWithType"
+            parameterType="org.finmate.product.dto.ProductFilterDTO">
+        SELECT
         <include refid="productSelectColumns"></include>
         <include refid="productJoin"></include>
-            WHERE p.id = #{id}
+        <where>
+            <!-- 상품 타입 필터 (선택) - null이면 전체 조회 -->
+            <if test="productType != null and productType != ''">
+                AND p.product_type = #{productType}
+            </if>
+
+            <!-- 검색어 조건 (선택) -->
+            <if test="query != null and query != ''">
+                AND (p.name LIKE CONCAT('%', #{query}, '%')
+                OR p.bank_name LIKE CONCAT('%', #{query}, '%'))
+            </if>
+
+            <!-- 은행명 필터 (선택) -->
+            <if test="bankName != null and bankName.size() > 0">
+                AND p.bank_name IN
+                <foreach item="bank" collection="bankName" open="(" separator="," close=")">
+                    #{bank}
+                </foreach>
+            </if>
+
+            <!-- 펀드 종류 필터 (펀드일 때만) -->
+            <if test="productType == 'FUND' and fundType != null and fundType.size() > 0">
+                AND f.fund_type IN
+                <foreach item="type" collection="fundType" open="(" separator="," close=")">
+                    #{type}
+                </foreach>
+            </if>
+        </where>
+
+        <!-- 정렬: 수익률 기준만 -->
+        ORDER BY p.expected_return
+        <choose>
+            <when test="sortOrder == 'asc'">ASC</when>
+            <otherwise>DESC</otherwise>
+        </choose>
     </select>
     <select id="getProductReviewByProductId" resultType="ProductReviewVO">
         SELECT * FROM review

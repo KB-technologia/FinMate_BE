@@ -10,6 +10,7 @@ import org.finmate.product.domain.ProductVO;
 import org.finmate.product.dto.ProductComparisonResultDTO;
 import org.finmate.product.dto.ProductDTO;
 import org.finmate.product.dto.ProductReviewDTO;
+import org.finmate.product.dto.ProductFilterDTO;
 import org.finmate.product.mapper.ProductMapper;
 import org.springframework.stereotype.Service;
 
@@ -98,5 +99,30 @@ public class ProductServiceImpl implements ProductService {
             throw new NotFoundException("해당 글을 삭제할 수 없습니다.");
         }
         return id;
+    }
+
+    @Override
+    public List<ProductDTO<?>> getFilteredProducts(ProductFilterDTO filter) {
+        // 입력값 검증
+        validateFilter(filter);
+
+        // 상품 조회 (페이징 없이 전체 조회)
+        List<org.finmate.product.domain.ProductVO> products = productMapper.getFilteredProductsByType(filter);
+
+        // ProductDTO로 변환하여 반환
+        return products.stream()
+                .map(ProductDTO::from)
+                .collect(Collectors.toList());
+    }
+
+    private void validateFilter(ProductFilterDTO filter) {
+
+        // 검색어 전처리
+        if (filter.getQuery() != null) {
+            filter.setQuery(filter.getQuery().trim());
+            if (filter.getQuery().isEmpty()) {
+                filter.setQuery(null);
+            }
+        }
     }
 }

@@ -2,6 +2,7 @@ package org.finmate.product.service;
 
 import org.finmate.product.dto.ProductComparisonResultDTO;
 import org.finmate.product.dto.ProductDTO;
+import org.finmate.product.dto.ProductFilterDTO;
 import org.finmate.product.dto.ProductReviewDTO;
 
 import java.util.List;
@@ -12,6 +13,8 @@ public interface ProductService {
     List<ProductDTO<?>> getAllProducts();
   
     ProductComparisonResultDTO compareProducts(Long id1, Long id2);
+
+    List<ProductDTO<?>> getFilteredProducts(ProductFilterDTO filter);
 
     List<ProductReviewDTO> getProductReviews(Long id);
 
