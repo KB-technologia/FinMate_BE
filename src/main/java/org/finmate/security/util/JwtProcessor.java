@@ -3,6 +3,7 @@ package org.finmate.security.util;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
@@ -17,7 +18,8 @@ public class JwtProcessor {
     private static final long TOKEN_VALID_MILLISECONDS = 1000L * 60L * 60L * 24L & 7L;
 
     // 테스트용 임시 secret key
-    private final String secret = "이것은_테스트용으로_충분히_길게_설정한_JWT_시크릿키입니다_길게_써야_안전합니다_1234567890";
+    @Value("${jwt.secret}")
+    private String secret;
     private final Key key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
 
     // private Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256); // 운영시 사용
