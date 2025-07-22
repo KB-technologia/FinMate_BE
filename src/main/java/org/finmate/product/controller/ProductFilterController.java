@@ -3,6 +3,7 @@ package org.finmate.product.controller;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.finmate.exception.NotFoundException;
 import org.finmate.product.dto.ProductDTO;
 import org.finmate.product.dto.ProductFilterDTO;
 import org.finmate.product.service.ProductService;
@@ -45,22 +46,22 @@ public class ProductFilterController {
             @ApiParam(value = "정렬 순서", required = false, example = "desc", allowableValues = "asc,desc")
             @RequestParam(defaultValue = "desc") String sortOrder) {
 
-        try {
-            // 필터 DTO 구성
-            ProductFilterDTO filter = new ProductFilterDTO();
-            filter.setQuery(query);
-            filter.setProductType(productType);
-            filter.setBankName(bankName);
-            filter.setFundType(fundType);
-            filter.setSortOrder(sortOrder);
 
-            // 필터링 서비스 호출
-            List<ProductDTO<?>> result = productService.getFilteredProducts(filter);
-            return ResponseEntity.ok(result);
+        // 필터 DTO 구성
+        ProductFilterDTO filter = new ProductFilterDTO();
+        filter.setQuery(query);
+        filter.setProductType(productType);
+        filter.setBankName(bankName);
+        filter.setFundType(fundType);
+        filter.setSortOrder(sortOrder);
 
-        } catch (Exception e) {
-            log.error("상품 필터링 조회 실패: ", e);
-            return ResponseEntity.badRequest().build();
+        // 필터링 서비스 호출
+        List<ProductDTO<?>> result = productService.getFilteredProducts(filter);
+
+        if (result == null || result.isEmpty()) {
+            throw new NotFoundException("조건에 맞는 상품을 찾을 수 없습니다.");
         }
+
+        return ResponseEntity.ok(result);
     }
 }
