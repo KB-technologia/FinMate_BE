@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/products")
+@RequestMapping("/api/product/filter")
 @Log4j2
 @Api(tags = "금융 상품 필터링 API")
 public class ProductFilterController {
@@ -28,7 +28,7 @@ public class ProductFilterController {
             @ApiResponse(code = 400, message = "잘못된 요청입니다."),
             @ApiResponse(code = 500, message = "서버에서 오류가 발생했습니다.")
     })
-    @GetMapping
+    @GetMapping()
     public ResponseEntity<List<ProductDTO<?>>> getFilteredProducts(
             @ApiParam(value = "검색 키워드 (상품명 또는 은행명)", required = false, example = "글로벌")
             @RequestParam(required = false) String query,
