@@ -10,5 +10,5 @@ public interface FavoriteService {
 
     void enrollFavorite(Long userId, Long productId);
 
-    void deleteFavorite(Long favoriteId);
+    void deleteFavorite(Long userId, Long productId);
 }

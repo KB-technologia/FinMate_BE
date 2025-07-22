@@ -55,12 +55,14 @@ public class FavoriteController {
             @ApiResponse(code = 204, message = "즐겨찾기 삭제 성공"),
             @ApiResponse(code = 404, message = "즐겨찾기 항목을 찾을 수 없음")
     })
-    @DeleteMapping("/{favoriteId}")
+    @DeleteMapping("/{productId}")
     public ResponseEntity<Void> deleteFavorite(
+            @AuthenticationPrincipal CustomUser user,
             @ApiParam(value = "즐겨찾기 ID", required = true, example = "1")
-            @PathVariable Long favoriteId
+            @PathVariable Long productId
     ) {
-        favoriteService.deleteFavorite(favoriteId);
+        Long userId = user.getUser().getId();
+        favoriteService.deleteFavorite(userId, productId);
         return ResponseEntity.noContent().build();
     }
 }

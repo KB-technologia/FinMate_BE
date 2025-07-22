@@ -215,8 +215,9 @@
     </insert>
 
     <!-- 즐겨찾기 삭제 -->
-    <delete id="deleteFavorite" parameterType="long">
-        DELETE FROM product_favorite
-        WHERE id = #{favoriteId}
+    <delete id="deleteFavoriteByUserAndProduct">
+        DELETE FROM favorite
+        WHERE user_id = #{userId}
+        AND product_id = #{productId}
     </delete>
 </mapper>

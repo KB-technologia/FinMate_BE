@@ -2,7 +2,6 @@ package org.finmate.product.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.finmate.product.domain.FavoriteVO;
 import org.finmate.product.dto.FavoriteDTO;
 import org.finmate.product.mapper.ProductMapper;
 import org.springframework.stereotype.Service;
@@ -21,7 +20,7 @@ public class FavoriteServiceImpl implements FavoriteService {
     public List<FavoriteDTO> getFavorites(Long userId) {
         return productMapper.getFavorites(userId)
                 .stream()
-                .map(FavoriteDTO::toDTO).toList(); // Mapper는 FavoriteDTO 리스트 반환
+                .map(FavoriteDTO::from).toList(); // Mapper는 FavoriteDTO 리스트 반환
     }
 
     @Transactional
@@ -35,8 +34,8 @@ public class FavoriteServiceImpl implements FavoriteService {
 
     @Transactional
     @Override
-    public void deleteFavorite(Long favoriteId) {
-        int deleted = productMapper.deleteFavorite(favoriteId);
+    public void deleteFavorite(Long userId, Long productId) {
+        int deleted = productMapper.deleteFavorite(userId, productId);
         if (deleted == 0) {
             throw new NoSuchElementException("삭제할 즐겨찾기를 찾을 수 없습니다.");
         }

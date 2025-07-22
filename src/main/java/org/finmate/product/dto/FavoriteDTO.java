@@ -26,7 +26,7 @@ public class FavoriteDTO {
     @ApiModelProperty(value = "즐겨찾기한 상품")
     private List<ProductDTO<?>> productDTOList;
 
-    public static FavoriteDTO toDTO(FavoriteVO vo) {
+    public static FavoriteDTO from(FavoriteVO vo) {
         List<ProductDTO<?>> dtoList = vo.getProductVOList().stream()
                 .map(pvo -> (ProductDTO<?>) ProductDTO.from(pvo))
                 .collect(Collectors.toList());

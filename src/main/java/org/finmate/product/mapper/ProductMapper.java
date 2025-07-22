@@ -18,7 +18,7 @@ public interface ProductMapper {
     int enrollFavorite(Long userId, Long productId);
 
     // 즐겨찾기 삭제
-    int deleteFavorite(Long favoriteId);
+    int deleteFavorite(Long userId, Long productId);
 
 
     ProductVO getProductDetail(Long id);
