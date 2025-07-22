@@ -17,6 +17,9 @@ public class SignupService {
     private final UserMapper userMapper;
 
     public void signup(SignupRequestDTO dto) {
+        if (!dto.getPassword().equals(dto.getPasswordConfirm())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
             UserVO user = UserVO.builder()
                 .name(dto.getName())
                 .accountId(dto.getAccountId())

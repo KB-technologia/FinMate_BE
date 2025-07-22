@@ -10,10 +10,29 @@
         INSERT INTO user (name, account_id, email, password, birth, provider)
         VALUES (#{name}, #{accountId}, #{email}, #{password}, #{birth}, #{provider})
     </insert>
+    <delete id="deleteByAccountId" parameterType="String">
+        DELETE FROM user WHERE account_id = #{accountId}
+    </delete>
     <select id="selectByAccountId" resultType="org.finmate.member.domain.UserVO">
         SELECT *
         FROM user
         WHERE account_id = #{accountId}
     </select>
+
+    <select id="findUserIdByAccountId" resultType="long">
+        SELECT id FROM user WHERE account_id = #{accountId}
+    </select>
+
+    <delete id="deleteUserInfoByUserId">
+        DELETE FROM user_info WHERE user_id = #{userId}
+    </delete>
+
+    <delete id="deleteUserAttendanceByUserId">
+        DELETE FROM user_attendance WHERE user_id = #{userId}
+    </delete>
+
+    <delete id="deleteUserById">
+        DELETE FROM user WHERE id = #{userId}
+    </delete>
 
 </mapper>

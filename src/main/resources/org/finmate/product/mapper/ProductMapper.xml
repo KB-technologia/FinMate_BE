@@ -184,7 +184,7 @@
         SELECT
         <include refid="productSelectColumns"/>
         <include refid="productJoin"/>
-            ORDER BY p.id
+        ORDER BY p.id
     </select>
 
     <!-- 상품 상세 조회 -->
@@ -242,4 +242,53 @@
         WHERE product_id = #{productId}
     </select>
 
+    <!-- ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 즐겨찾기 관련 SQL ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ -->
+    <!-- Favorite + Product 네스티드 매핑 -->
+    <resultMap id="FavoriteWithProduct" type="org.finmate.product.domain.FavoriteVO">
+        <id property="id" column="f_id"/>
+        <result property="userId" column="f_user_id"/>
+
+        <association property="productVOList"
+                     resultMap="org.finmate.product.mapper.ProductMapper.ProductWithType"/>
+    </resultMap>
+
+    <!-- SELECT 절 컬럼 정의 -->
+    <sql id="favoriteProductSelect">
+        pfav.id AS f_id,
+        pfav.user_id AS f_user_id,
+        <include refid="org.finmate.product.mapper.ProductMapper.productSelectColumns"/>
+    </sql>
+
+    <!-- JOIN 구문 정의 (FROM 제외) -->
+    <sql id="favoriteProductJoin">
+        JOIN financial_product p ON p.id = pfav.product_id
+    LEFT JOIN product_deposit d ON p.id = d.product_id
+    LEFT JOIN product_savings s ON p.id = s.product_id
+    LEFT JOIN product_fund f ON p.id = f.product_id
+    </sql>
+
+    <!-- 즐겨찾기 목록 조회 -->
+    <select id="getFavorites"
+            parameterType="long"
+            resultMap="FavoriteWithProduct">
+        SELECT
+        <include refid="favoriteProductSelect"/>
+        FROM product_favorite pfav
+        <include refid="favoriteProductJoin"/>
+        WHERE pfav.user_id = #{userId}
+        ORDER BY pfav.id
+    </select>
+
+    <!-- 즐겨찾기 등록 -->
+    <insert id="enrollFavorite" parameterType="map">
+        INSERT INTO product_favorite (user_id, product_id)
+        VALUES (#{userId}, #{productId})
+    </insert>
+
+    <!-- 즐겨찾기 삭제 -->
+    <delete id="deleteFavorite">
+        DELETE FROM favorite
+        WHERE user_id = #{userId}
+        AND product_id = #{productId}
+    </delete>
 </mapper>
