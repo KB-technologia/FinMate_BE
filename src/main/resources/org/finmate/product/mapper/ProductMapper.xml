@@ -15,7 +15,9 @@
         <result property="expectedReturn" column="p_expected_return"/>
         <result property="minAmount" column="p_min_amount"/>
         <result property="maxAmount" column="p_max_amount"/>
-        <result property="term" column="p_term"/>
+        <result property="minTerm" column="p_min_term"/>
+        <result property="maxTerm" column="p_max_term"/>
+        <result property="url" column="p_url"/>
         <result property="createdAt" column="p_created_at"/>
         <result property="updatedAt" column="p_updated_at"/>
         <result property="adventureScore" column="p_adventure_score"/>
@@ -71,6 +73,12 @@
             <result property="returnRate3m" column="return_rate_3m"/>
             <result property="returnRate6m" column="return_rate_6m"/>
         </association>
+
+        <!-- ProductRateVO -->
+        <association property="productRate" javaType="ProductRateVO" columnPrefix="r_">
+            <id property="id" column="id"/>
+            <result property="productId" column="product_id"/>
+        </association>
     </resultMap>
 
     <!-- 공통 SELECT Column 절 -->
@@ -83,7 +91,9 @@
             p.expected_return AS p_expected_return,
             p.min_amount AS p_min_amount,
             p.max_amount AS p_max_amount,
-            p.term AS p_term,
+            p.min_term AS p_min_term,
+            p.max_term AS p_max_term,
+            p.url AS p_url,
             p.created_at AS p_created_at,
             p.updated_at AS p_updated_at,
             p.adventure_score AS p_adventure_score,
@@ -129,7 +139,17 @@
             f.risk_grade AS f_risk_grade,
             f.return_rate_1m AS f_return_rate_1m,
             f.return_rate_3m AS f_return_rate_3m,
-            f.return_rate_6m AS f_return_rate_6m
+            f.return_rate_6m AS f_return_rate_6m,
+
+            r.id AS r_id,
+            r.product_id AS r_product_id,
+            r.return_rate_1m AS r_return_rate_1m,
+            r.return_rate_3m AS r_return_rate_3m,
+            r.return_rate_6m AS r_return_rate_6m,
+            r.return_rate_12m AS r_return_rate_12m,
+            r.return_rate_24m AS r_return_rate_24m,
+            r.return_rate_36m AS r_return_rate_36m,
+            r.return_rate_60m AS r_return_rate_60m
     </sql>
 
     <!-- 공통 JOIN 절 -->
@@ -138,6 +158,7 @@
                  LEFT JOIN product_deposit d ON p.id = d.product_id
                  LEFT JOIN product_savings s ON p.id = s.product_id
                  LEFT JOIN product_fund f ON p.id = f.product_id
+                 LEFT JOIN product_rate r ON p.id = r.product_id
     </sql>
     <insert id="insertProductReview">
         INSERT INTO review(product_id, user_id, rating, ease_of_signup, content, image_url, writer)
@@ -152,10 +173,10 @@
     </delete>
 
     <!-- 전체 상품 조회 -->
-    <select id="getAllProducts" resultType="org.finmate.product.domain.ProductVO" resultMap="ProductWithType">
+    <select id="getAllProducts" resultMap="ProductWithType">
         SELECT
-        <include refid="productSelectColumns"></include>
-        <include refid="productJoin"></include>
+        <include refid="productSelectColumns"/>
+        <include refid="productJoin"/>
             ORDER BY p.id
     </select>
 
@@ -171,8 +192,8 @@
             resultMap="ProductWithType"
             parameterType="org.finmate.product.dto.ProductFilterDTO">
         SELECT
-        <include refid="productSelectColumns"></include>
-        <include refid="productJoin"></include>
+        <include refid="productSelectColumns"/>
+        <include refid="productJoin"/>
         <where>
             <!-- 상품 타입 필터 (선택) - null이면 전체 조회 -->
             <if test="productType != null and productType != ''">
