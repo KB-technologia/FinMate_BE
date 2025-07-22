@@ -1,12 +1,98 @@
 package org.finmate.member.service;
 
 import lombok.RequiredArgsConstructor;
+import org.finmate.member.domain.KakaoUser;
+import org.finmate.member.domain.UserVO;
+import org.finmate.member.domain.enums.Provider;
+import org.finmate.member.mapper.UserMapper;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 
 @Service
 @RequiredArgsConstructor
 public class KakaoService {
 
-    private final String CLIENT_ID = "카카오 REST API 키";
-    private final String REDIRECT_URI = "http://localhost:8080/auth/kakao/callback";
+    @Value("${kakao.client-id}")
+    private String CLIENT_ID;
+
+    @Value("${kakao.redirect-uri}")
+    private String REDIRECT_URI;
+
+    private final UserMapper userMapper;
+
+    // 1. 인가 코드로 access token 받기
+    public String getAccessToken(String code){
+        String url = "https://kauth.kakao.com/oauth/token";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        Map<String, String> params = new LinkedHashMap<>();
+        params.put("grant_type", "authorization_code");
+        params.put("client_id", CLIENT_ID);
+        params.put("redirect_uri", REDIRECT_URI);
+        params.put("code", code);
+
+        HttpEntity<Map<String, String>> request = new HttpEntity<>(params, headers);
+
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
+
+        JSONObject json = new JSONObject(response.getBody());
+        return json.getString("access_token");
+    }
+
+    // 2. access token으로 사용자 정보 요청
+    public KakaoUser getUserInfo(String accessToken){
+        String url = "https://kapi.kakao.com/v2/user/me";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(accessToken);
+
+        HttpEntity<Void> request = new HttpEntity<>(headers);
+        RestTemplate restTemplate = new RestTemplate();
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                url, HttpMethod.GET, request, String.class
+        );
+
+        JSONObject json = new JSONObject(response.getBody());
+        JSONObject kakaoAccount = json.getJSONObject("kakao_account");
+        JSONObject properties = json.getJSONObject("properties");
+
+        String id = String.valueOf(json.getLong("id"));
+        String nickname = properties.optString("nickname", "카카오사용자");
+        String email = kakaoAccount.optString("email", "no-email@kakao.com");
+
+        return new KakaoUser(id, nickname, email);
+    }
+
+    // 3. 우리 서비스의 사용자로 DB에 저장 or 조회
+    public UserVO getOrCreateUser(KakaoUser kakaoUser){
+        String accountId = "kakao_" + kakaoUser.getId();
+
+        UserVO existingUser = userMapper.selectByAccountId(accountId);
+        if(existingUser != null){
+            return existingUser;
+        }
+
+        UserVO newUser = UserVO.builder()
+                .accountId(accountId)
+                .email(kakaoUser.getEmail())
+                .name(kakaoUser.getNickname())
+                .password("kakao")
+                .provider(Provider.KAKAO)
+                .build();
+
+        userMapper.insertUser(newUser);
+        return newUser;
+    }
+
 }
