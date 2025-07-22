@@ -4,8 +4,12 @@ import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.finmate.member.dto.MyPageResponseDto;
 import org.finmate.member.dto.MyPageUpdateRequestDto;
+import org.finmate.member.service.MemberService;
 import org.finmate.member.service.MyPageService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpSession;
 
 @RestController
 @RequiredArgsConstructor
@@ -14,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class MyPageController {
 
     private final MyPageService myPageService;
+    private final MemberService memberService;
 
     @ApiOperation(value = "마이페이지 조회", notes = "로그인한 사용자의 마이페이지 정보를 반환합니다.")
     @ApiResponses({
@@ -36,5 +41,19 @@ public class MyPageController {
     public void updateMyPage(@RequestBody MyPageUpdateRequestDto dto) {
         Long userId = 1L; // TODO: 인증 처리 후 교체
         myPageService.updateMyPageInfo(userId, dto);
+    }
+
+    @DeleteMapping("/withdraw")
+    @ApiOperation(value = "회원 탈퇴", notes = "사용자의 계정을 삭제합니다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "탈퇴 성공"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    public ResponseEntity<String> withdraw(HttpSession session) {
+        String accountId = (String) session.getAttribute("accountId");
+        memberService.withdraw(accountId);
+        session.invalidate(); // 세션 무효화
+
+        return ResponseEntity.ok("회원 탈퇴 완료");
     }
 }
