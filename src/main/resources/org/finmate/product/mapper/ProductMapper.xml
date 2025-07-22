@@ -215,7 +215,7 @@
     </insert>
 
     <!-- 즐겨찾기 삭제 -->
-    <delete id="deleteFavoriteByUserAndProduct">
+    <delete id="deleteFavorite">
         DELETE FROM favorite
         WHERE user_id = #{userId}
         AND product_id = #{productId}

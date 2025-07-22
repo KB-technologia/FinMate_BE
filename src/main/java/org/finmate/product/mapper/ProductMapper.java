@@ -15,11 +15,10 @@ public interface ProductMapper {
     List<FavoriteVO> getFavorites(Long userId);
 
     // 즐겨찾기 등록
-    int enrollFavorite(Long userId, Long productId);
+    int enrollFavorite(@Param("userId") Long userId, @Param("productId") Long productId);
 
     // 즐겨찾기 삭제
-    int deleteFavorite(Long userId, Long productId);
-
+    int deleteFavorite(@Param("userId") Long userId, @Param("productId") Long productId);
 
     ProductVO getProductDetail(Long id);
 
