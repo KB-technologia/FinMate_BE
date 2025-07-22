@@ -11,7 +11,7 @@ import org.finmate.member.domain.MyPageVO;
 @Builder
 @AllArgsConstructor
 @ApiModel(description = "마이페이지 조회 응답 DTO")
-public class MyPageResponseDto {
+public class MyPageResponseDTO {
 
     @ApiModelProperty(value = "계정 ID", example = "user123")
     private String accountId;
@@ -22,8 +22,8 @@ public class MyPageResponseDto {
     @ApiModelProperty(value = "생년월일", example = "1990-01-01")
     private String birth;
 
-    public static MyPageResponseDto from(MyPageVO myPageVO) {
-        return MyPageResponseDto.builder()
+    public static MyPageResponseDTO from(MyPageVO myPageVO) {
+        return MyPageResponseDTO.builder()
                 .accountId(myPageVO.getAccountId())
                 .email(myPageVO.getEmail())
                 .birth(myPageVO.getBirth())

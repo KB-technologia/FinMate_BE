@@ -27,7 +27,7 @@ public class SignupService {
                 .password(dto.getPassword())
                 .birth(LocalDate.parse(dto.getBirth()))
                 .provider(Provider.LOCAL)
-                .createAt(LocalDateTime.now())
+                .createdAt(LocalDateTime.now())
                 .build();
 
 

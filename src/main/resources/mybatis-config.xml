@@ -6,9 +6,11 @@
 <configuration>
     <settings>
         <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <setting name="databaseId" value="mysql"/>
     </settings>
     <typeAliases>
         <package name="org.finmate.product.domain" />
+        <package name="org.finmate.auth.domain"/>
         <package name="org.finmate.signup.domain" />
     </typeAliases>
 </configuration>

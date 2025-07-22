@@ -1,18 +1,21 @@
 package org.finmate.assessment.mapper;
 
 
+import org.apache.ibatis.annotations.Mapper;
 import org.finmate.assessment.domain.AssessmentDetailsVO;
 import org.finmate.assessment.domain.AssessmentVO;
 import org.finmate.assessment.dto.AssessmentDTO;
 import org.finmate.assessment.dto.AssessmentDetailsDTO;
+import org.finmate.member.domain.UserInfoVO;
 
 import java.util.List;
 
+@Mapper
 public interface AssessmentMapper {
 
-    public List<AssessmentVO> getList();
+    // 진단 테스트 질문지 반환
+    List<AssessmentVO> getList();
 
-    //public AssessmentDetailsVO getDetailsById(Long id);
-
-    //int insertUserInfo(UserInfo userInfo);
+    // 각 선택지에 따른 점수 추출
+    AssessmentDetailsVO getDetailsById(Long id);
 }

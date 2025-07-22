@@ -16,11 +16,13 @@ import org.springframework.web.servlet.view.JstlView;
 @ComponentScan(basePackages = {
         "org.finmate.exception",
         "org.finmate.controller",
+        "org.finmate.auth.controller",
         "org.finmate.member.controller",
         "org.finmate.portfolio.controller",
         "org.finmate.assessment.controller",
         "org.finmate.product.controller",
-        "org.finmate.signup.controller"
+        "org.finmate.signup.controller",
+        "org.finmate.quiz.controller"
 })
 public class ServletConfig implements WebMvcConfigurer {
 

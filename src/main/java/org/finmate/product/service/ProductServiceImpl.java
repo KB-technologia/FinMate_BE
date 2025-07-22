@@ -4,12 +4,18 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.finmate.common.util.OpenAiApi;
 import org.finmate.common.util.OpenAiDTO.OpenAiResponseDTO;
+import org.finmate.exception.NotFoundException;
+import org.finmate.product.domain.ProductReviewVO;
+import org.finmate.product.domain.ProductVO;
 import org.finmate.product.dto.ProductComparisonResultDTO;
 import org.finmate.product.dto.ProductDTO;
+import org.finmate.product.dto.ProductReviewDTO;
+import org.finmate.product.dto.ProductFilterDTO;
 import org.finmate.product.mapper.ProductMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Log4j2
@@ -32,7 +38,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO<?> getProductDetail(Long id) {
-        return ProductDTO.from(productMapper.getProductDetail(id));
+        return ProductDTO.from(
+                Optional.ofNullable(productMapper.getProductDetail(id))
+                        .orElseThrow(() -> new NotFoundException("해당 상품이 존재하지 않습니다."))
+        );
     }
 
     @Override
@@ -63,5 +72,57 @@ public class ProductServiceImpl implements ProductService {
                 .build();
 
         return result;
+    }
+
+    @Override
+    public List<ProductReviewDTO> getProductReviews(Long id) {
+        return productMapper.getProductReviewByProductId(id)
+                .stream()
+                .map(ProductReviewDTO::from)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Long insertProductReview(ProductReviewDTO productReviewDTO) {
+        ProductReviewVO vo = productReviewDTO.toVO();
+        int result = productMapper.insertProductReview(vo);
+        if (result == 0) {
+            throw new NotFoundException("해당 글을 등록할 수 없습니다.");
+        }
+        return vo.getId();
+    }
+
+    @Override
+    public Long deleteProductReview(Long id, Long userId) {
+        int result = productMapper.deleteProductReview(id, userId);
+        if (result == 0) {
+            throw new NotFoundException("해당 글을 삭제할 수 없습니다.");
+        }
+        return id;
+    }
+
+    @Override
+    public List<ProductDTO<?>> getFilteredProducts(ProductFilterDTO filter) {
+        // 입력값 검증
+        validateFilter(filter);
+
+        // 상품 조회 (페이징 없이 전체 조회)
+        List<org.finmate.product.domain.ProductVO> products = productMapper.getFilteredProductsByType(filter);
+
+        // ProductDTO로 변환하여 반환
+        return products.stream()
+                .map(ProductDTO::from)
+                .collect(Collectors.toList());
+    }
+
+    private void validateFilter(ProductFilterDTO filter) {
+
+        // 검색어 전처리
+        if (filter.getQuery() != null) {
+            filter.setQuery(filter.getQuery().trim());
+            if (filter.getQuery().isEmpty()) {
+                filter.setQuery(null);
+            }
+        }
     }
 }
