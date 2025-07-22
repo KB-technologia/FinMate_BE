@@ -13,8 +13,8 @@ import java.util.Date;
 @Component
 public class JwtProcessor {
 
-    //토큰 유효 시간 (5분)
-    private static final long TOKEN_VALID_MILLISECONDS = 1000L * 60L * 5L;
+    //토큰 유효 시간 (7일)
+    private static final long TOKEN_VALID_MILLISECONDS = 1000L * 60L * 60L * 24L & 7L;
 
     // 테스트용 임시 secret key
     private final String secret = "이것은_테스트용으로_충분히_길게_설정한_JWT_시크릿키입니다_길게_써야_안전합니다_1234567890";
