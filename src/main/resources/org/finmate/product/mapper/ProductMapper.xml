@@ -78,6 +78,13 @@
         <association property="productRate" javaType="ProductRateVO" columnPrefix="r_">
             <id property="id" column="id"/>
             <result property="productId" column="product_id"/>
+            <result property="returnRate1m" column="return_rate_1m"/>
+            <result property="returnRate3m" column="return_rate_3m"/>
+            <result property="returnRate6m" column="return_rate_6m"/>
+            <result property="returnRate12m" column="return_rate_12m"/>
+            <result property="returnRate24m" column="return_rate_24m"/>
+            <result property="returnRate36m" column="return_rate_36m"/>
+            <result property="returnRate60m" column="return_rate_60m"/>
         </association>
     </resultMap>
 
