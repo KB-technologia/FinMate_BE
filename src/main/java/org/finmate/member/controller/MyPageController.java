@@ -7,6 +7,7 @@ import org.finmate.member.dto.MyPageUpdateRequestDTO;
 import org.finmate.member.service.MemberService;
 import org.finmate.member.service.MyPageService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -49,10 +50,10 @@ public class MyPageController {
             @ApiResponse(code = 200, message = "탈퇴 성공"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<String> withdraw(HttpSession session) {
-        String accountId = (String) session.getAttribute("accountId");
+    public ResponseEntity<String> withdraw() {
+        String accountId = SecurityContextHolder.getContext().getAuthentication().getName();
+
         memberService.withdraw(accountId);
-        session.invalidate(); // 세션 무효화
 
         return ResponseEntity.ok("회원 탈퇴 완료");
     }
