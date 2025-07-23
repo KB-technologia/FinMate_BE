@@ -1,6 +1,7 @@
 package org.finmate.member.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.finmate.member.domain.KakaoUser;
 import org.finmate.member.domain.UserVO;
 import org.finmate.member.domain.enums.Provider;
@@ -16,7 +17,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class KakaoService {
@@ -47,7 +48,7 @@ public class KakaoService {
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
 
-        System.out.println("Kakao token response : " + response.getBody());
+        log.info("Kakao token response : {} ", response.getBody());
 
         JSONObject json = new JSONObject(response.getBody());
 
@@ -80,7 +81,7 @@ public class KakaoService {
         String nickname = properties.optString("nickname", "카카오사용자");
         String email = kakaoAccount.optString("email", "no-email@kakao.com");
 
-        System.out.println("getUserInfo - id: " + id + ", nickname: " + nickname + ", email: " + email);
+        log.info("getUserInfo - id: " + id + ", nickname: " + nickname + ", email: " + email);
 
         return new KakaoUser(id, nickname, email);
     }
@@ -103,7 +104,7 @@ public class KakaoService {
                 .provider(Provider.KAKAO)
                 .build();
 
-        System.out.println("새 사용자 생성: " + newUser);
+        log.info("새 사용자 생성: {}", newUser);
 
         userMapper.insertUser(newUser);
         return newUser;

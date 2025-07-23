@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.models.Response;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.finmate.member.domain.KakaoUser;
 import org.finmate.member.domain.UserVO;
 import org.finmate.member.service.KakaoService;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
+@Log4j2
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth/kakao")
@@ -42,7 +44,7 @@ public class KakaoAuthController {
         // 3. 기존 유저 조회 또는 DB에 저장
         UserVO user = kakaoService.getOrCreateUser(kakoUser);
 
-        System.out.println("JwtProcessor 호출 전 - accountId: " + user.getAccountId());
+        log.info("JwtProcessor 호출 전 - accountId: {} ", user.getAccountId());
 
         // 4. JWT 발급
         String jwt = jwtProcessor.generateToken(user.getAccountId());
