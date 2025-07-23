@@ -1,12 +1,14 @@
 package org.finmate.member.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.finmate.member.domain.KakaoUser;
 import org.finmate.member.domain.UserVO;
 import org.finmate.member.domain.enums.Provider;
+import org.finmate.member.dto.KakaoTokenResponse;
+import org.finmate.member.dto.KakaoUserResponse;
 import org.finmate.member.mapper.UserMapper;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -14,8 +16,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 @Log4j2
 @Service
@@ -50,13 +50,14 @@ public class KakaoService {
 
         log.info("Kakao token response : {} ", response.getBody());
 
-        JSONObject json = new JSONObject(response.getBody());
-
-        if(!json.has("access_token")) {
-            throw new IllegalArgumentException("Kakao 응답에 access_token이 없습니다 : " + response.getBody());
+        ObjectMapper om = new ObjectMapper();
+        try {
+            KakaoTokenResponse tokenResponse = om.readValue(response.getBody(), KakaoTokenResponse.class);
+            log.info("Kakao token response: {}", tokenResponse);
+            return tokenResponse.getAccess_token();
+        } catch (Exception e) {
+            throw new RuntimeException("카카오 토큰 파싱 실패: " + response.getBody(), e);
         }
-
-        return json.getString("access_token");
     }
 
     // 2. access token으로 사용자 정보 요청
@@ -73,17 +74,24 @@ public class KakaoService {
                 url, HttpMethod.GET, request, String.class
         );
 
-        JSONObject json = new JSONObject(response.getBody());
-        JSONObject kakaoAccount = json.getJSONObject("kakao_account");
-        JSONObject properties = json.getJSONObject("properties");
+        ObjectMapper om = new ObjectMapper();
 
-        String id = String.valueOf(json.getLong("id"));
-        String nickname = properties.optString("nickname", "카카오사용자");
-        String email = kakaoAccount.optString("email", "no-email@kakao.com");
+        try{
+            // JSON -> DTO 자동 매핑
+            KakaoUserResponse kakaoResponse = om.readValue(response.getBody(), KakaoUserResponse.class);
+            String id = String.valueOf(kakaoResponse.getId());
+            String nickname = kakaoResponse.getProperties().getNickname();
+            String email = kakaoResponse.getKakao_account().getEmail();
+            log.info("getUserInfo - id: {}, nickname: {}, email: {}", id, nickname, email);
 
-        log.info("getUserInfo - id: " + id + ", nickname: " + nickname + ", email: " + email);
-
-        return new KakaoUser(id, nickname, email);
+            return new KakaoUser(id,
+                    nickname != null ? nickname : "카카오사용자",
+                    email != null ? email : "no-email@kakao.com");
+        }
+        catch (Exception e) {
+            log.error("카카오 사용자 정보 파싱 실패: {}", e.getMessage());
+            throw new RuntimeException("카카오 사용자 정보 파싱 실패", e);
+        }
     }
 
     // 3. 우리 서비스의 사용자로 DB에 저장 or 조회
