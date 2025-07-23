@@ -19,4 +19,8 @@ public interface UserMapper {
     void deleteUserById(Long userId);
 
     boolean existsByAccountId(@Param("accountId") String accountId);
+
+    String findAccountIdByEmail(String email);
+    boolean existsByAccountIdAndEmail(@Param("accountId") String accountId, @Param("email") String email);
+    int updatePassword(@Param("accountId") String accountId, @Param("newPassword") String newPassword);
 }

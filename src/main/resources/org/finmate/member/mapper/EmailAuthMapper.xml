@@ -16,4 +16,11 @@
     <update id="updateVerified">
         UPDATE email_auth SET is_verified = true WHERE uuid = #{uuid}
     </update>
+
+    <select id="findEmailByVerifiedUuid" resultType="String">
+        SELECT email FROM email_auth
+        WHERE uuid = #{uuid}
+          AND is_verified = TRUE
+    </select>
+
 </mapper>
