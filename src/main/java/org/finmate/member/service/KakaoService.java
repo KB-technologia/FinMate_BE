@@ -47,7 +47,14 @@ public class KakaoService {
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
 
+        System.out.println("Kakao token response : " + response.getBody());
+
         JSONObject json = new JSONObject(response.getBody());
+
+        if(!json.has("access_token")) {
+            throw new IllegalArgumentException("Kakao 응답에 access_token이 없습니다 : " + response.getBody());
+        }
+
         return json.getString("access_token");
     }
 
@@ -73,6 +80,8 @@ public class KakaoService {
         String nickname = properties.optString("nickname", "카카오사용자");
         String email = kakaoAccount.optString("email", "no-email@kakao.com");
 
+        System.out.println("getUserInfo - id: " + id + ", nickname: " + nickname + ", email: " + email);
+
         return new KakaoUser(id, nickname, email);
     }
 
@@ -82,6 +91,7 @@ public class KakaoService {
 
         UserVO existingUser = userMapper.selectByAccountId(accountId);
         if(existingUser != null){
+            System.out.println("기존 사용자: " + existingUser);
             return existingUser;
         }
 
@@ -92,6 +102,8 @@ public class KakaoService {
                 .password("kakao")
                 .provider(Provider.KAKAO)
                 .build();
+
+        System.out.println("새 사용자 생성: " + newUser);
 
         userMapper.insertUser(newUser);
         return newUser;

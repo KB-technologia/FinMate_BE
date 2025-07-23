@@ -34,6 +34,8 @@ public class KakaoAuthController {
         // 3. 기존 유저 조회 또는 DB에 저장
         UserVO user = kakaoService.getOrCreateUser(kakoUser);
 
+        System.out.println("JwtProcessor 호출 전 - accountId: " + user.getAccountId());
+
         // 4. JWT 발급
         String jwt = jwtProcessor.generateToken(user.getAccountId());
 

@@ -15,17 +15,27 @@ import java.util.Date;
 public class JwtProcessor {
 
     //토큰 유효 시간 (7일)
-    private static final long TOKEN_VALID_MILLISECONDS = 1000L * 60L * 60L * 24L & 7L;
+    private static final long TOKEN_VALID_MILLISECONDS = 1000L * 60L * 60L * 24L * 7L;
 
-    // 테스트용 임시 secret key
-    @Value("${jwt.secret}")
-    private String secret;
-    private final Key key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+    private final String secret;
+    private final Key key;
+    public JwtProcessor(@Value("${jwt.secret}") String secret) {
+        this.secret = secret;
 
-    // private Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256); // 운영시 사용
+        if(secret == null){
+            log.error("Secret is null");
+            throw new IllegalStateException("Secret is null");
+        }
+        log.info("jwt.secret이 정상 로딩됨 : {} " ,secret);
+        this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+    }
+
 
     //JWT 생성
     public String generateToken(String subject){
+        log.info(" JWT 발급 시작 - subject(accountId): {}", subject);
+        log.info("secretKey 확인: {}", key);
+
         return Jwts.builder()
                 .setSubject(subject)
                 .setIssuedAt(new Date())
