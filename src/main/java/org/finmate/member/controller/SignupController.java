@@ -28,6 +28,8 @@ public class SignupController {
 
     @GetMapping("/check-id")
     @ResponseBody
+    @ApiOperation(value = "아이디 중복 확인", notes = "accountId가 이미 존재하는지 확인")
+    @ApiParam(value = "중복 확인할 사용자 계정 ID", required = true)
     public ResponseEntity<Boolean> checkAccountId(@RequestParam("accountId") String accountId) {
         boolean isDuplicate = signupService.isAccountIdDuplicate(accountId);
         return ResponseEntity.ok(isDuplicate);
