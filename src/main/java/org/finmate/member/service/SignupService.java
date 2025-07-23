@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.finmate.member.mapper.UserMapper;
 import org.finmate.member.dto.SignupRequestDTO;
 import org.finmate.member.domain.UserVO;
-import org.finmate.member.domain.Provider;
+import org.finmate.member.domain.enums.Provider;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
