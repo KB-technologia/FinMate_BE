@@ -1,5 +1,8 @@
 package org.finmate.member.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import io.swagger.models.Response;
 import lombok.RequiredArgsConstructor;
 import org.finmate.member.domain.KakaoUser;
@@ -17,14 +20,19 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth/kakao")
+@Api(tags = "카카오 로그인 API")
 public class KakaoAuthController {
 
     private final KakaoService kakaoService;
     private final JwtProcessor jwtProcessor;
 
     // 인가코드 받아서 로그인 처리
+    @ApiOperation(value = "카카오 로그인 콜백", notes = "인가 코드를 받아 카카오 로그인 처리 및 JWT 발급")
     @GetMapping("/callback")
-    public ResponseEntity<?> kakaoCallback(@RequestParam String code) {
+    public ResponseEntity<?> kakaoCallback(
+            @ApiParam(value = "카카오 인가 코드", required = true)
+            @RequestParam String code
+    ) {
         // 1. 인가코드로 액세스 토큰 요청
         String accessToken = kakaoService.getAccessToken(code);
 
