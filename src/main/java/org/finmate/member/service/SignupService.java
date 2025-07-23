@@ -33,4 +33,8 @@ public class SignupService {
 
         userMapper.insertUser(user);
     }
+
+    public boolean isAccountIdDuplicate(String accountId) {
+        return userMapper.existsByAccountId(accountId);
+    }
 }

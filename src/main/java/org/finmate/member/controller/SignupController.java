@@ -26,4 +26,12 @@ public class SignupController {
         return ResponseEntity.ok("회원가입 성공");
     }
 
+    @GetMapping("/check-id")
+    @ResponseBody
+    public ResponseEntity<Boolean> checkAccountId(@RequestParam("accountId") String accountId) {
+        boolean isDuplicate = signupService.isAccountIdDuplicate(accountId);
+        return ResponseEntity.ok(isDuplicate);
+    }
+
+
 }
