@@ -9,6 +9,8 @@ import lombok.extern.log4j.Log4j2;
 import org.finmate.member.domain.KakaoUser;
 import org.finmate.member.domain.UserVO;
 import org.finmate.member.service.KakaoService;
+import org.finmate.security.dto.AuthResultDTO;
+import org.finmate.security.dto.UserInfoDTO;
 import org.finmate.security.util.JwtProcessor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,12 +52,9 @@ public class KakaoAuthController {
         String jwt = jwtProcessor.generateToken(user.getAccountId());
 
         // 5. JWT 반환
-        Map<String, Object> resposnse = Map.of(
-                "token", jwt,
-                "accountId", user.getAccountId(),
-                "name", user.getName()
-        );
+        UserInfoDTO userInfoDTO = UserInfoDTO.of(user);
+        AuthResultDTO authResultDTO = new AuthResultDTO(jwt, userInfoDTO);
 
-        return ResponseEntity.ok(resposnse);
+        return ResponseEntity.ok(authResultDTO);
     }
 }
