@@ -92,6 +92,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         JwtUsernamePasswordAuthenticationFilter jwtFilter = new JwtUsernamePasswordAuthenticationFilter(authenticationManagerBean(), loginSuccessHandler, loginFailureHandler);
 
         http.addFilterBefore(encodingFilter(), CsrfFilter.class) // 한글 인코딩 필터 설정
+                .cors()
+                .and()
                 .addFilterBefore(authenticationErrorFilter, UsernamePasswordAuthenticationFilter.class) // 인증 에러 필터
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class) //jwt 인증 필터
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class) // 로그인 인증 필터
