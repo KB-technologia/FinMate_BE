@@ -12,6 +12,7 @@ import org.finmate.security.handler.LoginSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -46,13 +47,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final PasswordEncoder passwordEncoder;
 
 
-//    @Bean
-//    public PasswordEncoder passwordEncoder(){
-//        return new BCryptPasswordEncoder();
-//    }
-
     // 문자셋 필터 (한글 인코딩 필터)
-    public CharacterEncodingFilter encodingFilter(){
+    public CharacterEncodingFilter encodingFilter() {
         CharacterEncodingFilter encodingFilter = new CharacterEncodingFilter();
         encodingFilter.setEncoding("UTF-8");
         encodingFilter.setForceEncoding(true);
@@ -68,7 +64,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     // cross origin 접근 허용
     @Bean
-    public CorsFilter corsFilter(){
+    public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
@@ -81,18 +77,36 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     // 접근 제한 무시 경로 설정 - resource
     @Override
-    public void configure(WebSecurity web) throws Exception{
+    public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/assets/**", "/api/member/**");
     }
 
     // Http 보안 설정 (JWT 기반)
     @Override
-    public void configure(HttpSecurity http) throws Exception{
+    public void configure(HttpSecurity http) throws Exception {
         //jwt 인증 필터 등록 (기존 필터 앞)
         JwtUsernamePasswordAuthenticationFilter jwtFilter = new JwtUsernamePasswordAuthenticationFilter(authenticationManagerBean(), loginSuccessHandler, loginFailureHandler);
 
         http.addFilterBefore(encodingFilter(), CsrfFilter.class) // 한글 인코딩 필터 설정
                 .cors()
+                .and()
+                .authorizeRequests()//권한 설정
+                .antMatchers("/api/assessment").authenticated() //AssessmentController 모든 요청은 로그인 필요(투자 성향 진단 테스트)
+                .antMatchers("/api/member/character/**").authenticated() //캐릭터 조회, 캐릭터 변경
+                .antMatchers("/api/member/emailauthentication/**").permitAll() //이메일 인증 (인증코드 이메일로 전송, 인증코드 검증)
+                .antMatchers("/auth/kakao/callback").permitAll() // 카카오 로그인 (카카오 인가코드 -> JWT발급)
+                .antMatchers(HttpMethod.GET, "/api/member/me").authenticated() // 마이페이지 조회
+                .antMatchers(HttpMethod.PATCH, "/api/member/me").authenticated() // 마이페이지 수정
+                .antMatchers(HttpMethod.DELETE, "/api/member/withdraw").authenticated() // 회원 탈퇴
+                .antMatchers("/api/member/join").permitAll() // 회원가입
+                .antMatchers("/api/member/portfolio").authenticated() // 포트폴리오 등록/조회/수정/삭제
+                .antMatchers("/api/product/favorite/**").authenticated() // 즐겨찾기 조회/등록/삭제
+                .antMatchers(HttpMethod.POST, "/api/product/*/review").authenticated() // 리뷰 등록
+                .antMatchers(HttpMethod.DELETE, "/api/product/*/review").authenticated() //리뷰 삭제
+                .antMatchers("/api/product/**").permitAll() // 전체 상품 조회/상품 비교/ 상품 상세 보기/ 리뷰 조회
+                .antMatchers("/api/product/filter/**").permitAll() // 조건별 상품 조회
+                .antMatchers("/api/quiz/**").permitAll() // 랜덤 퀴즈 조회/퀴즈 정답 제출 및 해설 확인
+                .anyRequest().permitAll()
                 .and()
                 .addFilterBefore(authenticationErrorFilter, UsernamePasswordAuthenticationFilter.class) // 인증 에러 필터
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class) //jwt 인증 필터
@@ -109,7 +123,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception{
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService)
                 .passwordEncoder(passwordEncoder);
 
