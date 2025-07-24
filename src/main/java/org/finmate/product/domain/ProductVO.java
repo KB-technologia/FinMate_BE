@@ -23,6 +23,7 @@ public class ProductVO {
     private Integer minTerm;
     private Integer maxTerm;
     private String url;
+    private String description;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Integer adventureScore;

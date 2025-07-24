@@ -18,6 +18,7 @@
         <result property="minTerm" column="p_min_term"/>
         <result property="maxTerm" column="p_max_term"/>
         <result property="url" column="p_url"/>
+        <result property="description" column="p_description"/>
         <result property="createdAt" column="p_created_at"/>
         <result property="updatedAt" column="p_updated_at"/>
         <result property="adventureScore" column="p_adventure_score"/>
@@ -99,6 +100,7 @@
             p.min_term AS p_min_term,
             p.max_term AS p_max_term,
             p.url AS p_url,
+            p.description AS p_description,
             p.created_at AS p_created_at,
             p.updated_at AS p_updated_at,
             p.adventure_score AS p_adventure_score,

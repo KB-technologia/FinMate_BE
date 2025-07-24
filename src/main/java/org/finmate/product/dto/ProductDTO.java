@@ -53,6 +53,9 @@ public class ProductDTO<T> {
     @ApiModelProperty(value = "금융 상품 바로가기 URL")
     private String url;
 
+    @ApiModelProperty(value = "금융 상품 설명")
+    private String description;
+
     @ApiModelProperty(value = "등록일")
     private LocalDateTime createdAt;
 
@@ -93,6 +96,7 @@ public class ProductDTO<T> {
                 .minTerm(vo.getMinTerm())
                 .maxTerm(vo.getMaxTerm())
                 .url(vo.getUrl())
+                .description(vo.getDescription())
                 .createdAt(vo.getCreatedAt())
                 .updatedAt(vo.getUpdatedAt())
                 .adventureScore(vo.getAdventureScore())
