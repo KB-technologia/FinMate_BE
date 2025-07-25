@@ -14,7 +14,6 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/product/filter")
 @CrossOrigin(origins = "http://localhost:5173")
 @Log4j2
 @Api(tags = "금융 상품 필터링 API")
