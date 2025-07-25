@@ -27,14 +27,10 @@ public class QuizServiceImpl implements QuizService {
                 .orElseThrow(() -> new RuntimeException("해당 퀴즈가 존재하지 않습니다."));
 
         boolean isCorrect = quiz.isQuizAnswer() == dto.isAnswer();
-        log.info("정답 비교 결과: {}", isCorrect);
-        log.info("반환 메시지: {}", isCorrect ? quiz.getCorrectAnswer() : quiz.getWrongAnswer());
         return QuizAnswerResponseDTO.builder()
                 .correct(isCorrect)
                 .message(isCorrect ? quiz.getCorrectAnswer() : quiz.getWrongAnswer())
-
                 .build();
     }
-
     //TODO : 사용자가 정답을 맞췄을 시 경험치 지급 로직 추가
 }
