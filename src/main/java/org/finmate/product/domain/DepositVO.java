@@ -13,11 +13,10 @@ import lombok.NoArgsConstructor;
 public class DepositVO {
     private Long id;
     private Long productId;
-    private Double interestRate;
     private Boolean isFlexible;
     private Double earlyWithdrawalPenalty;
     private InterestType interestType;
-    private Double baseRate;
+    private Integer defaultTermMonths;
     private Double bonusRate;
     private CompoundingPeriod compoundingPeriod;
 

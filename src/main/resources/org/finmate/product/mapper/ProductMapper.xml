@@ -18,6 +18,7 @@
         <result property="minTerm" column="p_min_term"/>
         <result property="maxTerm" column="p_max_term"/>
         <result property="url" column="p_url"/>
+        <result property="description" column="p_description"/>
         <result property="createdAt" column="p_created_at"/>
         <result property="updatedAt" column="p_updated_at"/>
         <result property="adventureScore" column="p_adventure_score"/>
@@ -30,11 +31,10 @@
         <association property="deposit" javaType="DepositVO" columnPrefix="d_">
             <id property="id" column="id"/>
             <result property="productId" column="product_id"/>
-            <result property="interestRate" column="interest_rate"/>
+            <result property="defaultTermMonths" column="default_term_months"/>
             <result property="isFlexible" column="is_flexible"/>
             <result property="earlyWithdrawalPenalty" column="early_withdrawal_penalty"/>
             <result property="interestType" column="interest_type"/>
-            <result property="baseRate" column="base_rate"/>
             <result property="bonusRate" column="bonus_rate"/>
             <result property="compoundingPeriod" column="compounding_period"/>
         </association>
@@ -43,13 +43,12 @@
         <association property="savings" javaType="SavingsVO" columnPrefix="s_">
             <id property="id" column="id"/>
             <result property="productId" column="product_id"/>
-            <result property="interestRate" column="interest_rate"/>
+            <result property="defaultTermMonths" column="default_term_months"/>
             <result property="isFlexible" column="is_flexible"/>
             <result property="paymentCycle" column="payment_cycle"/>
             <result property="maxMonthlyPayment" column="max_monthly_payment"/>
             <result property="earlyWithdrawalPenalty" column="early_withdrawal_penalty"/>
             <result property="interestType" column="interest_type"/>
-            <result property="baseRate" column="base_rate"/>
             <result property="bonusRate" column="bonus_rate"/>
             <result property="compoundingPeriod" column="compounding_period"/>
         </association>
@@ -101,6 +100,7 @@
             p.min_term AS p_min_term,
             p.max_term AS p_max_term,
             p.url AS p_url,
+            p.description AS p_description,
             p.created_at AS p_created_at,
             p.updated_at AS p_updated_at,
             p.adventure_score AS p_adventure_score,
@@ -111,23 +111,21 @@
 
             d.id AS d_id,
             d.product_id AS d_product_id,
-            d.interest_rate AS d_interest_rate,
+            d.default_term_months AS d_default_term_months,
             d.is_flexible AS d_is_flexible,
             d.early_withdrawal_penalty AS d_early_withdrawal_penalty,
             d.interest_type AS d_interest_type,
-            d.base_rate AS d_base_rate,
             d.bonus_rate AS d_bonus_rate,
             d.compounding_period AS d_compounding_period,
 
             s.id AS s_id,
             s.product_id AS s_product_id,
-            s.interest_rate AS s_interest_rate,
+            s.default_term_months AS s_default_term_months,
             s.is_flexible AS s_is_flexible,
             s.payment_cycle AS s_payment_cycle,
             s.max_monthly_payment AS s_max_monthly_payment,
             s.early_withdrawal_penalty AS s_early_withdrawal_penalty,
             s.interest_type AS s_interest_type,
-            s.base_rate AS s_base_rate,
             s.bonus_rate AS s_bonus_rate,
             s.compounding_period AS s_compounding_period,
 
@@ -261,10 +259,10 @@
 
     <!-- JOIN 구문 정의 (FROM 제외) -->
     <sql id="favoriteProductJoin">
-        JOIN financial_product p ON p.id = pfav.product_id
-    LEFT JOIN product_deposit d ON p.id = d.product_id
-    LEFT JOIN product_savings s ON p.id = s.product_id
-    LEFT JOIN product_fund f ON p.id = f.product_id
+        LEFT JOIN financial_product p ON p.id = pfav.product_id
+        LEFT JOIN product_deposit d ON p.id = d.product_id
+        LEFT JOIN product_savings s ON p.id = s.product_id
+        LEFT JOIN product_fund f ON p.id = f.product_id
     </sql>
 
     <!-- 즐겨찾기 목록 조회 -->
@@ -287,7 +285,7 @@
 
     <!-- 즐겨찾기 삭제 -->
     <delete id="deleteFavorite">
-        DELETE FROM favorite
+        DELETE FROM product_favorite
         WHERE user_id = #{userId}
         AND product_id = #{productId}
     </delete>
