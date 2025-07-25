@@ -229,7 +229,17 @@
         </where>
 
         <!-- 정렬: 수익률 기준만 -->
-        ORDER BY p.expected_return
+        ORDER BY
+        (
+        CASE
+        WHEN p.product_type = 'SAVINGS' THEN
+        p.expected_return + s.bonus_rate
+        WHEN p.product_type = 'DEPOSIT' THEN
+        p.expected_return + d.bonus_rate
+        ELSE
+        p.expected_return
+        END
+        )
         <choose>
             <when test="sortOrder == 'asc'">ASC</when>
             <otherwise>DESC</otherwise>
