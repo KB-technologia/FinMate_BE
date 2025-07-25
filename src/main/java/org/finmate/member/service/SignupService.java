@@ -4,8 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.finmate.member.mapper.UserMapper;
 import org.finmate.member.dto.SignupRequestDTO;
 import org.finmate.member.domain.UserVO;
-import org.finmate.member.domain.Provider;
+import org.finmate.member.domain.enums.Provider;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.finmate.member.domain.enums.Provider;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -32,7 +33,7 @@ public class SignupService {
                 .name(dto.getName())
                 .accountId(dto.getAccountId())
                 .email(dto.getEmail())
-                .password(encodedPassword)
+                .password(dto.getPassword())
                 .birth(LocalDate.parse(dto.getBirth()))
                 .provider(Provider.LOCAL)
                 .createdAt(LocalDateTime.now())

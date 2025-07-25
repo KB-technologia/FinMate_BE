@@ -20,7 +20,10 @@ public class ProductVO {
     private Double expectedReturn;
     private Long minAmount;
     private Long maxAmount;
-    private Integer term;
+    private Integer minTerm;
+    private Integer maxTerm;
+    private String url;
+    private String description;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Integer adventureScore;
@@ -32,12 +35,6 @@ public class ProductVO {
     private DepositVO deposit;
     private SavingsVO savings;
     private FundVO fund;
+    private ProductRateVO productRate;
 
-    public static ProductVO of(String name, String bankName, ProductType productType) {
-        return builder()
-                .name(name)
-                .bankName(bankName)
-                .productType(productType)
-                .build();
-    }
 }

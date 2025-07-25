@@ -37,7 +37,8 @@ import java.util.Locale;
         "org.finmate.common.util",
         "org.finmate.portfolio.service",
         "org.finmate.security.handler",
-        "org.finmate.quiz.service"
+        "org.finmate.quiz.service",
+        "org.finmate.security.util"
 })
 
 public class RootConfig {

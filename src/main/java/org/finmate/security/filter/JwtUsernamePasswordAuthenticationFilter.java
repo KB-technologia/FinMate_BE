@@ -23,7 +23,7 @@ public class JwtUsernamePasswordAuthenticationFilter extends UsernamePasswordAut
             LoginFailureHandler failureHandler
     ){
         super(authenticationManager);
-        setFilterProcessesUrl("/api/auth/login"); //POST 로그인 요청 url
+        setFilterProcessesUrl("/auth/login"); //POST 로그인 요청 url
         setAuthenticationSuccessHandler(successHandler); // 로그인 성공 핸들러 등록
         setAuthenticationFailureHandler(failureHandler); // 로그인 실패 핸들러 등록
     }

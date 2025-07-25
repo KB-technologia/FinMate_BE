@@ -10,8 +10,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.finmate.assessment.dto.AssessmentDTO;
 import org.finmate.assessment.dto.AssessmentRequestDTO;
 import org.finmate.assessment.service.AssessmentService;
+import org.finmate.member.domain.CustomUser;
 import org.finmate.member.dto.UserInfoDTO;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -49,8 +51,11 @@ public class AssessmentController {
      * 투자 성향 테스트 결과 user_info 반환 및 저장
      */
     @PostMapping("")
-    public ResponseEntity<UserInfoDTO> resultAssessment(@RequestBody AssessmentRequestDTO requestDTO){
-        Long userId = requestDTO.getUserId();
+    public ResponseEntity<UserInfoDTO> resultAssessment(
+            @AuthenticationPrincipal CustomUser customUser,
+            @RequestBody AssessmentRequestDTO requestDTO
+    ){
+        Long userId = customUser.getUser().getId();
         List<Integer> choices = requestDTO.getChoices();
 
         return ResponseEntity.of(assessmentService.resultAssessment(userId, choices));

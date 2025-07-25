@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.finmate.product.domain.ProductRateVO;
 import org.finmate.product.domain.ProductType;
 import org.finmate.product.domain.ProductVO;
 
@@ -43,8 +44,17 @@ public class ProductDTO<T> {
     @ApiModelProperty(value = "최대가입금액")
     private Long maxAmount;
 
-    @ApiModelProperty(value = "권장/만기 기간")
-    private Integer term;
+    @ApiModelProperty(value = "최소 만기 기간")
+    private Integer minTerm;
+
+    @ApiModelProperty(value = "최대 만기 기간")
+    private Integer maxTerm;
+
+    @ApiModelProperty(value = "금융 상품 바로가기 URL")
+    private String url;
+
+    @ApiModelProperty(value = "금융 상품 설명")
+    private String description;
 
     @ApiModelProperty(value = "등록일")
     private LocalDateTime createdAt;
@@ -70,6 +80,9 @@ public class ProductDTO<T> {
     @ApiModelProperty(value = "타입별 금융 상품 데이터")
     private T detail;
 
+    @ApiModelProperty(value = "예/적금일 경우 기간별 금리 데이터")
+    private ProductRateVO productRate;
+
     public static ProductDTO<?> from(ProductVO vo) {
         var builder = builder()
                 .id(vo.getId())
@@ -80,14 +93,18 @@ public class ProductDTO<T> {
                 .expectedReturn(vo.getExpectedReturn())
                 .minAmount(vo.getMinAmount())
                 .maxAmount(vo.getMaxAmount())
-                .term(vo.getTerm())
+                .minTerm(vo.getMinTerm())
+                .maxTerm(vo.getMaxTerm())
+                .url(vo.getUrl())
+                .description(vo.getDescription())
                 .createdAt(vo.getCreatedAt())
                 .updatedAt(vo.getUpdatedAt())
                 .adventureScore(vo.getAdventureScore())
                 .valueTag(vo.getValueTag())
                 .speedTag(vo.getSpeedTag())
                 .strategyTag(vo.getStrategyTag())
-                .minFinanceScore(vo.getMinFinanceScore());
+                .minFinanceScore(vo.getMinFinanceScore())
+                .productRate(vo.getProductRate());
 
         switch (vo.getProductType()) {
             case DEPOSIT -> {
