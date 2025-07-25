@@ -2,6 +2,7 @@ package org.finmate.member.controller;
 
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
+import org.finmate.member.dto.ChangePasswordRequestDTO;
 import org.finmate.member.service.FindService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,15 +35,10 @@ public class FindController {
                 : ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("정보 불일치");
     }
 
-    // 3. 비밀번호 재설정
     @PostMapping("/changepassword")
-    @ApiOperation(value = "비밀번호 재설정", notes = "비밀번호를 새로 저장")
-    public ResponseEntity<String> resetPassword(@RequestParam String accountId,
-                                                @RequestParam String newPassword) {
-        boolean success = findService.resetPassword(accountId, newPassword);
-        return success
-                ? ResponseEntity.ok("비밀번호 변경 완료")
-                : ResponseEntity.status(HttpStatus.NOT_FOUND).body("사용자 없음");
+    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequestDTO dto) {
+        findService.resetPassword(dto);
+        return ResponseEntity.ok().build();
     }
 }
 
