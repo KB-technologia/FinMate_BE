@@ -3,10 +3,15 @@ package org.finmate.member.controller;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.finmate.member.dto.ChangePasswordRequestDTO;
+import org.finmate.member.dto.FindAccountIdRequestDTO;
+import org.finmate.member.dto.FindAccountIdResponseDTO;
+import org.finmate.member.dto.VerifyUserRequestDTO;
 import org.finmate.member.service.FindService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @Api(tags = "아이디 찾기 / 비밀번호 변경 API")
 @RestController
@@ -16,27 +21,23 @@ public class FindController {
 
     private final FindService findService;
 
-    @GetMapping("/findaccountid")
+    @PostMapping("/findaccountid")
     @ApiOperation(value = "아이디 찾기", notes = "이메일 인증이 완료된 UUID로 등록된 accountId를 반환")
-    public ResponseEntity<String> findAccountId(@RequestParam String uuid) {
-        String accountId = findService.findAccountIdByUuid(uuid);
-        return accountId != null
-                ? ResponseEntity.ok(accountId)
-                : ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("이메일 인증이 완료되지 않았거나 사용자 없음");
+    public FindAccountIdResponseDTO findAccountId(@RequestBody FindAccountIdRequestDTO dto) {
+        String accountId = findService.findAccountIdByUuid(dto.getUuid());
+        return new FindAccountIdResponseDTO(accountId);
     }
 
-    // 2. 비밀번호 재설정 가능 여부 확인
     @PostMapping("/changepassword/verify")
     @ApiOperation(value = "비밀번호 변경 전 사용자 검증", notes = "uuid 인증 여부 + accountId 매칭 확인")
-    public ResponseEntity<String> verifyUser(@RequestParam String uuid, @RequestParam String accountId) {
-        boolean valid = findService.verifyUser(uuid, accountId);
-        return valid
-                ? ResponseEntity.ok("확인 완료")
-                : ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("정보 불일치");
+    public ResponseEntity<Void> verifyUser(@RequestBody VerifyUserRequestDTO dto) {
+        boolean valid = findService.verifyUser(dto.getUuid(), dto.getAccountId());
+        return valid ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
     @PostMapping("/changepassword")
-    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequestDTO dto) {
+    @ApiOperation(value = "비밀번호 변경")
+    public ResponseEntity<Void> changePassword(@RequestBody ChangePasswordRequestDTO dto) {
         findService.resetPassword(dto);
         return ResponseEntity.ok().build();
     }

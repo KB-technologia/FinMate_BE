@@ -26,7 +26,7 @@ public class EmailAuthController {
             @RequestBody EmailRequestDTO request
     ) {
         String uuid = emailAuthService.sendAuthCode(request.getEmail());
-        return ResponseEntity.ok(uuid); // uuid 반환 or "인증코드 전송 성공" 메시지로 변경 가능
+        return ResponseEntity.ok(uuid); //
     }
 
     @ApiOperation(value = "이메일 인증 코드 검증", notes = "UUID와 인증 코드를 통해 이메일 인증을 검증합니다.")
