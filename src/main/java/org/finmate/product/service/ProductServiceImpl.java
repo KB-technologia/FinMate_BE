@@ -83,6 +83,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<ProductReviewDTO> getMyReviews(Long userId) {
+        return productMapper.getProductReviewByUserId(userId)
+                .stream()
+                .map(ProductReviewDTO::from)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public Long insertProductReview(ProductReviewDTO productReviewDTO) {
         ProductReviewVO vo = productReviewDTO.toVO();
         int result = productMapper.insertProductReview(vo);
