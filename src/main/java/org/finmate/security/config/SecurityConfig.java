@@ -78,8 +78,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // 접근 제한 무시 경로 설정 - resource
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/assets/**", "/api/member/**");
+        web.ignoring().antMatchers("/assets/**");
     }
+
 
     // Http 보안 설정 (JWT 기반)
     @Override
