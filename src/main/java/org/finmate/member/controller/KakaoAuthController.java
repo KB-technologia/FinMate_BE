@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Map;
 
 @Log4j2
@@ -33,10 +35,11 @@ public class KakaoAuthController {
     // 인가코드 받아서 로그인 처리
     @ApiOperation(value = "카카오 로그인 콜백", notes = "인가 코드를 받아 카카오 로그인 처리 및 JWT 발급")
     @GetMapping("/callback")
-    public ResponseEntity<?> kakaoCallback(
+    public void kakaoCallback(
             @ApiParam(value = "카카오 인가 코드", required = true)
-            @RequestParam String code
-    ) {
+            @RequestParam String code,
+            HttpServletResponse response
+    ) throws IOException {
         // 1. 인가코드로 액세스 토큰 요청
         String accessToken = kakaoService.getAccessToken(code);
 
@@ -51,10 +54,12 @@ public class KakaoAuthController {
         // 4. JWT 발급
         String jwt = jwtProcessor.generateToken(user.getAccountId());
 
-        // 5. JWT 반환
-        UserInfoDTO userInfoDTO = UserInfoDTO.of(user);
-        AuthResultDTO authResultDTO = new AuthResultDTO(jwt, userInfoDTO);
-
-        return ResponseEntity.ok(authResultDTO);
+        // 5. 프론트로 redirect (토큰 쿼리로 전달)
+        String redirectUrl = "http://localhost:5173/auth/kakao/redirect?token="+jwt;
+        response.sendRedirect(redirectUrl);
+//        UserInfoDTO userInfoDTO = UserInfoDTO.of(user);
+//        AuthResultDTO authResultDTO = new AuthResultDTO(jwt, userInfoDTO);
+//
+//        return ResponseEntity.ok(authResultDTO);
     }
 }
