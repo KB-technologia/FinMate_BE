@@ -33,7 +33,7 @@ public class SignupService {
                 .name(dto.getName())
                 .accountId(dto.getAccountId())
                 .email(dto.getEmail())
-                .password(dto.getPassword())
+                .password(encodedPassword)
                 .birth(LocalDate.parse(dto.getBirth()))
                 .provider(Provider.LOCAL)
                 .createdAt(LocalDateTime.now())
