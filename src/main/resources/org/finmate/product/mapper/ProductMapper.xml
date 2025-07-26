@@ -273,6 +273,7 @@
         LEFT JOIN product_deposit d ON p.id = d.product_id
         LEFT JOIN product_savings s ON p.id = s.product_id
         LEFT JOIN product_fund f ON p.id = f.product_id
+        LEFT JOIN product_rate r ON p.id = r.product_id
     </sql>
 
     <!-- 즐겨찾기 목록 조회 -->
