@@ -2,7 +2,7 @@ package org.finmate.member.controller;
 
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
-import org.finmate.member.dto.AuthResponseDTO;
+import org.finmate.member.dto.EmailAuthInitResponseDTO;
 import org.finmate.member.dto.EmailRequestDTO;
 import org.finmate.member.dto.EmailVerifyRequestDTO;
 import org.finmate.member.service.EmailAuthService;
@@ -23,11 +23,11 @@ public class EmailAuthController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     @PostMapping(value = "/emailauthentication")
-    public ResponseEntity<AuthResponseDTO> sendAuthCode(
+    public ResponseEntity<EmailAuthInitResponseDTO> sendAuthCode(
             @RequestBody EmailRequestDTO request
     ) {
         String uuid = emailAuthService.sendAuthCode(request.getEmail());
-        AuthResponseDTO response = new AuthResponseDTO(uuid);
+        EmailAuthInitResponseDTO response = new EmailAuthInitResponseDTO(uuid);
         return ResponseEntity.ok(response); //
     }
 

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class FindService {
+public class AccountRecoveryService {
 
     private final EmailAuthMapper emailAuthMapper;
     private final UserMapper userMapper;
