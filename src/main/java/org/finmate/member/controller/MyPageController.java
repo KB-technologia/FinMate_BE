@@ -44,7 +44,7 @@ public class MyPageController {
         myPageService.updateMyPageInfo(userId, dto);
     }
 
-    @DeleteMapping("/withdraw")
+    @DeleteMapping(value = "/withdraw", produces = "text/plain; charset=UTF-8")
     @ApiOperation(value = "회원 탈퇴", notes = "사용자의 계정을 삭제합니다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "탈퇴 성공"),

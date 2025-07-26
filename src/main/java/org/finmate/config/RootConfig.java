@@ -16,7 +16,6 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
-import java.util.Locale;
 
 @Configuration
 @EnableTransactionManagement
@@ -79,6 +78,4 @@ public class RootConfig {
 
         return manager;
     }
-
-
 }

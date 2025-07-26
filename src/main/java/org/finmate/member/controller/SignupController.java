@@ -21,9 +21,19 @@ public class SignupController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     @PostMapping(value = "/join", produces = "text/plain;charset=UTF-8")
-    public ResponseEntity<String> join(@RequestBody SignupRequestDTO dto) {
+    public ResponseEntity<Void> join(@RequestBody SignupRequestDTO dto) {
         signupService.signup(dto);
-        return ResponseEntity.ok("회원가입 성공");
+        return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/check-id")
+    @ResponseBody
+    @ApiOperation(value = "아이디 중복 확인", notes = "accountId가 이미 존재하는지 확인")
+    @ApiParam(value = "중복 확인할 사용자 계정 ID", required = true)
+    public ResponseEntity<Boolean> checkAccountId(@RequestParam("accountId") String accountId) {
+        boolean isDuplicate = signupService.isAccountIdDuplicate(accountId);
+        return ResponseEntity.ok(isDuplicate);
+    }
+
 
 }

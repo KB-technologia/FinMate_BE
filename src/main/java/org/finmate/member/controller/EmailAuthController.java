@@ -2,6 +2,7 @@ package org.finmate.member.controller;
 
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
+import org.finmate.member.dto.EmailAuthInitResponseDTO;
 import org.finmate.member.dto.EmailRequestDTO;
 import org.finmate.member.dto.EmailVerifyRequestDTO;
 import org.finmate.member.service.EmailAuthService;
@@ -21,12 +22,13 @@ public class EmailAuthController {
             @ApiResponse(code = 200, message = "인증코드 발송 성공"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    @PostMapping(value = "/emailauthentication", produces = "text/plain;charset=UTF-8")
-    public ResponseEntity<String> sendAuthCode(
+    @PostMapping(value = "/emailauthentication")
+    public ResponseEntity<EmailAuthInitResponseDTO> sendAuthCode(
             @RequestBody EmailRequestDTO request
     ) {
         String uuid = emailAuthService.sendAuthCode(request.getEmail());
-        return ResponseEntity.ok(uuid); // uuid 반환 or "인증코드 전송 성공" 메시지로 변경 가능
+        EmailAuthInitResponseDTO response = new EmailAuthInitResponseDTO(uuid);
+        return ResponseEntity.ok(response); //
     }
 
     @ApiOperation(value = "이메일 인증 코드 검증", notes = "UUID와 인증 코드를 통해 이메일 인증을 검증합니다.")

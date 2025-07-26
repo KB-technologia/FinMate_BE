@@ -9,5 +9,6 @@ public interface EmailAuthMapper {
     void insertAuthCode(EmailAuthVO auth);
     EmailAuthVO findByUuid(String uuid);
     void updateVerified(@Param("uuid") String uuid);
+    String findEmailByVerifiedUuid(@Param("uuid") String uuid);
 }
 

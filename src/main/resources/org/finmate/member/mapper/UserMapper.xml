@@ -35,4 +35,22 @@
         DELETE FROM user WHERE id = #{userId}
     </delete>
 
+    <select id="existsByAccountId" resultType="boolean">
+        SELECT COUNT(*) > 0 FROM user WHERE account_id = #{accountId}
+    </select>
+
+    <select id="findAccountIdByEmail" resultType="String">
+        SELECT account_id FROM user WHERE email = #{email}
+    </select>
+
+    <select id="existsByAccountIdAndEmail" resultType="boolean">
+        SELECT COUNT(*) > 0 FROM user
+        WHERE account_id = #{accountId} AND email = #{email}
+    </select>
+
+    <update id="updatePassword">
+        UPDATE user
+        SET password = #{newPassword}
+        WHERE account_id = #{accountId}
+    </update>
 </mapper>
