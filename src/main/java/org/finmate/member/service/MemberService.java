@@ -12,9 +12,7 @@ public class MemberService {
     private final UserMapper userMapper;
 
     @Transactional
-    public void withdraw(String accountId) {
-        Long userId = userMapper.findUserIdByAccountId(accountId);
-
+    public void withdraw(Long userId) {
         if (userId == null) {
             throw new IllegalArgumentException("존재하지 않는 사용자입니다.");
         }
