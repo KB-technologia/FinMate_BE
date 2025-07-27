@@ -299,4 +299,13 @@
         WHERE user_id = #{userId}
         AND product_id = #{productId}
     </delete>
+
+    <!-- ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 상품 추천 관련 SQL ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ -->
+    <!-- 상품 추천 (랜덤) -->
+    <select id="getRandomProductRecommendation" resultMap="ProductWithType">
+        SELECT <include refid="productSelectColumns"/>
+            <include refid="productJoin"/>
+        ORDER BY RAND()
+        LIMIT 8
+    </select>
 </mapper>

@@ -35,5 +35,8 @@ public interface ProductMapper {
             @Param("productId") Long productId,
             @Param("userId") Long userId);
 
+    // 상품 추천 (랜덤)
+    List<ProductVO> getRandomProductRecommendation();
+
 }
 
