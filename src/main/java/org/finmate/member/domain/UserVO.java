@@ -17,7 +17,6 @@ public class UserVO {
     private String accountId;
     private String email;
     private String password;
-    private LocalDate birth;
     private Provider provider;
     private LocalDateTime createdAt;
 }

@@ -7,8 +7,8 @@
 
 
 <insert id="insertUser" parameterType="org.finmate.member.domain.UserVO">
-        INSERT INTO user (name, account_id, email, password, birth, provider)
-        VALUES (#{name}, #{accountId}, #{email}, #{password}, #{birth}, #{provider})
+        INSERT INTO user (name, account_id, email, password, provider)
+        VALUES (#{name}, #{accountId}, #{email}, #{password}, #{provider})
     </insert>
     <delete id="deleteByAccountId" parameterType="String">
         DELETE FROM user WHERE account_id = #{accountId}
