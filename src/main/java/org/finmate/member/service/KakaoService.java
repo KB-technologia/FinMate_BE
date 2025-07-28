@@ -113,7 +113,7 @@ public class KakaoService {
                     .password("kakao")
                     .provider(Provider.KAKAO)
                     .build();
-            userMapper.insertUser(user);
+//            userMapper.insertUser(user);
             isNewUser = true;
         }
 
@@ -122,29 +122,4 @@ public class KakaoService {
 
         return new AuthResultDTO(token, userLoginInfoDTO, isNewUser);
     }
-
-
-//    // 3. 우리 서비스의 사용자로 DB에 저장 or 조회
-//    public UserVO getOrCreateUser(KakaoUser kakaoUser){
-//        String accountId = "kakao_" + kakaoUser.getId();
-//
-//        UserVO existingUser = userMapper.selectByAccountId(accountId);
-//        if(existingUser != null){
-//            return existingUser;
-//        }
-//
-//        UserVO newUser = UserVO.builder()
-//                .accountId(accountId)
-//                .email(kakaoUser.getEmail())
-//                .name(kakaoUser.getNickname())
-//                .password("kakao")
-//                .provider(Provider.KAKAO)
-//                .build();
-//
-//        log.info("새 사용자 생성: {}", newUser);
-//
-//        userMapper.insertUser(newUser);
-//        return newUser;
-//    }
-
 }
