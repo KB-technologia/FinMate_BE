@@ -5,7 +5,7 @@ import lombok.extern.log4j.Log4j2;
 import org.finmate.member.domain.CustomUser;
 import org.finmate.member.domain.UserVO;
 import org.finmate.security.dto.AuthResultDTO;
-import org.finmate.security.dto.UserInfoDTO;
+import org.finmate.security.dto.UserLoginInfoDTO;
 import org.finmate.security.util.JsonResponse;
 import org.finmate.security.util.JwtProcessor;
 import org.springframework.security.core.Authentication;
@@ -30,8 +30,8 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         UserVO userVO = customUser.getUser();
 
         String token = jwtProcessor.generateToken(userVO.getAccountId());
-        UserInfoDTO userInfo = UserInfoDTO.of(userVO);
-        AuthResultDTO result = new AuthResultDTO(token, userInfo);
+        UserLoginInfoDTO userInfo = UserLoginInfoDTO.of(userVO);
+        AuthResultDTO result = new AuthResultDTO(token, userInfo, false);
 
         JsonResponse.send(response,result);
     }
