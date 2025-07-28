@@ -87,11 +87,20 @@ public class KakaoService {
             String id = String.valueOf(kakaoResponse.getId());
             String nickname = kakaoResponse.getProperties().getNickname();
             String email = kakaoResponse.getKakao_account().getEmail();
-            log.info("getUserInfo - id: {}, nickname: {}, email: {}", id, nickname, email);
+            String gender = kakaoResponse.getKakao_account().getGender();
+            String birthyear = kakaoResponse.getKakao_account().getBirthyear();
+            String birthday = kakaoResponse.getKakao_account().getBirthday();
 
+            String birth = null;
+            if(birthyear != null && birthday != null){
+                birth = birthyear +"-"+birthday.substring(0,2) + "-"+birthday.substring(2);
+            }
+            log.info("getUserInfo - id: {}, nickname: {}, email: {}, gender: {}, birth: {}",
+                    id, nickname, email, gender, birth);
             return new KakaoUser(id,
                     nickname != null ? nickname : "카카오사용자",
-                    email != null ? email : "no-email@kakao.com");
+                    email != null ? email : "no-email@kakao.com",
+                    gender, birth);
         }
         catch (Exception e) {
             log.error("카카오 사용자 정보 파싱 실패: {}", e.getMessage());
@@ -113,7 +122,6 @@ public class KakaoService {
                     .password("kakao")
                     .provider(Provider.KAKAO)
                     .build();
-//            userMapper.insertUser(user);
             isNewUser = true;
         }
 
