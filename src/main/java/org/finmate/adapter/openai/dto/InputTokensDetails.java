@@ -1,4 +1,4 @@
-package org.finmate.common.util.OpenAiDTO;
+package org.finmate.adapter.openai.dto;
 
 import lombok.Data;
 
