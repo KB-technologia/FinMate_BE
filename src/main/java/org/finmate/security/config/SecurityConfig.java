@@ -82,6 +82,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers("/assets/**");
     }
 
+
     // Http 보안 설정 (JWT 기반)
     @Override
     public void configure(HttpSecurity http) throws Exception {

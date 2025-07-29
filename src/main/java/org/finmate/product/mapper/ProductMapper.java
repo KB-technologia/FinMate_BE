@@ -33,10 +33,13 @@ public interface ProductMapper {
 
     int deleteProductReview(
             @Param("productId") Long productId,
-            @Param("userId") Long userId);
+            @Param("userId") Long userId
+    );
 
     // 상품 추천 (랜덤)
     List<ProductVO> getRandomProductRecommendation();
+
+    List<ProductReviewVO> getProductReviewByUserId(@Param("userId") Long userId);
 
 }
 
