@@ -4,8 +4,12 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.finmate.member.domain.UserVO;
 
+import java.util.List;
+
 @Mapper
 public interface UserMapper {
+
+    List<Long> getUserIdAll();
 
     UserVO selectByAccountId(String accountId);
 
