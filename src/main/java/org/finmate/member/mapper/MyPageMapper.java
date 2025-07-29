@@ -6,11 +6,17 @@ import org.finmate.member.domain.MyPageVO;
 
 @Mapper
 public interface MyPageMapper {
+
     MyPageVO findMyPageInfo(@Param("userId") Long userId);
 
-    void updateMyPageInfo(
+    void updateUser(
             @Param("userId") Long userId,
             @Param("password") String password,
-            @Param("vo") MyPageVO myPageVO
+            @Param("email") String email
+    );
+
+    void updateUserInfo(
+            @Param("userId") Long userId,
+            @Param("birth") String birth
     );
 }
