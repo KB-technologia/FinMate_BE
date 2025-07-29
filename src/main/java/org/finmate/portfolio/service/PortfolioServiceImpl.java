@@ -34,7 +34,6 @@ public class PortfolioServiceImpl implements PortfolioService {
     @Override
     public void createPortfolio(Long userId, PortfolioRequestDTO portfolioRequestDTO) {
 
-        //TODO: mydata + request  -> PortfolioDTO
         PortfolioDTO portfolioDTO = myDataApi.getMyData(userId).toPortfolioDTO();
 
         portfolioDTO.setUserId(userId);
