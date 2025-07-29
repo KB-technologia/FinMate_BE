@@ -12,6 +12,7 @@ import org.finmate.member.domain.CustomUser;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class MyPageController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     @GetMapping("/me")
-    public MyPageResponseDTO getMyPage(@AuthenticationPrincipal CustomUser user) {
+    public MyPageResponseDTO getMyPage(@ApiIgnore @AuthenticationPrincipal CustomUser user) {
         Long userId = user.getUser().getId();
         return myPageService.getMyPageInfo(userId);
     }
@@ -43,7 +44,7 @@ public class MyPageController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     @PatchMapping("/me")
-    public void updateMyPage(@AuthenticationPrincipal CustomUser user, @RequestBody MyPageUpdateRequestDTO dto) {
+    public void updateMyPage(@ApiIgnore @AuthenticationPrincipal CustomUser user, @RequestBody MyPageUpdateRequestDTO dto) {
         Long userId = user.getUser().getId();
         myPageService.updateMyPageInfo(userId, dto);
     }
@@ -54,7 +55,7 @@ public class MyPageController {
             @ApiResponse(code = 200, message = "탈퇴 성공"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<String> withdraw(@AuthenticationPrincipal CustomUser user) {
+    public ResponseEntity<String> withdraw(@ApiIgnore @AuthenticationPrincipal CustomUser user) {
         String accountId = user.getUser().getAccountId();
         memberService.withdraw(accountId);
         return ResponseEntity.ok("회원 탈퇴 완료");
@@ -68,7 +69,7 @@ public class MyPageController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     @GetMapping("/review")
-    public ResponseEntity<List<ProductReviewDTO>> getMyReviews(@AuthenticationPrincipal CustomUser user) {
+    public ResponseEntity<List<ProductReviewDTO>> getMyReviews(@ApiIgnore @AuthenticationPrincipal CustomUser user) {
         Long userId = user.getUser().getId();
         List<ProductReviewDTO> reviews = productService.getMyReviews(userId);
         return ResponseEntity.ok(reviews);

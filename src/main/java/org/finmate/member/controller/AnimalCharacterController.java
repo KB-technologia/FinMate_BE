@@ -14,6 +14,7 @@ import org.finmate.member.service.AnimalCharacterServiceImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 @Log4j2
 @RestController
@@ -38,7 +39,7 @@ public class AnimalCharacterController {
                     response = AnimalCharacterDTO.class, responseContainer = "AnimalCharacterDTO"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<AnimalCharacterDTO> getCharacter(@AuthenticationPrincipal CustomUser customUser){
+    public ResponseEntity<AnimalCharacterDTO> getCharacter(@ApiIgnore @AuthenticationPrincipal CustomUser customUser){
         return ResponseEntity.of(characterService.getCharacterById(customUser.getUser().getId()));
     }
 
@@ -56,7 +57,7 @@ public class AnimalCharacterController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     public ResponseEntity<AnimalCharacterDTO> changeCharacter(
-            @AuthenticationPrincipal CustomUser customUser,
+            @ApiIgnore @AuthenticationPrincipal CustomUser customUser,
             @RequestBody AnimalChangeDTO animalChangeDTO)
     {
         Long userId = customUser.getUser().getId();

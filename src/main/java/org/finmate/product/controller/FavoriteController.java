@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class FavoriteController {
     })
     @GetMapping
     public ResponseEntity<List<FavoriteDTO>> getFavoriteList(
-            @AuthenticationPrincipal CustomUser user) {
+            @ApiIgnore @AuthenticationPrincipal CustomUser user) {
 
         Long userId = user.getUser().getId();
         return ResponseEntity.ok(favoriteService.getFavorites(userId));
@@ -40,7 +41,7 @@ public class FavoriteController {
     @ApiOperation(value = "즐겨찾기 등록", notes = "사용자가 특정 금융상품을 즐겨찾기에 등록합니다.")
     @PostMapping("/{productId}")
     public ResponseEntity<Void> enrollFavorite(
-            @AuthenticationPrincipal CustomUser user,
+            @ApiIgnore @AuthenticationPrincipal CustomUser user,
             @ApiParam(value = "상품 ID", required = true, example = "1")
             @PathVariable Long productId) {
 
@@ -57,7 +58,7 @@ public class FavoriteController {
     })
     @DeleteMapping("/{productId}")
     public ResponseEntity<Void> deleteFavorite(
-            @AuthenticationPrincipal CustomUser user,
+            @ApiIgnore @AuthenticationPrincipal CustomUser user,
             @ApiParam(value = "즐겨찾기 ID", required = true, example = "1")
             @PathVariable Long productId
     ) {

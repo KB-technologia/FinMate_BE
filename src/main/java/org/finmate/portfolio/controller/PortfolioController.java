@@ -15,6 +15,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.time.LocalDate;
 
@@ -31,7 +32,7 @@ public class PortfolioController {
     @ApiOperation(value = "재무 포트폴리오 등록", notes = "사용자의 재무 포트폴리오를 등록")
     @PostMapping
     public ResponseEntity<PortfolioResponseDTO<Long>> create(
-            @AuthenticationPrincipal CustomUser customUser,
+            @ApiIgnore @AuthenticationPrincipal CustomUser customUser,
             @RequestBody PortfolioRequestDTO requestDTO) {
         Long userId = customUser.getUser().getId();
 
@@ -44,7 +45,7 @@ public class PortfolioController {
 
     @ApiOperation(value = "재무 포트폴리오 조회", notes = "userId로 재무 포트폴리오를 조회")
     @GetMapping
-    public ResponseEntity<PortfolioDTO> get(@AuthenticationPrincipal CustomUser customUser) {
+    public ResponseEntity<PortfolioDTO> get(@ApiIgnore @AuthenticationPrincipal CustomUser customUser) {
         Long userId = customUser.getUser().getId();
         PortfolioDTO dto = portfolioService.getPortfolioByUserId(userId);
         return ResponseEntity.ok(dto);
@@ -53,7 +54,7 @@ public class PortfolioController {
     @ApiOperation(value = "재무 포트폴리오 수정", notes = "재무 포트폴리오 수정")
     @PatchMapping
     public ResponseEntity<PortfolioResponseDTO<Long>> update(
-            @AuthenticationPrincipal CustomUser customUser,
+            @ApiIgnore @AuthenticationPrincipal CustomUser customUser,
             @RequestBody PortfolioDTO dto)
     {
         Long userId = customUser.getUser().getId();
@@ -69,7 +70,7 @@ public class PortfolioController {
 
     @ApiOperation(value = "재무 포트폴리오 삭제", notes = "userId로 재무 포트폴리오를 삭제")
     @DeleteMapping
-    public ResponseEntity<PortfolioResponseDTO<Long>> delete(@AuthenticationPrincipal CustomUser customUser) {
+    public ResponseEntity<PortfolioResponseDTO<Long>> delete(@ApiIgnore @AuthenticationPrincipal CustomUser customUser) {
         Long userId = customUser.getUser().getId();
         portfolioService.deletePortfolioByUserId(userId);
         return ResponseEntity.ok(
@@ -82,7 +83,7 @@ public class PortfolioController {
 
     @ApiOperation(value = "과거의 재무 포트폴리오 조회", notes = "userId로 과거 재무 포트폴리오를 조회")
     @GetMapping("/history")
-    public ResponseEntity<PortfolioDTO> getHistory(@AuthenticationPrincipal CustomUser customUser,  @RequestParam("date")
+    public ResponseEntity<PortfolioDTO> getHistory(@ApiIgnore @AuthenticationPrincipal CustomUser customUser,  @RequestParam("date")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         Long userId = customUser.getUser().getId();
         PortfolioDTO dto = portfolioService.getHistoryPortfolioByUserId(userId, date);
