@@ -56,9 +56,10 @@ public class SignupService {
                 .travelsFrequently(TravelFrequency.valueOf(dto.getTravelsFrequently()))
                 .numberOfChildren(dto.getNumberOfChildren())
                 .housingType(HousingType.valueOf(dto.getHousingType()))
-                .worksAtSme(dto.getEmployedAtSme())
+                .employedAtSme(dto.getEmployedAtSme())
                 .usesMicroloan(dto.getUsesMicroloan())
                 .exp(0)
+                .updatedAt(LocalDateTime.now())
                 .build();
         userInfoMapper.insertUserInfo(userInfo);
     }

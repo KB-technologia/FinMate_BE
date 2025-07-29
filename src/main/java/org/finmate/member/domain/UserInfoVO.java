@@ -39,7 +39,7 @@ public class UserInfoVO {
     private TravelFrequency travelsFrequently; // 여행 다니는 빈도
     private Integer numberOfChildren; // 자녀 수
     private HousingType housingType; // 주거 형태
-    private Boolean worksAtSme; // 중소기업 재직 중인지
+    private Boolean employedAtSme; // 중소기업 재직 중인지
     private Boolean usesMicroloan; // 미소금융 대출 유무
 
     private LocalDateTime updatedAt;

@@ -6,7 +6,8 @@
 <mapper namespace="org.finmate.member.mapper.UserMapper">
 
 
-<insert id="insertUser" parameterType="org.finmate.member.domain.UserVO">
+<insert id="insertUser" parameterType="org.finmate.member.domain.UserVO"
+        useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         INSERT INTO user (name, account_id, email, password, provider)
         VALUES (#{name}, #{accountId}, #{email}, #{password}, #{provider})
     </insert>

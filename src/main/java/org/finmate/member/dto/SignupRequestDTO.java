@@ -4,7 +4,6 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
-import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -31,10 +30,10 @@ public class SignupRequestDTO {
     @ApiModelProperty(value = "생년월일", example = "2000-01-01")
     private String birth;
 
-    @ApiModelProperty(value = "성별", example = "MALE, FEMALE")
+    @ApiModelProperty(value = "성별", example = "MALE")
     private String gender;
 
-    @ApiModelProperty(value = "결혼 여부", example = "MARRIED, SINGLE")
+    @ApiModelProperty(value = "결혼 여부", example = "MARRIED")
     private String maritalStatus;
 
     @ApiModelProperty(value = "직업 보유 여부", example = "true, false")
@@ -46,16 +45,16 @@ public class SignupRequestDTO {
     @ApiModelProperty(value = "운동 여부", example = "true, false")
     private Boolean exercises;
 
-    @ApiModelProperty(value = "기념일 챙기는 주기", example = "MONTHLY, YEARLY")
+    @ApiModelProperty(value = "기념일 챙기는 주기", example = "MONTHLY")
     private String anniversaryFrequency;
 
-    @ApiModelProperty(value = "여행 자주 하는지 여부", example = "NEVER, SOMETIMES, OFTEN")
+    @ApiModelProperty(value = "여행 자주 하는지 여부", example = "NEVER")
     private String travelsFrequently;
 
     @ApiModelProperty(value = "자녀 수", example = "2")
     private Integer numberOfChildren;
 
-    @ApiModelProperty(value = "주거 형태", example = "OWNED, LEASED, RENTED")
+    @ApiModelProperty(value = "주거 형태", example = "OWNED")
     private String housingType;
 
     @ApiModelProperty(value = "중소기업 재직 여부", example = "true, false")
