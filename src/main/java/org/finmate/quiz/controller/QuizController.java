@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
+import org.finmate.quiz.dto.QuizAnswerResponseDTO;
 import org.finmate.quiz.dto.QuizCheckRequestDTO;
 import org.finmate.quiz.dto.QuizDTO;
 import org.finmate.quiz.service.QuizService;
@@ -27,9 +28,8 @@ public class QuizController {
     }
 
     @ApiModelProperty(value = "퀴즈 정답 체크", notes = "사용자가 입력한 퀴즈의 정답과 DB에 저장된 퀴즈의 정답과 비교하여 해설 출력")
-    @PostMapping(value = "/check" ,  produces = "text/plain; charset=UTF-8")
-    //Todo : 한글 인코딩이 깨져서 GPT한테 물어본 코드 임시로 대입(produces = "text/plain; charset=UTF-8"), 추후 수정 필요
-    public String checkQuiz(@RequestBody QuizCheckRequestDTO dto) {
+    @PostMapping("/check")
+    public QuizAnswerResponseDTO checkQuiz(@RequestBody QuizCheckRequestDTO dto) {
         return quizService.checkAnswer(dto);
     }
 }
