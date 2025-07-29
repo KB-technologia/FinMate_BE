@@ -9,9 +9,14 @@ public interface MyPageMapper {
 
     MyPageVO findMyPageInfo(@Param("userId") Long userId);
 
-    void updateUser(
+    void updateUserWithPassword(
             @Param("userId") Long userId,
             @Param("password") String password,
+            @Param("email") String email
+    );
+
+    void updateUserWithoutPassword(
+            @Param("userId") Long userId,
             @Param("email") String email
     );
 

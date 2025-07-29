@@ -18,10 +18,19 @@
         WHERE u.id = #{userId}
     </select>
 
-    <update id="updateUser">
+    <!-- 📌 비밀번호 포함 업데이트 -->
+    <update id="updateUserWithPassword">
         UPDATE user
         SET
             password = #{password},
+            email = #{email}
+        WHERE id = #{userId}
+    </update>
+
+    <!-- 📌 비밀번호 없이 이메일만 업데이트 -->
+    <update id="updateUserWithoutPassword">
+        UPDATE user
+        SET
             email = #{email}
         WHERE id = #{userId}
     </update>
@@ -33,4 +42,6 @@
         WHERE user_id = #{userId}
     </update>
 </mapper>
+
+
 
