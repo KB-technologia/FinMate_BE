@@ -33,7 +33,9 @@ public interface ProductMapper {
 
     int deleteProductReview(
             @Param("productId") Long productId,
-            @Param("userId") Long userId);
+            @Param("userId") Long userId
+    );
 
+    List<ProductReviewVO> getProductReviewByUserId(@Param("userId") Long userId);
 }
 

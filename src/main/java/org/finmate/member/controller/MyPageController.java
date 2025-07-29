@@ -7,10 +7,15 @@ import org.finmate.member.dto.MyPageResponseDTO;
 import org.finmate.member.dto.MyPageUpdateRequestDTO;
 import org.finmate.member.service.MemberService;
 import org.finmate.member.service.MyPageService;
+import org.finmate.product.dto.ProductReviewDTO;
+import org.finmate.product.service.ProductService;
+import org.finmate.member.domain.CustomUser;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,6 +25,7 @@ public class MyPageController {
 
     private final MyPageService myPageService;
     private final MemberService memberService;
+    private final ProductService productService;
 
     @ApiOperation(value = "마이페이지 조회", notes = "로그인한 사용자의 마이페이지 정보를 반환합니다.")
     @ApiResponses({
@@ -27,8 +33,8 @@ public class MyPageController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     @GetMapping("/me")
-    public MyPageResponseDTO getMyPage() {
-        Long userId = 1L; // TODO: 인증 처리 후 교체
+    public MyPageResponseDTO getMyPage(@AuthenticationPrincipal CustomUser user) {
+        Long userId = user.getUser().getId();
         return myPageService.getMyPageInfo(userId);
     }
 
@@ -39,8 +45,8 @@ public class MyPageController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     @PatchMapping("/me")
-    public void updateMyPage(@RequestBody MyPageUpdateRequestDTO dto) {
-        Long userId = 1L; // TODO: 인증 처리 후 교체
+    public void updateMyPage(@AuthenticationPrincipal CustomUser user, @RequestBody MyPageUpdateRequestDTO dto) {
+        Long userId = user.getUser().getId();
         myPageService.updateMyPageInfo(userId, dto);
     }
 
@@ -54,5 +60,19 @@ public class MyPageController {
         Long userId = user.getUser().getId();
         memberService.withdraw(userId);
         return ResponseEntity.ok().build();
+    }
+
+    @ApiOperation(value = "내가 작성한 리뷰 목록 조회", notes = "로그인한 사용자가 작성한 금융 상품 리뷰들을 조회합니다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "요청 성공"),
+            @ApiResponse(code = 401, message = "인증 실패"),
+            @ApiResponse(code = 403, message = "권한 없음"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    @GetMapping("/review")
+    public ResponseEntity<List<ProductReviewDTO>> getMyReviews(@AuthenticationPrincipal CustomUser user) {
+        Long userId = user.getUser().getId();
+        List<ProductReviewDTO> reviews = productService.getMyReviews(userId);
+        return ResponseEntity.ok(reviews);
     }
 }
