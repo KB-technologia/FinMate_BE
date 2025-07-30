@@ -6,34 +6,43 @@
 <mapper namespace="org.finmate.portfolio.mapper.PortfolioMapper">
     <insert id="insertPortfolio">
         INSERT INTO financial_portfolio (
-            user_id, age, total_assets, annual_income,
-            investment_profile, cash_ratio, bond_ratio,
-            equity_ratio, other_ratio
+            user_id, total_assets, investment_profile, cash, deposit,
+            savings, bond, fund, stock, other
         ) VALUES (
-        #{userId}, #{age}, #{totalAssets}, #{annualIncome},
-        #{investmentProfile}, #{cashRatio}, #{bondRatio},
-        #{equityRatio}, #{otherRatio}
-        )
+                     #{userId}, #{totalAssets},
+                     #{investmentProfile}, #{cash}, #{deposit},
+                     #{savings}, #{bond}, #{fund}, #{stock}, #{other}
+                 )
     </insert>
 
-    <select id="selectPortfolioByUserId" resultType="org.finmate.portfolio.domain.PortfolioVO">
-        SELECT * FROM financial_portfolio WHERE user_id = #{userId}
+    <select id="getPortfolio" resultType="org.finmate.portfolio.domain.PortfolioVO">
+        SELECT * FROM financial_portfolio WHERE user_id = #{userId} ORDER BY created_at DESC
+        LIMIT 1
     </select>
+
+    <select id="getHistoryPortfolio" resultType="org.finmate.portfolio.domain.PortfolioVO">
+        SELECT *
+        FROM financial_portfolio
+        WHERE user_id = #{userId}
+          AND DATE(created_at) = #{date}
+    </select>
+
 
     <update id="updatePortfolio">
         UPDATE financial_portfolio SET
-            age = #{age},
-            total_assets = #{totalAssets},
-            annual_income = #{annualIncome},
-            investment_profile = #{investmentProfile},
-            cash_ratio = #{cashRatio},
-            bond_ratio = #{bondRatio},
-            equity_ratio = #{equityRatio},
-            other_ratio = #{otherRatio}
-        WHERE user_id = #{userId}
+                                       total_assets = #{totalAssets},
+                                       investment_profile = #{investmentProfile},
+                                       cash = #{cash},
+                                       deposit= #{deposit},
+                                       savings = #{savings},
+                                       bond = #{bond},
+                                       fund = #{fund},
+                                       stock =#{stock},
+                                       other =#{other}
+        WHERE user_id = #{userId} and DATE(created_at) = CURDATE()
     </update>
 
-    <delete id="deletePortfolioByUserId">
+    <delete id="deletePortfolio">
         DELETE FROM financial_portfolio WHERE user_id = #{userId}
     </delete>
 

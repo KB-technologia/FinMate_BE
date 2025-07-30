@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @ApiModel(description = "재무 포트폴리오 응답 DTO")
-public class PortfolioApiResponse<T> {
+public class PortfolioResponseDTO<T> {
     @ApiModelProperty(value = "재무 포트폴리오 API 응답 메시지")
     private String message;
 

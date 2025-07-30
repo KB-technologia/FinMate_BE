@@ -2,54 +2,95 @@ package org.finmate.portfolio.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.finmate.adapter.mydata.MyDataApi;
+import org.finmate.adapter.mydata.dto.MyDataResponseDTO;
+import org.finmate.exception.NotFoundException;
+import org.finmate.portfolio.domain.InvestmentProfile;
 import org.finmate.portfolio.domain.PortfolioVO;
 import org.finmate.portfolio.dto.PortfolioDTO;
+import org.finmate.portfolio.dto.PortfolioRequestDTO;
 import org.finmate.portfolio.mapper.PortfolioMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.NoSuchElementException;
 
+/**
+ * 포트폴리오 서비스 구현 클래스, 사용자의 포트폴리오 생성, 조회, 수정, 삭제, 이력 조회를 처리
+ * @author 소영재
+ */
 @Log4j2
 @Service
 @RequiredArgsConstructor
 public class PortfolioServiceImpl implements PortfolioService {
     private final PortfolioMapper portfolioMapper;
 
+    private final MyDataApi myDataApi;
+    /**
+     * 포트폴리오 생성
+     * @param userId 유저 아이디
+     * @param portfolioRequestDTO 유저에게 입력 받는 값(cash, other(기타자산))
+     */
     @Override
-    public void createPortfolio(PortfolioDTO portfolio) {
-        checkRatio(portfolio);
-        PortfolioVO vo = portfolio.toVO();
-        portfolioMapper.insertPortfolio(vo);
+    public void createPortfolio(Long userId, PortfolioRequestDTO portfolioRequestDTO) {
+
+        PortfolioDTO portfolioDTO = myDataApi.getMyData(userId).toPortfolioDTO();
+
+        portfolioDTO.setUserId(userId);
+        portfolioDTO.setCash(portfolioRequestDTO.getCash());
+        portfolioDTO.setOther(portfolioRequestDTO.getOther());
+        portfolioDTO.update();
+
+        portfolioMapper.insertPortfolio(portfolioDTO.toVO());
     }
 
-
+    /**
+     * userId에 해당하는 포트폴리오 조회
+     * @param userId
+     */
     @Override
     public PortfolioDTO getPortfolioByUserId(Long userId) {
-        PortfolioVO vo = portfolioMapper.selectPortfolioByUserId(userId);
+        PortfolioVO vo = portfolioMapper.getPortfolio(userId);
         if(vo== null){
-            throw new NoSuchElementException("해당 사용자의 포트폴리오가 존재하지 않습니다.");
+            throw new NotFoundException("해당 사용자의 포트폴리오가 존재하지 않습니다.");
         }
         return PortfolioDTO.from(vo);
     }
 
+    /**
+     * 포트폴리오 수정하는 메서드
+     * @param portfolio
+     * @deprecated 로직 수정 전
+     */
     @Override
     public void updatePortfolio(PortfolioDTO portfolio) {
-        checkRatio(portfolio);
         PortfolioVO vo = portfolio.toVO();
         portfolioMapper.updatePortfolio(vo);
     }
 
-@   Override
+    /**
+     * userId에 해당하는 포트폴리오 삭제
+     * @param userId
+     */
+    @Override
     public void deletePortfolioByUserId(Long userId) {
-        portfolioMapper.deletePortfolioByUserId(userId);
+        portfolioMapper.deletePortfolio(userId);
     }
 
+    /**
+     * 과거의 포트폴리오 이력을 조회하는 메서드
+     * @param userId
+     * @param date
+     */
     @Override
-    public void checkRatio (PortfolioDTO portfolio) {
-        double totalRatio = portfolio.getCashRatio() + portfolio.getBondRatio()
-                + portfolio.getEquityRatio() + portfolio.getOtherRatio();
-        if (Math.abs(totalRatio - 100.0) > 0.001) {
-            throw new IllegalArgumentException("비율 총합이 100%가 아닙니다.");
+    public PortfolioDTO getHistoryPortfolioByUserId(Long userId, LocalDate date) {
+        PortfolioVO vo = portfolioMapper.getHistoryPortfolio(userId, date);
+        if(vo== null){
+            throw new NotFoundException("해당 사용자의 포트폴리오가 존재하지 않습니다.");
         }
+        return PortfolioDTO.from(vo);
     }
+
+
+
 }

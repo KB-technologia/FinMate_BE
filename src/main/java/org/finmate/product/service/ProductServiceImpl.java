@@ -2,11 +2,10 @@ package org.finmate.product.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.finmate.common.util.OpenAiApi;
-import org.finmate.common.util.OpenAiDTO.OpenAiResponseDTO;
+import org.finmate.adapter.openai.OpenAiApi;
+import org.finmate.adapter.openai.dto.OpenAiResponseDTO;
 import org.finmate.exception.NotFoundException;
 import org.finmate.product.domain.ProductReviewVO;
-import org.finmate.product.domain.ProductVO;
 import org.finmate.product.dto.ProductComparisonResultDTO;
 import org.finmate.product.dto.ProductDTO;
 import org.finmate.product.dto.ProductReviewDTO;

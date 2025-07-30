@@ -15,6 +15,7 @@ import org.finmate.member.dto.UserInfoDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 import java.util.Optional;
@@ -52,7 +53,7 @@ public class AssessmentController {
      */
     @PostMapping("")
     public ResponseEntity<UserInfoDTO> resultAssessment(
-            @AuthenticationPrincipal CustomUser customUser,
+            @ApiIgnore @AuthenticationPrincipal CustomUser customUser,
             @RequestBody AssessmentRequestDTO requestDTO
     ){
         Long userId = customUser.getUser().getId();

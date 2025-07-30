@@ -12,6 +12,7 @@ import org.finmate.product.service.ProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
@@ -90,8 +91,7 @@ public class ProductController {
             @PathVariable Long id,
             @ApiParam(value = "등록할 금융 상품 리뷰 DTO", required = true)
             @RequestBody ProductReviewDTO review,
-            @ApiParam(value = "유저 ID", required = true, example = "1")
-            @AuthenticationPrincipal CustomUser user
+            @ApiIgnore @AuthenticationPrincipal CustomUser user
     ) {
         review.setProductId(id);
         review.setUserId(user.getUser().getId());
@@ -109,8 +109,7 @@ public class ProductController {
     public ResponseEntity<ReviewIdResponse> deleteProductReview(
             @ApiParam(value = "상품 ID", required = true, example = "1")
             @PathVariable Long id,
-            @ApiParam(value = "유저 ID", required = true, example = "1")
-            @AuthenticationPrincipal CustomUser user
+            @ApiIgnore @AuthenticationPrincipal CustomUser user
     ) {
         return ResponseEntity.ok(new ReviewIdResponse(productService.deleteProductReview(id, user.getUser().getId())));
     }

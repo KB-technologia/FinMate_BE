@@ -48,6 +48,9 @@
         SELECT COUNT(*) > 0 FROM user
         WHERE account_id = #{accountId} AND email = #{email}
     </select>
+    <select id="getUserIdAll" resultType="java.lang.Long">
+        SELECT id FROM user;
+    </select>
 
     <update id="updatePassword">
         UPDATE user

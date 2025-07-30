@@ -13,12 +13,14 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 
 @Configuration
 @EnableTransactionManagement
+@EnableScheduling
 @PropertySource({"classpath:/application.properties"})
 @MapperScan(basePackages = {
         "org.finmate.member.mapper",
@@ -31,7 +33,7 @@ import javax.sql.DataSource;
         "org.finmate.assessment.service",
         "org.finmate.product.service",
         "org.finmate.member.service",
-        "org.finmate.common.util",
+        "org.finmate.adapter",
         "org.finmate.portfolio.service",
         "org.finmate.security.handler",
         "org.finmate.quiz.service",
