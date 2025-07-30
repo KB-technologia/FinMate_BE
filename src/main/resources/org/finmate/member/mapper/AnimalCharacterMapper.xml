@@ -12,5 +12,13 @@
         WHERE u.user_id = #{userId}
     </select>
 
+    <select id="randomCharacter" resultType="long">
+        SELECT id
+        FROM animal_character
+        ORDER BY RAND()
+        LIMIT 1
+    </select>
+
+
 </mapper>
 
