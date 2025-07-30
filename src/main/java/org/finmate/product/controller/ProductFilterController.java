@@ -8,17 +8,14 @@ import org.finmate.product.dto.ProductDTO;
 import org.finmate.product.dto.ProductFilterDTO;
 import org.finmate.product.service.ProductService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/product/filter")
 @Log4j2
+@RequestMapping("/api/product/filter")
 @Api(tags = "금융 상품 필터링 API")
 public class ProductFilterController {
     private final ProductService productService;

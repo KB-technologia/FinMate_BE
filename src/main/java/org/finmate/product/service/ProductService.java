@@ -18,6 +18,8 @@ public interface ProductService {
 
     List<ProductReviewDTO> getProductReviews(Long id);
 
+    List<ProductReviewDTO> getMyReviews(Long userId);
+
     Long insertProductReview(ProductReviewDTO productReviewDTO);
 
     Long deleteProductReview(Long id, Long userId);
