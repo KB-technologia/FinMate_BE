@@ -31,14 +31,13 @@ public class UserInfoVO {
     private LocalDate birth; // 생년월일
     private Gender gender; // 성별
 
-    private MaritalStatus maritalStatus; //결혼 유무
+    private Boolean isMarried; //결혼 유무
     private Boolean hasJob; // 직업 유무
     private Boolean usesPublicTransport; // 대중교통 이용 유무
-    private Boolean exercises; // 운동 여부
-    private AnniversaryFrequency anniversaryFrequency; // 기념일 챙기는 빈도
-    private TravelFrequency travelsFrequently; // 여행 다니는 빈도
-    private Integer numberOfChildren; // 자녀 수
-    private HousingType housingType; // 주거 형태
+    private Boolean doesExercise; // 운동 여부
+    private Boolean travelsFrequently; // 여행 다니는지
+    private Boolean hasChildren; // 자녀 유무
+    private Boolean hasHouse; // 주거 형태
     private Boolean employedAtSme; // 중소기업 재직 중인지
     private Boolean usesMicroloan; // 미소금융 대출 유무
 
