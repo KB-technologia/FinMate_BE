@@ -47,8 +47,9 @@ public class ProductController {
             @ApiParam(value = "상품 ID 1", required = true, example = "1")
             @RequestParam Long id1,
             @ApiParam(value = "상품 ID 2", required = true, example = "2")
-            @RequestParam Long id2) {
-        return ResponseEntity.ok(productService.compareProducts(id1, id2));
+            @RequestParam Long id2,
+            @ApiIgnore @AuthenticationPrincipal CustomUser user) {
+        return ResponseEntity.ok(productService.compareProducts(id1, id2, user));
     }
 
 

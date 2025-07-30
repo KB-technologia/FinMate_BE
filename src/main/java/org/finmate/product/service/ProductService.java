@@ -1,5 +1,6 @@
 package org.finmate.product.service;
 
+import org.finmate.member.domain.CustomUser;
 import org.finmate.product.dto.ProductComparisonResultDTO;
 import org.finmate.product.dto.ProductDTO;
 import org.finmate.product.dto.ProductFilterDTO;
@@ -12,7 +13,7 @@ public interface ProductService {
   
     List<ProductDTO<?>> getAllProducts();
   
-    ProductComparisonResultDTO compareProducts(Long id1, Long id2);
+    ProductComparisonResultDTO compareProducts(Long id1, Long id2, CustomUser user);
 
     List<ProductDTO<?>> getFilteredProducts(ProductFilterDTO filter);
 

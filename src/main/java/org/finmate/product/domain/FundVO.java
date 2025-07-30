@@ -18,15 +18,13 @@ public class FundVO {
     private FundType fundType;
     private String manager;
     private LocalDate inceptionDate;
+    private Double initialNav;
     private Double nav;
     private Long aum;
+    private LocalDate baseDate;
     private Double expenseRatio;
-    private Double sharpeRatio;
-    private String regions;
-    private String sectors;
     private Integer redemptionPeriod;
     private Integer riskGrade;
-    private Double returnRate1m;
-    private Double returnRate3m;
-    private Double returnRate6m;
+    private String productClassCode;
+    private String associationCode;
 }
