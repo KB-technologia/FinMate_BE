@@ -27,9 +27,8 @@ public class AnimalCharacterController {
 
     /**
      * 캐릭터 조회
-     * userId는 추후 토큰 형식으로 리팩토링 예정
      */
-    @GetMapping("{userId}")
+    @GetMapping
     @ApiOperation(
             value = "캐릭터 조회",
             notes = "사용자 ID를 기반으로 현재 사용자의 캐릭터 조회"
@@ -46,7 +45,7 @@ public class AnimalCharacterController {
     /**
      * 캐릭터 변경
      */
-    @PostMapping("")
+    @PostMapping
     @ApiOperation(
             value = "캐릭터 변경",
             notes = "사용자 ID와 캐릭터 ID을 통해 사용자의 인포 테이블 갱신"
