@@ -8,7 +8,11 @@ import org.finmate.member.domain.UserVO;
 import org.finmate.member.domain.enums.Provider;
 import org.finmate.member.dto.KakaoTokenResponse;
 import org.finmate.member.dto.KakaoUserResponse;
+import org.finmate.member.dto.UserInfoDTO;
 import org.finmate.member.mapper.UserMapper;
+import org.finmate.security.dto.AuthResultDTO;
+import org.finmate.security.dto.UserLoginInfoDTO;
+import org.finmate.security.util.JwtProcessor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -22,6 +26,7 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class KakaoService {
 
+    private final JwtProcessor jwtProcessor;
     @Value("${kakao.client-id}")
     private String CLIENT_ID;
 
@@ -82,11 +87,20 @@ public class KakaoService {
             String id = String.valueOf(kakaoResponse.getId());
             String nickname = kakaoResponse.getProperties().getNickname();
             String email = kakaoResponse.getKakao_account().getEmail();
-            log.info("getUserInfo - id: {}, nickname: {}, email: {}", id, nickname, email);
+            String gender = kakaoResponse.getKakao_account().getGender();
+            String birthyear = kakaoResponse.getKakao_account().getBirthyear();
+            String birthday = kakaoResponse.getKakao_account().getBirthday();
 
+            String birth = null;
+            if(birthyear != null && birthday != null){
+                birth = birthyear +"-"+birthday.substring(0,2) + "-"+birthday.substring(2);
+            }
+            log.info("getUserInfo - id: {}, nickname: {}, email: {}, gender: {}, birth: {}",
+                    id, nickname, email, gender, birth);
             return new KakaoUser(id,
                     nickname != null ? nickname : "카카오사용자",
-                    email != null ? email : "no-email@kakao.com");
+                    email != null ? email : "no-email@kakao.com",
+                    gender, birth);
         }
         catch (Exception e) {
             log.error("카카오 사용자 정보 파싱 실패: {}", e.getMessage());
@@ -94,28 +108,26 @@ public class KakaoService {
         }
     }
 
-    // 3. 우리 서비스의 사용자로 DB에 저장 or 조회
-    public UserVO getOrCreateUser(KakaoUser kakaoUser){
-        String accountId = "kakao_" + kakaoUser.getId();
 
-        UserVO existingUser = userMapper.selectByAccountId(accountId);
-        if(existingUser != null){
-            System.out.println("기존 사용자: " + existingUser);
-            return existingUser;
+    public AuthResultDTO getOrCreateUserAndBuildAuthDTO(KakaoUser kakaoUser){
+        String accountId = "kakao_" + kakaoUser.getId();
+        UserVO user = userMapper.selectByAccountId(accountId);
+
+        boolean isNewUser = false;
+        if(user == null){
+            user = UserVO.builder()
+                    .accountId(accountId)
+                    .email(kakaoUser.getEmail())
+                    .name(kakaoUser.getNickname())
+                    .password("kakao")
+                    .provider(Provider.KAKAO)
+                    .build();
+            isNewUser = true;
         }
 
-        UserVO newUser = UserVO.builder()
-                .accountId(accountId)
-                .email(kakaoUser.getEmail())
-                .name(kakaoUser.getNickname())
-                .password("kakao")
-                .provider(Provider.KAKAO)
-                .build();
+        String token = jwtProcessor.generateToken(user.getAccountId());
+        UserLoginInfoDTO userLoginInfoDTO = UserLoginInfoDTO.of(user);
 
-        log.info("새 사용자 생성: {}", newUser);
-
-        userMapper.insertUser(newUser);
-        return newUser;
+        return new AuthResultDTO(token, userLoginInfoDTO, isNewUser);
     }
-
 }

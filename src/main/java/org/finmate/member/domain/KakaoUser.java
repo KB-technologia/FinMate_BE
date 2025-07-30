@@ -9,4 +9,6 @@ public class KakaoUser {
     private String id;
     private String nickname;
     private String email;
+    private String gender;
+    private String birth;
 }

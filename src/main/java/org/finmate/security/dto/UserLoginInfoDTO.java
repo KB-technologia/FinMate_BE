@@ -10,13 +10,13 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserInfoDTO {
+public class UserLoginInfoDTO {
     private String username;
     private String email;
     private List<String> roles;
 
-    public static UserInfoDTO of(UserVO member){
-        return new UserInfoDTO(
+    public static UserLoginInfoDTO of(UserVO member){
+        return new UserLoginInfoDTO(
                 member.getAccountId(),
                 member.getEmail(),
                 List.of("ROLE_USER") // 현재는 고정값으로 설정
