@@ -37,6 +37,18 @@
             <result property="interestType" column="interest_type"/>
             <result property="bonusRate" column="bonus_rate"/>
             <result property="compoundingPeriod" column="compounding_period"/>
+            <result property="minAge" column="min_age" />
+            <result property="maxAge" column="max_age" />
+            <result property="gender" column="gender" />
+            <result property="isMarried" column="is_married"/>
+            <result property="hasJob" column="has_job"/>
+            <result property="usesPublicTransport" column="uses_public_transport"/>
+            <result property="travelsFrequently" column="travels_frequently"/>
+            <result property="doesExercise" column="does_exercise" />
+            <result property="hasChildren" column="has_children" />
+            <result property="hasHouse" column="has_house" />
+            <result property="employedAtSme" column="employed_at_sme" />
+            <result property="usesMicroloan" column="uses_microloan" />
         </association>
 
         <!-- SavingsVO -->
@@ -51,6 +63,18 @@
             <result property="interestType" column="interest_type"/>
             <result property="bonusRate" column="bonus_rate"/>
             <result property="compoundingPeriod" column="compounding_period"/>
+            <result property="minAge" column="min_age" />
+            <result property="maxAge" column="max_age" />
+            <result property="gender" column="gender" />
+            <result property="isMarried" column="is_married"/>
+            <result property="hasJob" column="has_job"/>
+            <result property="usesPublicTransport" column="uses_public_transport"/>
+            <result property="travelsFrequently" column="travels_frequently"/>
+            <result property="doesExercise" column="does_exercise" />
+            <result property="hasChildren" column="has_children" />
+            <result property="hasHouse" column="has_house" />
+            <result property="employedAtSme" column="employed_at_sme" />
+            <result property="usesMicroloan" column="uses_microloan" />
         </association>
 
         <!-- FundVO -->
@@ -60,17 +84,15 @@
             <result property="fundType" column="fund_type"/>
             <result property="manager" column="manager"/>
             <result property="inceptionDate" column="inception_date"/>
+            <result property="initialNav" column="initial_nav" />
             <result property="nav" column="nav"/>
             <result property="aum" column="aum"/>
+            <result property="baseDate" column="base_date" />
             <result property="expenseRatio" column="expense_ratio"/>
-            <result property="sharpeRatio" column="sharpe_ratio"/>
-            <result property="regions" column="regions"/>
-            <result property="sectors" column="sectors"/>
             <result property="redemptionPeriod" column="redemption_period"/>
             <result property="riskGrade" column="risk_grade"/>
-            <result property="returnRate1m" column="return_rate_1m"/>
-            <result property="returnRate3m" column="return_rate_3m"/>
-            <result property="returnRate6m" column="return_rate_6m"/>
+            <result property="productClassCode" column="product_class_code" />
+            <result property="associationCode" column="association_code" />
         </association>
 
         <!-- ProductRateVO -->
@@ -109,14 +131,25 @@
             p.strategy_tag AS p_strategy_tag,
             p.min_finance_score AS p_min_finance_score,
 
-            d.id AS d_id,
-            d.product_id AS d_product_id,
-            d.default_term_months AS d_default_term_months,
-            d.is_flexible AS d_is_flexible,
-            d.early_withdrawal_penalty AS d_early_withdrawal_penalty,
-            d.interest_type AS d_interest_type,
-            d.bonus_rate AS d_bonus_rate,
-            d.compounding_period AS d_compounding_period,
+            s.id AS d_id,
+            s.product_id AS d_product_id,
+            s.default_term_months AS d_default_term_months,
+            s.is_flexible AS d_is_flexible,
+            s.early_withdrawal_penalty AS d_early_withdrawal_penalty,
+            s.interest_type AS d_interest_type,
+            s.bonus_rate AS d_bonus_rate,
+            s.compounding_period AS d_compounding_period,
+            s.min_age AS d_min_age,
+            s.max_age AS d_max_age,
+            s.gender AS d_gender,
+            s.is_married AS d_is_married,
+            s.has_job AS d_has_job,
+            s.uses_public_transport AS d_uses_public_transport,
+            s.does_exercise AS d_does_exercise,
+            s.has_children AS d_has_children,
+            s.has_house AS d_has_house,
+            s.employed_at_sme AS d_employed_at_sme,
+            s.uses_microloan AS d_uses_microloan,
 
             s.id AS s_id,
             s.product_id AS s_product_id,
@@ -128,23 +161,33 @@
             s.interest_type AS s_interest_type,
             s.bonus_rate AS s_bonus_rate,
             s.compounding_period AS s_compounding_period,
+            s.min_age AS s_min_age,
+            s.max_age AS s_max_age,
+            s.gender AS s_gender,
+            s.is_married AS s_is_married,
+            s.has_job AS s_has_job,
+            s.uses_public_transport AS s_uses_public_transport,
+            s.does_exercise AS s_does_exercise,
+            s.has_children AS s_has_children,
+            s.has_house AS s_has_house,
+            s.employed_at_sme AS s_employed_at_sme,
+            s.uses_microloan AS s_uses_microloan,
+
 
             f.id AS f_id,
             f.product_id AS f_product_id,
             f.fund_type AS f_fund_type,
             f.manager AS f_manager,
             f.inception_date AS f_inception_date,
+            f.initial_nav AS f_initial_nav,
             f.nav AS f_nav,
             f.aum AS f_aum,
+            f.base_date AS f_base_date,
             f.expense_ratio AS f_expense_ratio,
-            f.sharpe_ratio AS f_sharpe_ratio,
-            f.regions AS f_regions,
-            f.sectors AS f_sectors,
             f.redemption_period AS f_redemption_period,
             f.risk_grade AS f_risk_grade,
-            f.return_rate_1m AS f_return_rate_1m,
-            f.return_rate_3m AS f_return_rate_3m,
-            f.return_rate_6m AS f_return_rate_6m,
+            f.product_class_code AS f_product_class_code,
+            f.association_code AS f_association_code,
 
             r.id AS r_id,
             r.product_id AS r_product_id,
@@ -160,11 +203,85 @@
     <!-- 공통 JOIN 절 -->
     <sql id="productJoin">
         FROM financial_product p
-                 LEFT JOIN product_deposit d ON p.id = d.product_id
-                 LEFT JOIN product_savings s ON p.id = s.product_id
+                 LEFT JOIN product_deposit_savings s ON p.id = s.product_id
                  LEFT JOIN product_fund f ON p.id = f.product_id
                  LEFT JOIN product_rate r ON p.id = r.product_id
     </sql>
+
+    <!--  금융상품추가  -->
+    <insert id="insertProduct">
+        INSERT INTO financial_product(name, bank_name,
+                                      product_type, risk_level, expected_return,
+                                      min_amount, max_amount, min_term, max_term,
+                                      url, description,
+                                      adventure_score, value_tag, speed_tag, strategy_tag, min_finance_score)
+        VALUES(#{name}, #{bankName},
+               #{productType}, #{riskLevel}, #{expectedReturn},
+               #{minAmount}, #{maxAmount}, #{minTerm}, #{maxTerm},
+               #{url}, #{description},
+               #{adventureScore}, #{valueTag}, #{speedTag}, #{strategyTag}, #{minFinanceScore})
+        <selectKey resultType="Long" keyProperty="id" keyColumn="id" order="AFTER">
+            select last_insert_id()
+        </selectKey>
+    </insert>
+
+    <insert id="insertDeposit">
+        INSERT INTO product_deposit_savings(product_id, default_term_months,
+                                            is_flexible, early_withdrawal_penalty,
+                                            interest_type, bonus_rate, compounding_period,
+                                            min_age, max_age,
+                                            gender, is_married, has_job, uses_public_transport,
+                                            does_exercise, travels_frequently, has_children,
+                                            has_house, employed_at_sme, uses_microloan)
+        VALUES (#{productId}, #{defaultTermMonths},
+                #{isFlexible}, #{earlyWithdrawalPenalty},
+                #{interestType}, #{bonusRate}, #{compoundingPeriod},
+                #{minAge}, #{maxAge},
+                #{gender}, #{isMarried}, #{hasJob}, #{usesPublicTransport},
+                #{doesExercise}, #{travelsFrequently}, #{hasChildren},
+                #{hasHouse}, #{employedAtSme}, #{usesMicroloan})
+    </insert>
+
+    <insert id="insertSavings">
+        INSERT INTO product_deposit_savings(product_id, default_term_months,
+                                            is_flexible, early_withdrawal_penalty,
+                                            payment_cycle, max_monthly_payment,
+                                            interest_type, bonus_rate, compounding_period,
+                                            min_age, max_age,
+                                            gender, is_married, has_job, uses_public_transport,
+                                            does_exercise, travels_frequently, has_children,
+                                            has_house, employed_at_sme, uses_microloan)
+        VALUES (#{productId}, #{defaultTermMonths},
+                #{isFlexible}, #{earlyWithdrawalPenalty},
+                #{paymentCycle}, #{maxMonthlyPayment},
+                #{interestType}, #{bonusRate}, #{compoundingPeriod},
+                #{minAge}, #{maxAge},
+                #{gender}, #{isMarried}, #{hasJob}, #{usesPublicTransport},
+                #{doesExercise}, #{travelsFrequently}, #{hasChildren},
+                #{hasHouse}, #{employedAtSme}, #{usesMicroloan})
+    </insert>
+
+    <insert id="insertFund">
+        INSERT INTO product_fund(product_id, fund_type, manager,
+                                 inception_date, initial_nav,
+                                 nav, aum, base_date,
+                                 expense_ratio, redemption_period, risk_grade,
+                                 product_class_code, association_code)
+        VALUES (#{productId}, #{fundType}, #{manager},
+                #{inceptionDate}, #{initialNav},
+                #{nav}, #{aum}, #{baseDate},
+                #{expenseRatio}, #{redemptionPeriod}, #{riskGrade},
+                #{productClassCode}, #{associationCode})
+    </insert>
+
+    <insert id="insertProductRate">
+        INSERT INTO product_rate(product_id,
+                                 return_rate_1m, return_rate_3m, return_rate_6m,
+                                 return_rate_12m, return_rate_24m, return_rate_36m, return_rate_60m)
+        VALUES (#{productId},
+                #{returnRate1m}, #{returnRate3m}, #{returnRate6m},
+                #{returnRate12m}, #{returnRate24m}, #{returnRate36m}, #{returnRate60m})
+    </insert>
     <insert id="insertProductReview">
         INSERT INTO review(product_id, user_id, rating, ease_of_signup, content, image_url, writer)
         VALUES (#{productId}, #{userId},#{rating}, #{easeOfSignup}, #{content}, #{imageUrl}, #{writer})
@@ -172,6 +289,104 @@
             select last_insert_id()
         </selectKey>
     </insert>
+    <update id="updateProduct">
+        UPDATE financial_product
+        SET
+            name = #{name},
+            bank_name = #{bankName},
+            product_type = #{productType},
+            risk_level = #{riskLevel},
+            expected_return = #{expectedReturn},
+            min_amount = #{minAmount},
+            max_amount = #{maxAmount},
+            min_term = #{minTerm},
+            max_term = #{maxTerm},
+            url = #{url},
+            description = #{description},
+            adventure_score = #{adventureScore},
+            value_tag = #{valueTag},
+            speed_tag = #{speedTag},
+            strategy_tag = #{strategyTag},
+            min_finance_score = #{minFinanceScore}
+        WHERE id = #{id}
+    </update>
+    <update id="updateDeposit">
+        UPDATE product_deposit_savings
+        SET
+            default_term_months = #{defaultTermMonths},
+            is_flexible = #{isFlexible},
+            early_withdrawal_penalty = #{earlyWithdrawalPenalty},
+            interest_type = #{interestType},
+            bonus_rate = #{bonusRate},
+            compounding_period = #{compoundingPeriod},
+            min_age = #{minAge},
+            max_age = #{maxAge},
+            gender = #{gender},
+            is_married = #{isMarried},
+            has_job = #{hasJob},
+            uses_public_transport = #{usesPublicTransport},
+            does_exercise = #{doesExercise},
+            travels_frequently = #{travelsFrequently},
+            has_children = #{hasChildren},
+            has_house = #{hasHouse},
+            employed_at_sme = #{employedAtSme},
+            uses_microloan = #{usesMicroloan}
+        WHERE product_id = #{productId}
+    </update>
+    <update id="updateSavings">
+        UPDATE product_deposit_savings
+        SET
+            default_term_months = #{defaultTermMonths},
+            is_flexible = #{isFlexible},
+            early_withdrawal_penalty = #{earlyWithdrawalPenalty},
+            payment_cycle = #{paymentCycle},
+            max_monthly_payment = #{maxMonthlyPayment},
+            interest_type = #{interestType},
+            bonus_rate = #{bonusRate},
+            compounding_period = #{compoundingPeriod},
+            min_age = #{minAge},
+            max_age = #{maxAge},
+            gender = #{gender},
+            is_married = #{isMarried},
+            has_job = #{hasJob},
+            uses_public_transport = #{usesPublicTransport},
+            does_exercise = #{doesExercise},
+            travels_frequently = #{travelsFrequently},
+            has_children = #{hasChildren},
+            has_house = #{hasHouse},
+            employed_at_sme = #{employedAtSme},
+            uses_microloan = #{usesMicroloan}
+        WHERE product_id = #{productId}
+    </update>
+    <update id="updateFund">
+        UPDATE product_fund
+        SET
+            fund_type = #{fundType},
+            manager = #{manager},
+            inception_date = #{inceptionDate},
+            initial_nav = #{initialNav},
+            nav = #{nav},
+            aum = #{aum},
+            base_date = #{baseDate},
+            expense_ratio = #{expenseRatio},
+            redemption_period = #{redemptionPeriod},
+            risk_grade = #{riskGrade},
+            product_class_code = #{productClassCode},
+            association_code = #{associationCode}
+        WHERE product_id = #{productId}
+    </update>
+    <update id="updateProductRate">
+        UPDATE product_rate
+        SET
+            return_rate_1m = #{returnRate1m},
+            return_rate_3m = #{returnRate3m},
+            return_rate_6m = #{returnRate6m},
+            return_rate_12m = #{returnRate12m},
+            return_rate_24m = #{returnRate24m},
+            return_rate_36m = #{returnRate36m},
+            return_rate_60m = #{returnRate60m}
+        WHERE product_id = #{productId}
+    </update>
     <delete id="deleteProductReview">
         DELETE FROM review
                WHERE product_id = #{productId} and user_id = #{userId}
@@ -277,8 +492,7 @@
     <!-- JOIN 구문 정의 (FROM 제외) -->
     <sql id="favoriteProductJoin">
         LEFT JOIN financial_product p ON p.id = pfav.product_id
-        LEFT JOIN product_deposit d ON p.id = d.product_id
-        LEFT JOIN product_savings s ON p.id = s.product_id
+        LEFT JOIN product_deposit_savings s ON p.id = s.product_id
         LEFT JOIN product_fund f ON p.id = f.product_id
         LEFT JOIN product_rate r ON p.id = r.product_id
     </sql>
@@ -301,6 +515,7 @@
         VALUES (#{userId}, #{productId})
     </insert>
 
+
     <!-- 즐겨찾기 삭제 -->
     <delete id="deleteFavorite">
         DELETE FROM product_favorite
@@ -315,5 +530,9 @@
             <include refid="productJoin"/>
         ORDER BY RAND()
         LIMIT 8
+    </select>
+    <select id="findProductIdByNameAndBankName" resultType="java.lang.Long">
+        SELECT id FROM financial_product
+        WHERE name = #{name} and bank_name = #{bankName}
     </select>
 </mapper>
