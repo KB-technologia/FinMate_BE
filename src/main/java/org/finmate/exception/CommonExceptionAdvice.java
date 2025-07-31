@@ -5,7 +5,6 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
@@ -61,6 +60,19 @@ public class CommonExceptionAdvice {
                         .timestamp(LocalDateTime.now())
                         .build()
         );
+    }
+
+    @ExceptionHandler(OpenAiApiException.class)
+    public ResponseEntity<?> handleOpenAiException(HttpServletRequest request,OpenAiApiException ex) {
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                .body(
+                        ErrorResponse.builder()
+                                .error("SERVICE_UNAVAILABLE")
+                                .message(ex.getMessage())
+                                .path(request.getRequestURI())
+                                .timestamp(LocalDateTime.now())
+                                .build()
+                );
     }
 
 }

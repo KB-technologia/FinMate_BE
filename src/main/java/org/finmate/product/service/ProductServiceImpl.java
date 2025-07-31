@@ -2,11 +2,18 @@ package org.finmate.product.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.finmate.common.util.OpenAiApi;
-import org.finmate.common.util.OpenAiDTO.OpenAiResponseDTO;
+import org.finmate.adapter.openai.OpenAiApi;
+import org.finmate.adapter.openai.dto.OpenAiResponseDTO;
+import org.finmate.common.util.PromptLoader;
 import org.finmate.exception.NotFoundException;
+import org.finmate.member.domain.CustomUser;
+import org.finmate.member.domain.UserInfoVO;
+import org.finmate.member.mapper.UserInfoMapper;
+import org.finmate.member.mapper.UserMapper;
+import org.finmate.portfolio.domain.PortfolioVO;
+import org.finmate.portfolio.dto.PortfolioDTO;
+import org.finmate.portfolio.mapper.PortfolioMapper;
 import org.finmate.product.domain.ProductReviewVO;
-import org.finmate.product.domain.ProductVO;
 import org.finmate.product.dto.ProductComparisonResultDTO;
 import org.finmate.product.dto.ProductDTO;
 import org.finmate.product.dto.ProductReviewDTO;
@@ -24,6 +31,9 @@ import java.util.stream.Collectors;
 public class ProductServiceImpl implements ProductService {
     private final ProductMapper productMapper;
 
+    private final UserInfoMapper userInfoMapper;
+
+    private final PortfolioMapper portfolioMapper;
 
     private final OpenAiApi openAiApi;
     //TODO: 필터링 서비스 구현
@@ -45,23 +55,19 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductComparisonResultDTO compareProducts(Long id1, Long id2) {
+    public ProductComparisonResultDTO compareProducts(Long id1, Long id2, CustomUser user) {
         ProductDTO<?> data1 = getProductDetail(id1);
         ProductDTO<?> data2 = getProductDetail(id2);
 
+        String text = PromptLoader.load("/prompts/product_compare.txt").formatted(data1.toString(), data2.toString());
+
         //TODO: 사용자 데이터도 결합해서 데이터 구성해야됨
-        String text = """
-다음은 두 개의 금융 상품 데이터입니다.
-각각의 상품을 이해하고, 두 상품의 특징을 자연스럽게 비교하여 설명해 주세요.
+        if(user != null) {
+            Long userId = user.getUser().getId();
+            UserInfoVO userInfo = userInfoMapper.getUserInfoById(userId);
+            PortfolioVO userPortfolio = portfolioMapper.getPortfolio(userId);
+        }
 
-[상품1]
-%s
-
-[상품2]
-%s
-
-비교 요약:
-""".formatted(data1.toString(), data2.toString());
         OpenAiResponseDTO response = openAiApi.callResponses(text);
         String comparisonResult = response.getOutput().get(0).getContent().get(0).getText();
 

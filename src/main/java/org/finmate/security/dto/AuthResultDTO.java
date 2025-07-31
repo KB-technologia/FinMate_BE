@@ -9,5 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AuthResultDTO {
     private String token;
-    private UserInfoDTO user;
+    private UserLoginInfoDTO user;
+    private boolean isNewUser;
 }

@@ -2,6 +2,7 @@ package org.finmate.member.controller;
 
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
+import org.finmate.member.domain.CustomUser;
 import org.finmate.member.dto.MyPageResponseDTO;
 import org.finmate.member.dto.MyPageUpdateRequestDTO;
 import org.finmate.member.service.MemberService;
@@ -12,6 +13,8 @@ import org.finmate.member.domain.CustomUser;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
+
 
 import java.util.List;
 
@@ -33,7 +36,7 @@ public class MyPageController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     @GetMapping("/me")
-    public MyPageResponseDTO getMyPage(@AuthenticationPrincipal CustomUser user) {
+    public MyPageResponseDTO getMyPage(@ApiIgnore @AuthenticationPrincipal CustomUser user) {
         Long userId = user.getUser().getId();
         return myPageService.getMyPageInfo(userId);
     }
@@ -51,7 +54,7 @@ public class MyPageController {
     })
     @PatchMapping("/me")
     public ResponseEntity<Void> updateMyPage(
-            @AuthenticationPrincipal CustomUser user,
+            @ApiIgnore @AuthenticationPrincipal CustomUser user,
             @ApiParam(value = "수정할 마이페이지 정보 (수정 항목만 포함)", required = true)
             @RequestBody MyPageUpdateRequestDTO dto
     ) {
@@ -67,11 +70,10 @@ public class MyPageController {
             @ApiResponse(code = 403, message = "접근 권한 없음"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    @DeleteMapping(value = "/withdraw", produces = "text/plain; charset=UTF-8")
-    public ResponseEntity<String> withdraw(@AuthenticationPrincipal CustomUser user) {
-        String accountId = user.getUser().getAccountId();
-        memberService.withdraw(accountId);
-        return ResponseEntity.ok("회원 탈퇴 완료");
+    public ResponseEntity<Void> withdraw(@ApiIgnore @AuthenticationPrincipal CustomUser user) {
+        Long userId = user.getUser().getId();
+        memberService.withdraw(userId);
+        return ResponseEntity.ok().build();
     }
 
     @ApiOperation(value = "내가 작성한 리뷰 목록 조회", notes = "로그인한 사용자가 작성한 금융 상품 리뷰들을 조회합니다.")
@@ -82,7 +84,7 @@ public class MyPageController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     @GetMapping("/review")
-    public ResponseEntity<List<ProductReviewDTO>> getMyReviews(@AuthenticationPrincipal CustomUser user) {
+    public ResponseEntity<List<ProductReviewDTO>> getMyReviews(@ApiIgnore @AuthenticationPrincipal CustomUser user) {
         Long userId = user.getUser().getId();
         List<ProductReviewDTO> reviews = productService.getMyReviews(userId);
         return ResponseEntity.ok(reviews);

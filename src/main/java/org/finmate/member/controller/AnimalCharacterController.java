@@ -14,6 +14,7 @@ import org.finmate.member.service.AnimalCharacterServiceImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 @Log4j2
 @RestController
@@ -26,9 +27,8 @@ public class AnimalCharacterController {
 
     /**
      * 캐릭터 조회
-     * userId는 추후 토큰 형식으로 리팩토링 예정
      */
-    @GetMapping("{userId}")
+    @GetMapping
     @ApiOperation(
             value = "캐릭터 조회",
             notes = "사용자 ID를 기반으로 현재 사용자의 캐릭터 조회"
@@ -38,14 +38,14 @@ public class AnimalCharacterController {
                     response = AnimalCharacterDTO.class, responseContainer = "AnimalCharacterDTO"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
-    public ResponseEntity<AnimalCharacterDTO> getCharacter(@AuthenticationPrincipal CustomUser customUser){
+    public ResponseEntity<AnimalCharacterDTO> getCharacter(@ApiIgnore @AuthenticationPrincipal CustomUser customUser){
         return ResponseEntity.of(characterService.getCharacterById(customUser.getUser().getId()));
     }
 
     /**
      * 캐릭터 변경
      */
-    @PostMapping("")
+    @PostMapping
     @ApiOperation(
             value = "캐릭터 변경",
             notes = "사용자 ID와 캐릭터 ID을 통해 사용자의 인포 테이블 갱신"
@@ -56,7 +56,7 @@ public class AnimalCharacterController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     public ResponseEntity<AnimalCharacterDTO> changeCharacter(
-            @AuthenticationPrincipal CustomUser customUser,
+            @ApiIgnore @AuthenticationPrincipal CustomUser customUser,
             @RequestBody AnimalChangeDTO animalChangeDTO)
     {
         Long userId = customUser.getUser().getId();
