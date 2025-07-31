@@ -28,6 +28,8 @@ public class MyPageController {
     @ApiOperation(value = "마이페이지 조회", notes = "로그인한 사용자의 마이페이지 정보를 반환합니다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "요청 성공", response = MyPageResponseDTO.class),
+            @ApiResponse(code = 401, message = "인증 실패"),
+            @ApiResponse(code = 403, message = "접근 권한 없음"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
     @GetMapping("/me")
@@ -36,24 +38,36 @@ public class MyPageController {
         return myPageService.getMyPageInfo(userId);
     }
 
-    @ApiOperation(value = "마이페이지 수정", notes = "비밀번호, 이메일, 생년월일 정보를 수정합니다.")
+    @ApiOperation(
+            value = "마이페이지 수정",
+            notes = "비밀번호, 이메일(인증 필요), 생년월일 중 원하는 항목만 선택적으로 수정할 수 있습니다."
+    )
     @ApiResponses({
             @ApiResponse(code = 200, message = "수정 성공"),
             @ApiResponse(code = 400, message = "잘못된 요청"),
+            @ApiResponse(code = 401, message = "인증 필요"),
+            @ApiResponse(code = 403, message = "접근 권한 없음"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
     @PatchMapping("/me")
-    public void updateMyPage(@AuthenticationPrincipal CustomUser user, @RequestBody MyPageUpdateRequestDTO dto) {
+    public ResponseEntity<Void> updateMyPage(
+            @AuthenticationPrincipal CustomUser user,
+            @ApiParam(value = "수정할 마이페이지 정보 (수정 항목만 포함)", required = true)
+            @RequestBody MyPageUpdateRequestDTO dto
+    ) {
         Long userId = user.getUser().getId();
         myPageService.updateMyPageInfo(userId, dto);
+        return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping(value = "/withdraw", produces = "text/plain; charset=UTF-8")
     @ApiOperation(value = "회원 탈퇴", notes = "사용자의 계정을 삭제합니다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "탈퇴 성공"),
+            @ApiResponse(code = 401, message = "인증 실패"),
+            @ApiResponse(code = 403, message = "접근 권한 없음"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
+    @DeleteMapping(value = "/withdraw", produces = "text/plain; charset=UTF-8")
     public ResponseEntity<String> withdraw(@AuthenticationPrincipal CustomUser user) {
         String accountId = user.getUser().getAccountId();
         memberService.withdraw(accountId);
@@ -64,7 +78,7 @@ public class MyPageController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "요청 성공"),
             @ApiResponse(code = 401, message = "인증 실패"),
-            @ApiResponse(code = 403, message = "권한 없음"),
+            @ApiResponse(code = 403, message = "접근 권한 없음"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
     @GetMapping("/review")

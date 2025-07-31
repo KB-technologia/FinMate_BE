@@ -39,10 +39,12 @@ public class MyPageService {
         if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
             String encodedPassword = passwordEncoder.encode(dto.getPassword());
             myPageMapper.updateUserWithPassword(userId, encodedPassword, dto.getEmail());
-        } else {
+        } else if (dto.getEmail() != null) {
             myPageMapper.updateUserWithoutPassword(userId, dto.getEmail());
         }
 
-        myPageMapper.updateUserInfo(userId, dto.getBirth());
+        if (dto.getBirth() != null) {
+            myPageMapper.updateUserInfo(userId, dto.getBirth());
+        }
     }
 }

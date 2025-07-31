@@ -31,6 +31,12 @@
         WHERE id = #{userId}
     </update>
 
+    <update id="updatePasswordOnly">
+        UPDATE user
+        SET password = #{password}
+        WHERE id = #{userId}
+    </update>
+
     <update id="updateUserInfo">
         UPDATE user_info
         SET

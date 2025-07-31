@@ -24,4 +24,9 @@ public interface MyPageMapper {
             @Param("userId") Long userId,
             @Param("birth") String birth
     );
+
+    void updatePasswordOnly(
+            @Param("userId") Long userId,
+            @Param("password") String password
+    );
 }
