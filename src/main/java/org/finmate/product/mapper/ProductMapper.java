@@ -1,9 +1,7 @@
 package org.finmate.product.mapper;
-import org.finmate.product.domain.FavoriteVO;
+import org.finmate.product.domain.*;
 
 import org.apache.ibatis.annotations.Param;
-import org.finmate.product.domain.ProductReviewVO;
-import org.finmate.product.domain.ProductVO;
 import org.finmate.product.dto.ProductFilterDTO;
 
 import java.util.List;
@@ -14,6 +12,23 @@ public interface ProductMapper {
 
     // 즐겨찾기 조회
     List<FavoriteVO> getFavorites(Long userId);
+
+    Long findProductIdByNameAndBankName(@Param("name") String name, @Param("bankName") String bankName);
+
+    int insertProduct(ProductVO productVO);
+    int updateProduct(ProductVO productVO);
+
+    int insertDeposit(DepositVO depositVO);
+    int updateDeposit(DepositVO depositVO);
+
+    int insertSavings(SavingsVO savingsVO);
+    int updateSavings(SavingsVO savingsVO);
+
+    int insertFund(FundVO fundVO);
+    int updateFund(FundVO fundVO);
+
+    int insertProductRate(ProductRateVO productRateVO);
+    int updateProductRate(ProductRateVO productRateVO);
 
     // 즐겨찾기 등록
     int enrollFavorite(@Param("userId") Long userId, @Param("productId") Long productId);

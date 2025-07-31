@@ -29,4 +29,16 @@ public class PortfolioVO {
 
     private LocalDateTime createdAt;
 
+    @Override
+    public String toString() {
+        return "총 자산: " + totalAssets + "원\n" + "투자 성향: " + investmentProfile.name() +
+                "현금: " + cash + "원\n" +
+                "예금: " + deposit + "원\n" +
+                "적금: " + savings + "원\n" +
+                "채권: " + bond + "원\n" +
+                "펀드: " + fund + "원\n" +
+                "주식: " + stock + "원\n" +
+                "기타: " + other + "원\n";
+    }
+
 }

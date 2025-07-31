@@ -17,10 +17,13 @@ public class MyPageUpdateRequestDTO {
     @ApiModelProperty(value = "수정할 이메일", example = "newuser@example.com")
     private String email;
 
+    @ApiModelProperty(value = "이메일 인증 UUID", example = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx")
+    private String emailVerificationUUID;
+
     @ApiModelProperty(value = "수정할 생년월일", example = "1995-05-01")
     private String birth;
 
     public MyPageVO toDomainWithAccountId(String accountId) {
-        return new MyPageVO(accountId, this.email, this.birth);
+        return new MyPageVO(accountId, this.email, this.birth, null, null);
     }
 }

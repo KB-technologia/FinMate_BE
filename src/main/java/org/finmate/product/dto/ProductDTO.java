@@ -7,9 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.finmate.product.domain.ProductRateVO;
-import org.finmate.product.domain.ProductType;
-import org.finmate.product.domain.ProductVO;
+import org.finmate.product.domain.*;
 
 import java.time.LocalDateTime;
 
@@ -118,5 +116,39 @@ public class ProductDTO<T> {
             }
             default -> throw new IllegalArgumentException("Unknown type");
         }
+    }
+
+    public ProductVO toVO() {
+        ProductVO.ProductVOBuilder builder = ProductVO.builder()
+                .id(id)
+                .name(name)
+                .bankName(bankName)
+                .productType(productType)
+                .riskLevel(riskLevel)
+                .expectedReturn(expectedReturn)
+                .minAmount(minAmount)
+                .maxAmount(maxAmount)
+                .minTerm(minTerm)
+                .maxTerm(maxTerm)
+                .url(url)
+                .description(description)
+                .createdAt(createdAt)
+                .updatedAt(updatedAt)
+                .adventureScore(adventureScore)
+                .valueTag(valueTag)
+                .speedTag(speedTag)
+                .strategyTag(strategyTag)
+                .minFinanceScore(minFinanceScore)
+                .productRate(productRate);
+
+        if (detail instanceof FundVO fundVO) {
+            builder.fund(fundVO);
+        } else if (detail instanceof DepositVO depositVO) {
+            builder.deposit(depositVO);
+        } else if (detail instanceof SavingsVO savingsVO) {
+            builder.savings(savingsVO);
+        }
+
+        return builder.build();
     }
 }
