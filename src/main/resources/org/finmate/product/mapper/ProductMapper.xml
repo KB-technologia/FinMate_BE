@@ -37,6 +37,8 @@
             <result property="interestType" column="interest_type"/>
             <result property="bonusRate" column="bonus_rate"/>
             <result property="compoundingPeriod" column="compounding_period"/>
+            <result property="minAge" column="min_age" />
+            <result property="maxAge" column="max_age" />
             <result property="gender" column="gender" />
             <result property="isMarried" column="is_married"/>
             <result property="hasJob" column="has_job"/>
@@ -61,6 +63,8 @@
             <result property="interestType" column="interest_type"/>
             <result property="bonusRate" column="bonus_rate"/>
             <result property="compoundingPeriod" column="compounding_period"/>
+            <result property="minAge" column="min_age" />
+            <result property="maxAge" column="max_age" />
             <result property="gender" column="gender" />
             <result property="isMarried" column="is_married"/>
             <result property="hasJob" column="has_job"/>
@@ -135,6 +139,8 @@
             s.interest_type AS d_interest_type,
             s.bonus_rate AS d_bonus_rate,
             s.compounding_period AS d_compounding_period,
+            s.min_age AS d_min_age,
+            s.max_age AS d_max_age,
             s.gender AS d_gender,
             s.is_married AS d_is_married,
             s.has_job AS d_has_job,
@@ -155,6 +161,8 @@
             s.interest_type AS s_interest_type,
             s.bonus_rate AS s_bonus_rate,
             s.compounding_period AS s_compounding_period,
+            s.min_age AS s_min_age,
+            s.max_age AS s_max_age,
             s.gender AS s_gender,
             s.is_married AS s_is_married,
             s.has_job AS s_has_job,
@@ -221,12 +229,14 @@
         INSERT INTO product_deposit_savings(product_id, default_term_months,
                                             is_flexible, early_withdrawal_penalty,
                                             interest_type, bonus_rate, compounding_period,
+                                            min_age, max_age,
                                             gender, is_married, has_job, uses_public_transport,
                                             does_exercise, travels_frequently, has_children,
                                             has_house, employed_at_sme, uses_microloan)
         VALUES (#{productId}, #{defaultTermMonths},
                 #{isFlexible}, #{earlyWithdrawalPenalty},
                 #{interestType}, #{bonusRate}, #{compoundingPeriod},
+                #{minAge}, #{maxAge},
                 #{gender}, #{isMarried}, #{hasJob}, #{usesPublicTransport},
                 #{doesExercise}, #{travelsFrequently}, #{hasChildren},
                 #{hasHouse}, #{employedAtSme}, #{usesMicroloan})
@@ -237,6 +247,7 @@
                                             is_flexible, early_withdrawal_penalty,
                                             payment_cycle, max_monthly_payment,
                                             interest_type, bonus_rate, compounding_period,
+                                            min_age, max_age,
                                             gender, is_married, has_job, uses_public_transport,
                                             does_exercise, travels_frequently, has_children,
                                             has_house, employed_at_sme, uses_microloan)
@@ -244,6 +255,7 @@
                 #{isFlexible}, #{earlyWithdrawalPenalty},
                 #{paymentCycle}, #{maxMonthlyPayment},
                 #{interestType}, #{bonusRate}, #{compoundingPeriod},
+                #{minAge}, #{maxAge},
                 #{gender}, #{isMarried}, #{hasJob}, #{usesPublicTransport},
                 #{doesExercise}, #{travelsFrequently}, #{hasChildren},
                 #{hasHouse}, #{employedAtSme}, #{usesMicroloan})
@@ -307,6 +319,8 @@
             interest_type = #{interestType},
             bonus_rate = #{bonusRate},
             compounding_period = #{compoundingPeriod},
+            min_age = #{minAge},
+            max_age = #{maxAge},
             gender = #{gender},
             is_married = #{isMarried},
             has_job = #{hasJob},
@@ -330,6 +344,8 @@
             interest_type = #{interestType},
             bonus_rate = #{bonusRate},
             compounding_period = #{compoundingPeriod},
+            min_age = #{minAge},
+            max_age = #{maxAge},
             gender = #{gender},
             is_married = #{isMarried},
             has_job = #{hasJob},

@@ -22,6 +22,8 @@ public class SavingsVO {
     private Double bonusRate;
     private CompoundingPeriod compoundingPeriod;
 
+    private Integer minAge;
+    private Integer maxAge;
     private Gender gender;
     private Boolean isMarried;
     private Boolean hasJob;
