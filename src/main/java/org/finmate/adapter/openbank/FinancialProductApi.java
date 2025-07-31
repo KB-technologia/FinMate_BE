@@ -28,7 +28,7 @@ public class FinancialProductApi {
 
 
     //TODO:주기 설정 바꾸긴해야됨
-    @Scheduled(fixedDelay = 10000)
+    @Scheduled(fixedDelay = 100000)
     @Transactional
     public void fetchFinancialProducts() {
         try (InputStream is = getClass().getResourceAsStream("/dummy/products/financial_products.json")) {

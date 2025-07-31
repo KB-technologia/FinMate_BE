@@ -19,6 +19,7 @@ public class CommonExceptionAdvice {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleCommonException(Exception ex, HttpServletRequest request) {
 
+        ex.printStackTrace();
         log.error("Exception ......." + ex.getMessage());
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
