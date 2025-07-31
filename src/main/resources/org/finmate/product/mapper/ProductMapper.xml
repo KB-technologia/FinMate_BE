@@ -535,4 +535,9 @@
         SELECT id FROM financial_product
         WHERE name = #{name} and bank_name = #{bankName}
     </select>
+    <select id="getProductReviewByProductIdAndUserId" resultType="org.finmate.product.domain.ProductReviewVO">
+        SELECT *
+        FROM review
+        WHERE user_id = #{userId} and product_id = #{productId}
+    </select>
 </mapper>

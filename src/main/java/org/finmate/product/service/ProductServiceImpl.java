@@ -115,8 +115,20 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Long insertProductReview(ProductReviewDTO productReviewDTO) {
+    public Long insertProductReview(ProductReviewDTO productReviewDTO, Long productId, Long userId) {
+        Optional.ofNullable(productMapper.getProductReviewByProductIdAndUserId(productId, userId))
+                .orElseThrow(() -> new NotFoundException("이미 등록된 리뷰가 있습니다."));
+
+        UserInfoVO userInfo = userInfoMapper.getUserInfoById(userId);
+        Long animalId = userInfo.getAnimalId();
+        AnimalCharacterVO animalCharacter = animalCharacterMapper.getCharacterById(animalId);
+
+        productReviewDTO.setProductId(productId);
+        productReviewDTO.setUserId(userId);
+        productReviewDTO.setWriter(userInfo.getProfileSummary() + " " + animalCharacter.getAnimalName());
+
         ProductReviewVO vo = productReviewDTO.toVO();
+
         int result = productMapper.insertProductReview(vo);
         if (result == 0) {
             throw new NotFoundException("해당 글을 등록할 수 없습니다.");
