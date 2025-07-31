@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,12 +27,13 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class MyDataApi {
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
 
     private final UserMapper userMapper;
     private final PortfolioMapper portfolioMapper;
 
     @Scheduled(cron = "0 0 1 * * *")
+    @Transactional
     public void fetchMyData() {
         List<Long> userList = userMapper.getUserIdAll();
         for(Long userId : userList) {
