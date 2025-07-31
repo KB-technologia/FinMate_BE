@@ -20,6 +20,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
+
 
 @Log4j2
 @Service
@@ -126,7 +128,15 @@ public class KakaoService {
         }
 
         String token = jwtProcessor.generateToken(user.getAccountId());
-        UserLoginInfoDTO userLoginInfoDTO = UserLoginInfoDTO.of(user);
+
+        UserLoginInfoDTO userLoginInfoDTO = new UserLoginInfoDTO(
+                accountId,
+                kakaoUser.getEmail(),
+                kakaoUser.getNickname(),
+                kakaoUser.getBirth(),
+                kakaoUser.getGender(),
+                List.of("ROLE_USER")
+        );
 
         return new AuthResultDTO(token, userLoginInfoDTO, isNewUser);
     }

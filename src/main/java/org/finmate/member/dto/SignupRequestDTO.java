@@ -12,6 +12,9 @@ import lombok.*;
 @ApiModel(value = "회원가입 요청", description = "회원가입 시 필요한 사용자 정보 DTO")
 public class SignupRequestDTO {
 
+    @ApiModelProperty(value = "가입 방식", example = "LOCAL 또는 KAKAO")
+    private String provider;
+
     @ApiModelProperty(value = "사용자 이름", example = "홍길동")
     private String name;
 
