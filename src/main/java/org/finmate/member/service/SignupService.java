@@ -29,6 +29,9 @@ public class SignupService {
     public void signup(SignupRequestDTO dto) {
 
         try {
+            log.info("[SignupService] 전달받은 provider: {}", dto.getProvider());
+
+
             String provider = dto.getProvider() != null ? dto.getProvider().toUpperCase() : "LOCAL";
 
             // 비밀번호 체크( LOCAL일 때만)
@@ -86,9 +89,11 @@ public class SignupService {
         }
         catch (Exception e)
         {
-            log.error("❌111111 회원가입 중 예외 발생: {}", e.getMessage(), e);  // 예외 전체 로그 출력
+            log.error("111111 회원가입 중 예외 발생: {}", e.getMessage(), e);  // 예외 전체 로그 출력
             throw e; // 예외 다시 던짐 (트랜잭션 롤백 등 유지)
         }
+
+
     }
 
     public boolean isAccountIdDuplicate(String accountId) {
