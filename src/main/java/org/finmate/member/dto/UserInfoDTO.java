@@ -45,6 +45,11 @@ public class UserInfoDTO {
     @ApiModelProperty(value = "재정 체력 = 리스크 허용도")
     private Double financeScore; // 재정 체력 = 리스크 허용도
 
+    @ApiModelProperty(value = "사용자 레벨")
+    private Integer userLevel;
+    @ApiModelProperty(value = "캐릭터 변경권")
+    private Integer characterTicket;
+
     @ApiModelProperty(value = "수정일")
     private LocalDateTime updatedAt;
 
@@ -64,6 +69,8 @@ public class UserInfoDTO {
                 .speedTag(vo.getSpeedTag())
                 .strategyTag(vo.getStrategyTag())
                 .financeScore(vo.getFinanceScore())
+                .userLevel(vo.getUserLevel())
+                .characterTicket(vo.getCharacterTicket())
                 .updatedAt(vo.getUpdatedAt())
                 .build();
     }
@@ -84,6 +91,8 @@ public class UserInfoDTO {
                 .speedTag(speedTag)
                 .strategyTag(strategyTag)
                 .financeScore(financeScore)
+                .userLevel(userLevel)
+                .characterTicket(characterTicket)
                 .updatedAt(updatedAt)
                 .build();
     }

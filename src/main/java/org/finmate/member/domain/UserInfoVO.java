@@ -42,6 +42,9 @@ public class UserInfoVO {
     private Boolean employedAtSme; // 중소기업 재직 중인지
     private Boolean usesMicroloan; // 미소금융 대출 유무
 
+    private Integer userLevel;
+    private Integer characterTicket;
+
     private LocalDateTime updatedAt;
 
     @Override
