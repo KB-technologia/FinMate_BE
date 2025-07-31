@@ -33,8 +33,8 @@ public class SignupRequestDTO {
     @ApiModelProperty(value = "성별", example = "MALE")
     private String gender;
 
-    @ApiModelProperty(value = "결혼 여부", example = "MARRIED")
-    private String maritalStatus;
+    @ApiModelProperty(value = "결혼 여부", example = "true, false")
+    private Boolean isMarried;
 
     @ApiModelProperty(value = "직업 보유 여부", example = "true, false")
     private Boolean hasJob;
@@ -43,19 +43,16 @@ public class SignupRequestDTO {
     private Boolean usesPublicTransport;
 
     @ApiModelProperty(value = "운동 여부", example = "true, false")
-    private Boolean exercises;
+    private Boolean doesExercise;
 
-    @ApiModelProperty(value = "기념일 챙기는 주기", example = "MONTHLY")
-    private String anniversaryFrequency;
+    @ApiModelProperty(value = "여행 자주 하는지 여부", example = "true, false")
+    private Boolean travelsFrequently;
 
-    @ApiModelProperty(value = "여행 자주 하는지 여부", example = "NEVER")
-    private String travelsFrequently;
+    @ApiModelProperty(value = "자녀 유무", example = "true, false")
+    private Boolean hasChildren;
 
-    @ApiModelProperty(value = "자녀 수", example = "2")
-    private Integer numberOfChildren;
-
-    @ApiModelProperty(value = "주거 형태", example = "OWNED")
-    private String housingType;
+    @ApiModelProperty(value = "주택 여부", example = "true, false")
+    private Boolean hasHouse;
 
     @ApiModelProperty(value = "중소기업 재직 여부", example = "true, false")
     private Boolean employedAtSme;
