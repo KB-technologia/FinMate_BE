@@ -36,16 +36,13 @@ public class MyPageService {
             }
         }
 
-        // 비밀번호가 입력된 경우
         if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
             String encodedPassword = passwordEncoder.encode(dto.getPassword());
             myPageMapper.updateUserWithPassword(userId, encodedPassword, dto.getEmail());
         } else {
-            // 비밀번호 미입력 → 이메일만 수정
             myPageMapper.updateUserWithoutPassword(userId, dto.getEmail());
         }
 
-        // 생년월일 업데이트
         myPageMapper.updateUserInfo(userId, dto.getBirth());
     }
 }

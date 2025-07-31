@@ -17,8 +17,6 @@
                  LEFT JOIN animal_character ac ON ui.animal_id = ac.id
         WHERE u.id = #{userId}
     </select>
-
-    <!-- 📌 비밀번호 포함 업데이트 -->
     <update id="updateUserWithPassword">
         UPDATE user
         SET
@@ -26,8 +24,6 @@
             email = #{email}
         WHERE id = #{userId}
     </update>
-
-    <!-- 📌 비밀번호 없이 이메일만 업데이트 -->
     <update id="updateUserWithoutPassword">
         UPDATE user
         SET
