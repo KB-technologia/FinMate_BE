@@ -10,6 +10,7 @@ import org.finmate.assessment.dto.AssessmentDTO;
 import org.finmate.member.domain.CustomUser;
 import org.finmate.member.dto.AnimalChangeDTO;
 import org.finmate.member.dto.AnimalCharacterDTO;
+import org.finmate.member.service.AnimalCharacterService;
 import org.finmate.member.service.AnimalCharacterServiceImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,7 +24,7 @@ import springfox.documentation.annotations.ApiIgnore;
 @Api(tags = "캐릭터 API")
 public class AnimalCharacterController {
 
-    private final AnimalCharacterServiceImpl characterService;
+    private final AnimalCharacterService characterService;
 
     /**
      * 캐릭터 조회

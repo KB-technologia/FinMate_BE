@@ -56,5 +56,9 @@ public interface ProductMapper {
 
     List<ProductReviewVO> getProductReviewByUserId(@Param("userId") Long userId);
 
+    ProductReviewVO getProductReviewByProductIdAndUserId(
+            @Param("productId") Long productId,
+            @Param("userId") Long userId);
+
 }
 

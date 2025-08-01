@@ -111,6 +111,7 @@
                                  user_level        = VALUES(user_level),
                                  character_ticket  = VALUES(character_ticket),
                                  updated_at        = NOW()
+
     </insert>
 </mapper>
 
