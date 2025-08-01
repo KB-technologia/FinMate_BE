@@ -5,11 +5,11 @@ import lombok.RequiredArgsConstructor;
 import org.finmate.member.domain.CustomUser;
 import org.finmate.member.dto.MyPageResponseDTO;
 import org.finmate.member.dto.MyPageUpdateRequestDTO;
+import org.finmate.member.dto.UserStatResponseDTO;
 import org.finmate.member.service.MemberService;
 import org.finmate.member.service.MyPageService;
 import org.finmate.product.dto.ProductReviewDTO;
 import org.finmate.product.service.ProductService;
-import org.finmate.member.domain.CustomUser;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -36,9 +36,22 @@ public class MyPageController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     @GetMapping("/me")
-    public MyPageResponseDTO getMyPage(@ApiIgnore @AuthenticationPrincipal CustomUser user) {
+    public ResponseEntity<MyPageResponseDTO> getMyPage(@ApiIgnore @AuthenticationPrincipal CustomUser user) {
         Long userId = user.getUser().getId();
-        return myPageService.getMyPageInfo(userId);
+        return ResponseEntity.ok(myPageService.getMyPageInfo(userId));
+    }
+
+    @ApiOperation(value = "사용자 스탯 조회", notes = "로그인한 사용자의 스탯(5대 지표) 정보를 반환합니다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "요청 성공", response = MyPageResponseDTO.class),
+            @ApiResponse(code = 401, message = "인증 실패"),
+            @ApiResponse(code = 403, message = "접근 권한 없음"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+    @GetMapping("/stat")
+    public ResponseEntity<UserStatResponseDTO> getMyStat(@ApiIgnore @AuthenticationPrincipal CustomUser user) {
+        Long userId = user.getUser().getId();
+        return ResponseEntity.ok(memberService.getStatByUserId(userId));
     }
 
     @ApiOperation(
@@ -70,6 +83,7 @@ public class MyPageController {
             @ApiResponse(code = 403, message = "접근 권한 없음"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
+    @DeleteMapping("/me")
     public ResponseEntity<Void> withdraw(@ApiIgnore @AuthenticationPrincipal CustomUser user) {
         Long userId = user.getUser().getId();
         memberService.withdraw(userId);

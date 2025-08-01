@@ -32,7 +32,7 @@
             character_ticket,
             updated_at
         FROM user_info
-        WHERE id = #{userId}
+        WHERE user_id = #{userId}
     </select>
     <!-- userinfo 에 설문 결과 저장 -->
     <insert

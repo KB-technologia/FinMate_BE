@@ -8,7 +8,6 @@ import org.finmate.member.domain.UserVO;
 import org.finmate.member.domain.enums.Provider;
 import org.finmate.member.dto.KakaoTokenResponse;
 import org.finmate.member.dto.KakaoUserResponse;
-import org.finmate.member.dto.UserInfoDTO;
 import org.finmate.member.mapper.UserMapper;
 import org.finmate.security.dto.AuthResultDTO;
 import org.finmate.security.dto.UserLoginInfoDTO;

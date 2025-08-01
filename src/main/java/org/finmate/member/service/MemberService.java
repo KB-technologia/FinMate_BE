@@ -1,6 +1,9 @@
 package org.finmate.member.service;
 
 import lombok.RequiredArgsConstructor;
+import org.finmate.member.domain.UserInfoVO;
+import org.finmate.member.dto.UserStatResponseDTO;
+import org.finmate.member.mapper.UserInfoMapper;
 import org.finmate.member.mapper.UserMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,6 +14,8 @@ public class MemberService {
 
     private final UserMapper userMapper;
 
+    private final UserInfoMapper userInfoMapper;
+
     @Transactional
     public void withdraw(Long userId) {
         if (userId == null) {
@@ -20,6 +25,18 @@ public class MemberService {
         userMapper.deleteUserInfoByUserId(userId);
         userMapper.deleteUserAttendanceByUserId(userId);
         userMapper.deleteUserById(userId);
+    }
+
+    @Transactional
+    public UserStatResponseDTO getStatByUserId(Long userId) {
+        UserInfoVO vo = userInfoMapper.getUserInfoById(userId);
+        return UserStatResponseDTO.builder()
+                .adventureScore(vo.getAdventureScore())
+                .valueTag(vo.getValueTag())
+                .speedTag(vo.getSpeedTag())
+                .strategyTag(vo.getStrategyTag())
+                .financeScore(vo.getFinanceScore())
+                .build();
     }
 }
 
