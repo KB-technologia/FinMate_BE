@@ -94,9 +94,7 @@ public class ProductController {
             @RequestBody ProductReviewDTO review,
             @ApiIgnore @AuthenticationPrincipal CustomUser user
     ) {
-        review.setProductId(id);
-        review.setUserId(user.getUser().getId());
-        Long resultId = productService.insertProductReview(review);
+        Long resultId = productService.insertProductReview(review, id, user.getUser().getId());
         return ResponseEntity.ok(new ReviewIdResponse(resultId));
     }
 
