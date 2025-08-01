@@ -18,25 +18,13 @@ public class AnimalCharacterDTO {
     @ApiModelProperty(value = "동물 캐릭터 이름", example = "고양이")
     private String animalName;
 
-    @ApiModelProperty(value = "동물 캐릭터 이미지 경로1")
-    private String animalImage1;
+    @ApiModelProperty(value = "동물 캐릭터 이미지 경로")
+    private String animalImage;
 
-    @ApiModelProperty(value = "동물 캐릭터 이미지 경로2")
-    private String animalImage2;
-
-    @ApiModelProperty(value = "동물 캐릭터 이미지 경로3")
-    private String animalImage3;
-
-    @ApiModelProperty(value = "동물 캐릭터 이미지 경로4")
-    private String animalImage4;
-
-    public static AnimalCharacterDTO from(AnimalCharacterVO vo) {
+    public static AnimalCharacterDTO from(String userCharacterName, String userCharacterImage) {
         return AnimalCharacterDTO.builder()
-                .animalName(vo.getAnimalName())
-                .animalImage1(vo.getAnimalImage1())
-                .animalImage2(vo.getAnimalImage2())
-                .animalImage3(vo.getAnimalImage3())
-                .animalImage4(vo.getAnimalImage4())
+                .animalName(userCharacterName)
+                .animalImage(userCharacterImage)
                 .build();
     }
 }
