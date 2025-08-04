@@ -1,5 +1,6 @@
 package org.finmate.adapter.mydata.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,9 +18,14 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MyDataResponseDTO {
+
+    @JsonProperty("rsp_code")
     private String rspCode;
+
+    @JsonProperty("rsp_msg")
     private String rspMsg;
 
+    @JsonProperty("registered_list")
     private List<MyDataProductDTO> registered_list;
 
     public PortfolioDTO toPortfolioDTO() {
