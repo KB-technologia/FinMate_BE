@@ -1,9 +1,8 @@
 package org.finmate.portfolio.mapper;
 
+import org.apache.ibatis.annotations.Param;
 import org.finmate.portfolio.domain.PortfolioVO;
-
 import java.time.LocalDate;
-
 
 public interface PortfolioMapper {
 
@@ -31,17 +30,18 @@ public interface PortfolioMapper {
     /**
      * 포트폴리오 업데이트
      * @param portfolio
-     * @deprecated
      * @return
      */
     public int updatePortfolio(PortfolioVO portfolio);
 
     /**
-     * 과거 포트폴리오 내역 조회
+     * 과거 포트폴리오 이력 조회
      * @param userId
-     * @param date
+     * @param startDate
+     * @param endDate
      * @return
      */
-    public PortfolioVO getHistoryPortfolio(Long userId, LocalDate date);
+    public PortfolioVO getHistoryPortfolio(@Param("userId")Long userId, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 
 }
+
