@@ -31,36 +31,36 @@ public class SignupService {
         try {
             log.info("[SignupService] 전달받은 provider: {}", dto.getProvider());
 
+            Provider provider = dto.getProvider() != null ? Provider.valueOf(dto.getProvider().toUpperCase()) : Provider.LOCAL;
 
-            String provider = dto.getProvider() != null ? dto.getProvider().toUpperCase() : "LOCAL";
-
-            // 비밀번호 체크( LOCAL일 때만)
-            if ("LOCAL".equals(provider)) {
-                if (!dto.getPassword().equals(dto.getPasswordConfirm())) {
-                    throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
-                }
-            }
-//        if (!dto.getPassword().equals(dto.getPasswordConfirm())) {
-//            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
-//        }
             if (userMapper.existsByAccountId(dto.getAccountId())) {
                 throw new RuntimeException("이미 사용 중인 아이디입니다.");
             }
 
             String encodedPassword;
-            if ("KAKAO".equals(provider)) {
-                encodedPassword = "kakao"; // 그냥 더미로 넣는 비밀번호
-            } else {
-                encodedPassword = passwordEncoder.encode(dto.getPassword());
+            switch(provider){
+                case LOCAL:
+                    if(!dto.getPassword().equals(dto.getPasswordConfirm())){
+                        throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+                    }
+                    encodedPassword = passwordEncoder.encode(dto.getPassword());
+                    break;
+
+                case KAKAO:
+                    encodedPassword = "kakao"; //더미 비밀번호
+                    break;
+
+                default :
+                    throw new IllegalArgumentException("지원하지 않는 provider입니다: " + provider);
+
             }
-            //String encodedPassword = passwordEncoder.encode(dto.getPassword());
 
             UserVO user = UserVO.builder()
                     .name(dto.getName())
                     .accountId(dto.getAccountId())
                     .email(dto.getEmail())
                     .password(encodedPassword)
-                    .provider(Provider.valueOf(provider))
+                    .provider(provider)
                     .createdAt(LocalDateTime.now())
                     .build();
             userMapper.insertUser(user);
