@@ -6,11 +6,11 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import lombok.extern.slf4j.Slf4j;
 import org.finmate.assessment.dto.AssessmentDTO;
 import org.finmate.assessment.dto.AssessmentRequestDTO;
 import org.finmate.assessment.service.AssessmentService;
 import org.finmate.member.domain.CustomUser;
+
 import org.finmate.member.dto.UserInfoDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
-import java.util.Optional;
 
 @Log4j2
 @RestController
