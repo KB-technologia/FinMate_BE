@@ -11,20 +11,16 @@ import org.finmate.member.domain.CustomUser;
 import org.finmate.member.domain.UserInfoVO;
 import org.finmate.member.mapper.AnimalCharacterMapper;
 import org.finmate.member.mapper.UserInfoMapper;
-import org.finmate.member.mapper.UserMapper;
 import org.finmate.portfolio.domain.PortfolioVO;
-import org.finmate.portfolio.dto.PortfolioDTO;
 import org.finmate.portfolio.mapper.PortfolioMapper;
 import org.finmate.product.domain.ProductReviewVO;
 import org.finmate.product.dto.ProductComparisonResultDTO;
 import org.finmate.product.dto.ProductDTO;
-import org.finmate.product.dto.ProductReviewDTO;
 import org.finmate.product.dto.ProductFilterDTO;
+import org.finmate.product.dto.ProductReviewDTO;
 import org.finmate.product.mapper.ProductMapper;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.Period;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -116,12 +112,13 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Long insertProductReview(ProductReviewDTO productReviewDTO, Long productId, Long userId) {
-        Optional.ofNullable(productMapper.getProductReviewByProductIdAndUserId(productId, userId))
-                .orElseThrow(() -> new NotFoundException("이미 등록된 리뷰가 있습니다."));
+        ProductReviewVO existingReview = productMapper.getProductReviewByProductIdAndUserId(productId, userId);
+        if (existingReview != null) {
+            throw new NotFoundException("이미 등록된 리뷰가 있습니다.");
+        }
 
         UserInfoVO userInfo = userInfoMapper.getUserInfoById(userId);
-        Long animalId = userInfo.getAnimalId();
-        AnimalCharacterVO animalCharacter = animalCharacterMapper.getCharacterById(animalId);
+        AnimalCharacterVO animalCharacter = animalCharacterMapper.getCharacterById(userId);
 
         productReviewDTO.setProductId(productId);
         productReviewDTO.setUserId(userId);
