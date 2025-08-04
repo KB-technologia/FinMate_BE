@@ -40,8 +40,8 @@
         SELECT COUNT(*) > 0 FROM user WHERE account_id = #{accountId}
     </select>
 
-    <select id="findAccountIdByEmail" resultType="String">
-        SELECT account_id FROM user WHERE email = #{email}
+    <select id="findAccountIdByEmail" resultType="org.finmate.member.dto.FindAccountIdResponseDTO">
+        SELECT name, account_id FROM user WHERE email = #{email}
     </select>
 
     <select id="existsByAccountIdAndEmail" resultType="boolean">

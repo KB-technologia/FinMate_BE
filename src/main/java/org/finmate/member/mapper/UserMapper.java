@@ -3,6 +3,7 @@ package org.finmate.member.mapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.finmate.member.domain.UserVO;
+import org.finmate.member.dto.FindAccountIdResponseDTO;
 
 import java.util.List;
 
@@ -24,7 +25,7 @@ public interface UserMapper {
 
     boolean existsByAccountId(@Param("accountId") String accountId);
 
-    String findAccountIdByEmail(String email);
+    FindAccountIdResponseDTO findAccountIdByEmail(String email);
     boolean existsByAccountIdAndEmail(@Param("accountId") String accountId, @Param("email") String email);
     int updatePassword(@Param("accountId") String accountId, @Param("newPassword") String newPassword);
 }
