@@ -48,17 +48,18 @@ public class AssessmentServiceImpl implements AssessmentService{
         ValueTag valueTag = ValueTag.fromCode(choice.get(2)); // 가치관 = 투자 목적
         SpeedTag speedTag = SpeedTag.fromCode(choice.get(3)); // 속도 = 투자기간
         StrategyTag strategyTag = StrategyTag.fromCode(choice.get(4)); // 운/전략 = 투자 전략
-        Double financeScore = (double) ((choice.get(5) + choice.get(6)) / 2.0); // 재정체력
+        Double financeScore = (double) ((choice.get(5))); // 재정체력
 
 
         /**
          * 사용자 성향 요약
          */
-        // 1번 문항 + 2번 문항 + 6번 문항 + 7번 문항 만 계산.
-        double sum = (double) (choice.get(0) + choice.get(1) + choice.get(5) + choice.get(6)) / 4;
-        String profileSummary = "";
+        // 모든 문항의 합 sum
+        double sum = 0;
+        for (Integer i : choice) sum += i;
+        sum /= choice.size();
 
-        profileSummary = getSummary(sum, profileSummary);
+        String profileSummary = getSummary(sum);
 
 
         /**
@@ -84,7 +85,10 @@ public class AssessmentServiceImpl implements AssessmentService{
         return Optional.ofNullable(UserInfoDTO.from(userInfoVO));
     }
 
-    private static String getSummary(double sum, String profileSummary) {
+    private static String getSummary(double sum) {
+
+        String profileSummary = "";
+
         String[] stable = {"소심한", "느긋한"};
         String[] delicate  = {"신중한", "섬세한"};
         String[] neutrality = {"현실적인", "전략적인"};

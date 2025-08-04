@@ -32,11 +32,10 @@
             character_ticket,
             updated_at
         FROM user_info
-        WHERE id = #{userId}
+        WHERE user_id = #{userId}
     </select>
     <!-- userinfo 에 설문 결과 저장 -->
-    <insert
-            id="insertUserInfo"
+    <insert id="insertUserInfo"
             parameterType="org.finmate.member.domain.UserInfoVO"
             useGeneratedKeys="true"
             keyProperty="id"
@@ -87,31 +86,32 @@
                    #{speedTag},
                    #{strategyTag},
                    #{financeScore},
-                   #{user_level},
-                   #{character_ticket},
+                   #{userLevel},
+                   #{characterTicket},
                    #{updatedAt}
                )
             ON DUPLICATE KEY UPDATE
-                                 animal_id       = VALUES(animal_id),
-                                 exp             = VALUES(exp),
-                                 is_married       = VALUES(is_married),
-                                 has_job              = VALUES(has_job),
-                                 uses_public_transport  = VALUES(uses_public_transport),
-                                 does_exercise              = VALUES(does_exercise),
-                                 travels_frequently     = VALUES(travels_frequently),
-                                 has_children     = VALUES(has_children),
-                                 has_house            = VALUES(has_house ),
-                                 employed_at_sme        = VALUES(employed_at_sme),
-                                 uses_microloan         = VALUES(uses_microloan),
-                                 profile_summary = VALUES(profile_summary),
-                                 adventure_score = VALUES(adventure_score),
-                                 value_tag       = VALUES(value_tag),
-                                 speed_tag       = VALUES(speed_tag),
-                                 strategy_tag    = VALUES(strategy_tag),
-                                 finance_score   = VALUES(finance_score),
-                                 user_level   = VALUES(user_level),
-                                 character_ticket   = VALUES(character_ticket),
-                                 updated_at      = NOW()
+                                 animal_id         = VALUES(animal_id),
+                                 exp               = VALUES(exp),
+                                 is_married        = VALUES(is_married),
+                                 has_job           = VALUES(has_job),
+                                 uses_public_transport = VALUES(uses_public_transport),
+                                 does_exercise     = VALUES(does_exercise),
+                                 travels_frequently = VALUES(travels_frequently),
+                                 has_children      = VALUES(has_children),
+                                 has_house         = VALUES(has_house),
+                                 employed_at_sme   = VALUES(employed_at_sme),
+                                 uses_microloan    = VALUES(uses_microloan),
+                                 profile_summary   = VALUES(profile_summary),
+                                 adventure_score   = VALUES(adventure_score),
+                                 value_tag         = VALUES(value_tag),
+                                 speed_tag         = VALUES(speed_tag),
+                                 strategy_tag      = VALUES(strategy_tag),
+                                 finance_score     = VALUES(finance_score),
+                                 user_level        = VALUES(user_level),
+                                 character_ticket  = VALUES(character_ticket),
+                                 updated_at        = NOW()
+
     </insert>
 </mapper>
 
