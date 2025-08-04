@@ -3,10 +3,12 @@ package org.finmate.member.dto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.finmate.member.domain.UserInfoVO;
+import org.finmate.member.domain.enums.Gender;
 import org.finmate.member.domain.enums.SpeedTag;
 import org.finmate.member.domain.enums.StrategyTag;
 import org.finmate.member.domain.enums.ValueTag;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -53,6 +55,39 @@ public class UserInfoDTO {
     @ApiModelProperty(value = "수정일")
     private LocalDateTime updatedAt;
 
+    @ApiModelProperty(value = "생년월일")
+    private LocalDate birth;
+
+    @ApiModelProperty(value = "성별 (MALE / FEMALE)")
+    private Gender gender;
+
+    @ApiModelProperty(value = "결혼 여부")
+    private Boolean isMarried;
+
+    @ApiModelProperty(value = "직업 유무")
+    private Boolean hasJob;
+
+    @ApiModelProperty(value = "대중교통 이용 여부")
+    private Boolean usesPublicTransport;
+
+    @ApiModelProperty(value = "운동 습관 여부")
+    private Boolean doesExercise;
+
+    @ApiModelProperty(value = "자주 여행을 다니는지 여부")
+    private Boolean travelsFrequently;
+
+    @ApiModelProperty(value = "자녀 유무")
+    private Boolean hasChildren;
+
+    @ApiModelProperty(value = "자가 주택 소유 여부")
+    private Boolean hasHouse;
+
+    @ApiModelProperty(value = "중소기업 재직 여부")
+    private Boolean employedAtSme;
+
+    @ApiModelProperty(value = "소액 대출 이용 여부")
+    private Boolean usesMicroloan;
+
 
     /**
      * VO -> DTO
@@ -72,6 +107,18 @@ public class UserInfoDTO {
                 .userLevel(vo.getUserLevel())
                 .characterTicket(vo.getCharacterTicket())
                 .updatedAt(vo.getUpdatedAt())
+
+                .gender(vo.getGender())
+                .isMarried(vo.getIsMarried())
+                .hasJob(vo.getHasJob())
+                .usesPublicTransport(vo.getUsesPublicTransport())
+                .doesExercise(vo.getDoesExercise())
+                .travelsFrequently(vo.getTravelsFrequently())
+                .hasChildren(vo.getHasChildren())
+                .hasHouse(vo.getHasHouse())
+                .employedAtSme(vo.getEmployedAtSme())
+                .usesMicroloan(vo.getUsesMicroloan())
+
                 .build();
     }
 
@@ -79,8 +126,7 @@ public class UserInfoDTO {
      * DTO -> VO
      */
     public UserInfoVO toVO(){
-        return UserInfoVO
-                .builder()
+        return UserInfoVO.builder()
                 .id(id)
                 .userId(userId)
                 .animalId(animalId)
@@ -94,6 +140,18 @@ public class UserInfoDTO {
                 .userLevel(userLevel)
                 .characterTicket(characterTicket)
                 .updatedAt(updatedAt)
+
+                .gender(gender)
+                .isMarried(isMarried)
+                .hasJob(hasJob)
+                .usesPublicTransport(usesPublicTransport)
+                .doesExercise(doesExercise)
+                .travelsFrequently(travelsFrequently)
+                .hasChildren(hasChildren)
+                .hasHouse(hasHouse)
+                .employedAtSme(employedAtSme)
+                .usesMicroloan(usesMicroloan)
+
                 .build();
     }
 }
