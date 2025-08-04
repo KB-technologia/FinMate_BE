@@ -1,8 +1,10 @@
 package org.finmate.security.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.finmate.member.domain.KakaoUser;
 import org.finmate.member.domain.UserVO;
 
 import java.util.List;
@@ -10,6 +12,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class UserLoginInfoDTO {
     private String accountId;
     private String email;
@@ -19,24 +22,24 @@ public class UserLoginInfoDTO {
     private List<String> roles;
 
     public static UserLoginInfoDTO of(UserVO user){
-        return new UserLoginInfoDTO(
-                user.getAccountId(),
-                user.getEmail(),
-                user.getName(),
-                null, // birth (UserVO에 없으므로 null)
-                null, // gender (UserVO에 없으므로 null)
-                List.of("ROLE_USER")
-        );
+        return UserLoginInfoDTO.builder()
+                .accountId(user.getAccountId())
+                .email(user.getEmail())
+                .name(user.getName())
+                .birth(null)
+                .gender(null)
+                .roles(List.of("ROLE_USER"))
+                .build();
     }
 
-//    public static UserLoginInfoDTO of(UserVO user){
-//        return new UserLoginInfoDTO(
-//                user.getAccountId(),
-//                user.getEmail(),
-//                user.getName(),
-//                user.getBirth(),
-//                user.getGender(),
-//                List.of("ROLE_USER") // 현재는 고정값으로 설정
-//        );
-//    }
+    public static UserLoginInfoDTO of(KakaoUser kakaoUser){
+        return UserLoginInfoDTO.builder()
+                .accountId("kakao_" + kakaoUser.getId())
+                .email(kakaoUser.getEmail())
+                .name(kakaoUser.getNickname())
+                .birth(kakaoUser.getBirth())
+                .gender(kakaoUser.getGender())
+                .roles(List.of("ROLE_USER"))
+                .build();
+    }
 }

@@ -129,14 +129,14 @@ public class KakaoService {
 
         String token = jwtProcessor.generateToken(user.getAccountId());
 
-        UserLoginInfoDTO userLoginInfoDTO = new UserLoginInfoDTO(
-                accountId,
-                kakaoUser.getEmail(),
-                kakaoUser.getNickname(),
-                kakaoUser.getBirth(),
-                kakaoUser.getGender(),
-                List.of("ROLE_USER")
-        );
+        UserLoginInfoDTO userLoginInfoDTO = UserLoginInfoDTO.builder()
+                .accountId(accountId)
+                .email(kakaoUser.getEmail())
+                .name(kakaoUser.getNickname())
+                .birth(kakaoUser.getBirth())
+                .gender(kakaoUser.getGender())
+                .roles(List.of("ROLE_USER"))
+                .build();
 
         return new AuthResultDTO(token, userLoginInfoDTO, isNewUser);
     }

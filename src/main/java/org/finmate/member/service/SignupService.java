@@ -65,7 +65,7 @@ public class SignupService {
                     .build();
             userMapper.insertUser(user);
 
-            log.debug("User inserted: {}", user);  // ✅ 추가된 로그
+            log.debug("User inserted: {}", user);
 
             UserInfoVO userInfo = UserInfoVO.builder()
                     .userId(user.getId())
@@ -84,13 +84,13 @@ public class SignupService {
                     .updatedAt(LocalDateTime.now())
                     .build();
             userInfoMapper.insertUserInfo(userInfo);
-            log.debug("UserInfo inserted: {}", userInfo);  // ✅ 추가된 로그
+            log.debug("UserInfo inserted: {}", userInfo);
 
         }
         catch (Exception e)
         {
-            log.error("111111 회원가입 중 예외 발생: {}", e.getMessage(), e);  // 예외 전체 로그 출력
-            throw e; // 예외 다시 던짐 (트랜잭션 롤백 등 유지)
+            log.error("111111 회원가입 중 예외 발생: {}", e.getMessage(), e);
+            throw e;
         }
 
 
