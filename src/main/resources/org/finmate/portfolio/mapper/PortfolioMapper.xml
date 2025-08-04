@@ -24,7 +24,9 @@
         SELECT *
         FROM financial_portfolio
         WHERE user_id = #{userId}
-          AND DATE(created_at) = #{date}
+          AND created_at >= #{startDate} AND created_at &lt; #{endDate}
+        ORDER BY created_at DESC
+        LIMIT 1
     </select>
 
 

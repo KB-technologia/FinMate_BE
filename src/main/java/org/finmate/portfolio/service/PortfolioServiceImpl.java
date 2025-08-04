@@ -5,7 +5,6 @@ import lombok.extern.log4j.Log4j2;
 import org.finmate.adapter.mydata.MyDataApi;
 import org.finmate.adapter.mydata.dto.MyDataResponseDTO;
 import org.finmate.exception.NotFoundException;
-import org.finmate.portfolio.domain.InvestmentProfile;
 import org.finmate.portfolio.domain.PortfolioVO;
 import org.finmate.portfolio.dto.PortfolioDTO;
 import org.finmate.portfolio.dto.PortfolioRequestDTO;
@@ -13,7 +12,6 @@ import org.finmate.portfolio.mapper.PortfolioMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.NoSuchElementException;
 
 /**
  * 포트폴리오 서비스 구현 클래스, 사용자의 포트폴리오 생성, 조회, 수정, 삭제, 이력 조회를 처리
@@ -24,7 +22,6 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class PortfolioServiceImpl implements PortfolioService {
     private final PortfolioMapper portfolioMapper;
-
     private final MyDataApi myDataApi;
     /**
      * 포트폴리오 생성
@@ -34,13 +31,12 @@ public class PortfolioServiceImpl implements PortfolioService {
     @Override
     public void createPortfolio(Long userId, PortfolioRequestDTO portfolioRequestDTO) {
 
-        PortfolioDTO portfolioDTO = myDataApi.getMyData(userId).toPortfolioDTO();
-
+        MyDataResponseDTO myData = myDataApi.getMyData(userId);
+        PortfolioDTO portfolioDTO = myData.toPortfolioDTO();
         portfolioDTO.setUserId(userId);
         portfolioDTO.setCash(portfolioRequestDTO.getCash());
         portfolioDTO.setOther(portfolioRequestDTO.getOther());
         portfolioDTO.update();
-
         portfolioMapper.insertPortfolio(portfolioDTO.toVO());
     }
 
@@ -58,13 +54,17 @@ public class PortfolioServiceImpl implements PortfolioService {
     }
 
     /**
-     * 포트폴리오 수정하는 메서드
-     * @param portfolio
-     * @deprecated 로직 수정 전
+     * 포트폴리오 수정 메서드
+     * @param userId
+     * @param portfolioRequestDTO
      */
     @Override
-    public void updatePortfolio(PortfolioDTO portfolio) {
-        PortfolioVO vo = portfolio.toVO();
+    public void updatePortfolio(Long userId, PortfolioRequestDTO portfolioRequestDTO) {
+        PortfolioDTO portfolioDTO = getPortfolioByUserId(userId);
+        portfolioDTO.setCash(portfolioRequestDTO.getCash());
+        portfolioDTO.setOther(portfolioRequestDTO.getOther());
+        portfolioDTO.update();
+        PortfolioVO vo = portfolioDTO.toVO();
         portfolioMapper.updatePortfolio(vo);
     }
 
@@ -84,13 +84,13 @@ public class PortfolioServiceImpl implements PortfolioService {
      */
     @Override
     public PortfolioDTO getHistoryPortfolioByUserId(Long userId, LocalDate date) {
-        PortfolioVO vo = portfolioMapper.getHistoryPortfolio(userId, date);
+        LocalDate startDate = date;
+        LocalDate endDate = date.plusDays(1);
+
+        PortfolioVO vo = portfolioMapper.getHistoryPortfolio(userId, startDate, endDate);
         if(vo== null){
-            throw new NotFoundException("해당 사용자의 포트폴리오가 존재하지 않습니다.");
+            throw new NotFoundException("해당 사용자의 과거 포트폴리오가 존재하지 않습니다.");
         }
         return PortfolioDTO.from(vo);
     }
-
-
-
 }

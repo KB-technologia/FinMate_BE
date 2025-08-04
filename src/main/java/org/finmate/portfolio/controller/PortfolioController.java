@@ -4,8 +4,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.finmate.adapter.mydata.MyDataApi;
-import org.finmate.adapter.mydata.dto.MyDataResponseDTO;
 import org.finmate.member.domain.CustomUser;
 import org.finmate.portfolio.dto.PortfolioRequestDTO;
 import org.finmate.portfolio.dto.PortfolioResponseDTO;
@@ -55,15 +53,14 @@ public class PortfolioController {
     @PatchMapping
     public ResponseEntity<PortfolioResponseDTO<Long>> update(
             @ApiIgnore @AuthenticationPrincipal CustomUser customUser,
-            @RequestBody PortfolioDTO dto)
+            @RequestBody PortfolioRequestDTO requestDTO)
     {
         Long userId = customUser.getUser().getId();
-        dto.setUserId(userId);
-        portfolioService.updatePortfolio(dto);
+        portfolioService.updatePortfolio(userId, requestDTO);
         return ResponseEntity.ok(
                 PortfolioResponseDTO.<Long>builder()
                         .message("재무 포트폴리오 수정 완료")
-                        .data(dto.getId())
+                        .data(userId)
                         .build()
         );
     }
@@ -83,9 +80,8 @@ public class PortfolioController {
 
     @ApiOperation(value = "과거의 재무 포트폴리오 조회", notes = "userId로 과거 재무 포트폴리오를 조회")
     @GetMapping("/history")
-    public ResponseEntity<PortfolioDTO> getHistory(@ApiIgnore @AuthenticationPrincipal CustomUser customUser,  @RequestParam("date")
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-        Long userId = customUser.getUser().getId();
+    public ResponseEntity<PortfolioDTO> getHistory(@ApiIgnore @AuthenticationPrincipal CustomUser customUser, @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        Long userId = customUser.getUser().getId();;
         PortfolioDTO dto = portfolioService.getHistoryPortfolioByUserId(userId, date);
         return ResponseEntity.ok(dto);
     }
