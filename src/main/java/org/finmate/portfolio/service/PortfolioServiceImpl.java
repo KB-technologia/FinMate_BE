@@ -32,7 +32,7 @@ public class PortfolioServiceImpl implements PortfolioService {
     public void createPortfolio(Long userId, PortfolioRequestDTO portfolioRequestDTO) {
 
         MyDataResponseDTO myData = myDataApi.getMyData(userId);
-        PortfolioDTO portfolioDTO = myDataApi.getMyData(userId).toPortfolioDTO();
+        PortfolioDTO portfolioDTO = myData.toPortfolioDTO();
         portfolioDTO.setUserId(userId);
         portfolioDTO.setCash(portfolioRequestDTO.getCash());
         portfolioDTO.setOther(portfolioRequestDTO.getOther());
