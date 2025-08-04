@@ -447,12 +447,10 @@
         ORDER BY
         (
         CASE
-        WHEN p.product_type = 'SAVINGS' THEN
-        p.expected_return + s.bonus_rate
-        WHEN p.product_type = 'DEPOSIT' THEN
-        p.expected_return + d.bonus_rate
-        ELSE
+        WHEN p.product_type = 'FUND' THEN
         p.expected_return
+        ELSE
+        p.expected_return + s.bonus_rate
         END
         )
         <choose>
