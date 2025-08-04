@@ -87,10 +87,9 @@ public class SignupService {
             log.debug("UserInfo inserted: {}", userInfo);
 
         }
-        catch (Exception e)
-        {
-            log.error("111111 회원가입 중 예외 발생: {}", e.getMessage(), e);
-            throw e;
+        catch (RuntimeException e) {
+            log.error("회원가입 처리 중 예외 발생: {}", e.getMessage(), e);
+            throw new RuntimeException("회원가입 처리 중 오류가 발생했습니다. 다시 시도해주세요.");
         }
 
 
