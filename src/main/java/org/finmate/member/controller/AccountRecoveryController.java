@@ -22,8 +22,7 @@ public class AccountRecoveryController {
     @PostMapping("/findaccountid")
     @ApiOperation(value = "아이디 찾기", notes = "이메일 인증이 완료된 UUID로 등록된 accountId를 반환")
     public FindAccountIdResponseDTO findAccountId(@RequestBody FindAccountIdRequestDTO dto) {
-        String accountId = accountRecoveryService.findAccountIdByUuid(dto.getUuid());
-        return new FindAccountIdResponseDTO(accountId);
+        return accountRecoveryService.findAccountIdByUuid(dto.getUuid());
     }
 
     @PostMapping("/changepassword/verify")

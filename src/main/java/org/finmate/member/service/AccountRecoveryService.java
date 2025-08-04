@@ -3,6 +3,7 @@ package org.finmate.member.service;
 import lombok.RequiredArgsConstructor;
 import org.finmate.member.domain.EmailAuthVO;
 import org.finmate.member.dto.ChangePasswordRequestDTO;
+import org.finmate.member.dto.FindAccountIdResponseDTO;
 import org.finmate.member.mapper.EmailAuthMapper;
 import org.finmate.member.mapper.UserMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,7 +17,7 @@ public class AccountRecoveryService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
-    public String findAccountIdByUuid(String uuid) {
+    public FindAccountIdResponseDTO findAccountIdByUuid(String uuid) {
         String email = emailAuthMapper.findEmailByVerifiedUuid(uuid);
         if (email == null) return null;
         return userMapper.findAccountIdByEmail(email);

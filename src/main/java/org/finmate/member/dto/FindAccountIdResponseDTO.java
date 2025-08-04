@@ -7,5 +7,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FindAccountIdResponseDTO {
+    private String name;
     private String accountId;
 }
