@@ -24,4 +24,7 @@ public interface ProductService {
     Long insertProductReview(ProductReviewDTO productReviewDTO, Long productId, Long userId);
 
     Long deleteProductReview(Long id, Long userId);
+
+    // 사용자 맞춤 추천 상품
+    List<ProductDTO<?>> getCustomizedProducts(Long userId);
 }
