@@ -196,10 +196,10 @@ public class ProductServiceImpl implements ProductService {
         // 거리가 짧은 순으로 정렬
         return allProducts.stream()
                 .sorted(Comparator.comparingDouble(product -> getDistance(product, portfolioDTO, userInfoDTO)))
-//                .peek(product -> {
-//                    double distance = getDistance(product, portfolioDTO, userInfoDTO);
-//                    log.info("--------------------------------Product: {}, Distance: {}", product.getName(), distance);
-//                })
+                .peek(product -> {
+                    double distance = getDistance(product, portfolioDTO, userInfoDTO);
+                    log.info("--------------------------------Product: {}, Distance: {}", product.getName(), distance);
+                })
                 .collect(Collectors.toList());
     }
 
@@ -283,6 +283,7 @@ public class ProductServiceImpl implements ProductService {
         else if(productDTO.getDetail() instanceof DepositVO) w4 = normalized[0];
         else if(productDTO.getDetail() instanceof FundVO) w4 = normalized[2];
         else w4 = 0;
+        log.info("w4: " + w4 + " " + productDTO.getName());
 
         /**
          * 거리 계산
@@ -298,38 +299,63 @@ public class ProductServiceImpl implements ProductService {
 
     // 회원 가입 설문 일치 여부 확인 메소드
     private static int isRequirementViolated(ProductDTO<?> productDTO, UserInfoDTO userInfoDTO) {
-        if(productDTO.getDetail() instanceof SavingsVO userSavingsVO){
-            // 조건이 null 이 아닌 경우만 비교
-            if (userInfoDTO.getIsMarried() != null && !userSavingsVO.getIsMarried().equals(userInfoDTO.getIsMarried())) return 1;
-            if (userInfoDTO.getHasJob() != null && !userSavingsVO.getHasJob().equals(userInfoDTO.getHasJob())) return 1;
-            if (userInfoDTO.getUsesPublicTransport() != null && !userSavingsVO.getUsesPublicTransport().equals(userInfoDTO.getUsesPublicTransport())) return 1;
-            if (userInfoDTO.getDoesExercise() != null && !userSavingsVO.getDoesExercise().equals(userInfoDTO.getDoesExercise())) return 1;
-            if (userInfoDTO.getTravelsFrequently() != null && !userSavingsVO.getTravelsFrequently().equals(userInfoDTO.getTravelsFrequently())) return 1;
-            if (userInfoDTO.getHasChildren() != null && !userSavingsVO.getHasChildren().equals(userInfoDTO.getHasChildren())) return 1;
-            if (userInfoDTO.getHasHouse() != null && !userSavingsVO.getHasHouse().equals(userInfoDTO.getHasHouse())) return 1;
-            if (userInfoDTO.getEmployedAtSme() != null && !userSavingsVO.getEmployedAtSme().equals(userInfoDTO.getEmployedAtSme())) return 1;
-            if (userInfoDTO.getUsesMicroloan() != null && !userSavingsVO.getUsesMicroloan().equals(userInfoDTO.getUsesMicroloan())) return 1;
-            // gender는 ENUM이니까 equals로 비교
-            //if (userInfoDTO.getGender() != null && !userSavingsVO.getGender().equals(userInfoDTO.getGender())) return 1;
 
+        // 1. 유저 나이 계산 (생년월일 → 만 나이)
+        Integer userAge = calculateUserAge(userInfoDTO.getBirth());
+
+        if (productDTO.getDetail() instanceof SavingsVO userSavingsVO) {
+            // Boolean 조건들: null이 아닐 때만 비교
+            if (userSavingsVO.getIsMarried() != null && !userSavingsVO.getIsMarried().equals(userInfoDTO.getIsMarried())) return 1;
+            if (userSavingsVO.getHasJob() != null && !userSavingsVO.getHasJob().equals(userInfoDTO.getHasJob())) return 1;
+            if (userSavingsVO.getUsesPublicTransport() != null && !userSavingsVO.getUsesPublicTransport().equals(userInfoDTO.getUsesPublicTransport())) return 1;
+            if (userSavingsVO.getDoesExercise() != null && !userSavingsVO.getDoesExercise().equals(userInfoDTO.getDoesExercise())) return 1;
+            if (userSavingsVO.getTravelsFrequently() != null && !userSavingsVO.getTravelsFrequently().equals(userInfoDTO.getTravelsFrequently())) return 1;
+            if (userSavingsVO.getHasChildren() != null && !userSavingsVO.getHasChildren().equals(userInfoDTO.getHasChildren())) return 1;
+            if (userSavingsVO.getHasHouse() != null && !userSavingsVO.getHasHouse().equals(userInfoDTO.getHasHouse())) return 1;
+            if (userSavingsVO.getEmployedAtSme() != null && !userSavingsVO.getEmployedAtSme().equals(userInfoDTO.getEmployedAtSme())) return 1;
+            if (userSavingsVO.getUsesMicroloan() != null && !userSavingsVO.getUsesMicroloan().equals(userInfoDTO.getUsesMicroloan())) return 1;
+            if (userSavingsVO.getGender() != null && userInfoDTO.getGender() != null && !userSavingsVO.getGender().equals(userInfoDTO.getGender())) return 1;
+            // 나이 조건: null이 아닐 때만 비교
+            if (userSavingsVO.getMinAge() != null && userAge != null && userAge < userSavingsVO.getMinAge()) return 1;
+            if (userSavingsVO.getMaxAge() != null && userAge != null && userAge > userSavingsVO.getMaxAge()) return 1;
             return 0;
 
-        }else if(productDTO.getDetail() instanceof DepositVO userDepositVO){
-            // 조건이 null 이 아닌 경우만 비교
-            if (userInfoDTO.getIsMarried() != null && !userDepositVO.equals(userInfoDTO.getIsMarried())) return 1;
-            if (userInfoDTO.getHasJob() != null && !userDepositVO.getHasJob().equals(userInfoDTO.getHasJob())) return 1;
-            if (userInfoDTO.getUsesPublicTransport() != null && !userDepositVO.getUsesPublicTransport().equals(userInfoDTO.getUsesPublicTransport())) return 1;
-            if (userInfoDTO.getDoesExercise() != null && !userDepositVO.getDoesExercise().equals(userInfoDTO.getDoesExercise())) return 1;
-            if (userInfoDTO.getTravelsFrequently() != null && !userDepositVO.getTravelsFrequently().equals(userInfoDTO.getTravelsFrequently())) return 1;
-            if (userInfoDTO.getHasChildren() != null && !userDepositVO.getHasChildren().equals(userInfoDTO.getHasChildren())) return 1;
-            if (userInfoDTO.getHasHouse() != null && !userDepositVO.getHasHouse().equals(userInfoDTO.getHasHouse())) return 1;
-            if (userInfoDTO.getEmployedAtSme() != null && !userDepositVO.getEmployedAtSme().equals(userInfoDTO.getEmployedAtSme())) return 1;
-            if (userInfoDTO.getUsesMicroloan() != null && !userDepositVO.getUsesMicroloan().equals(userInfoDTO.getUsesMicroloan())) return 1;
-            // gender는 ENUM이니까 equals로 비교
-            //if (userInfoDTO.getGender() != null && !userDepositVO.getGender().equals(userInfoDTO.getGender())) return 1;
+        } else if (productDTO.getDetail() instanceof DepositVO userDepositVO) {
+            if (userDepositVO.getIsMarried() != null && !userDepositVO.getIsMarried().equals(userInfoDTO.getIsMarried())) return 1;
+
+            if (userDepositVO.getHasJob() != null && !userDepositVO.getHasJob().equals(userInfoDTO.getHasJob())) return 1;
+
+            if (userDepositVO.getUsesPublicTransport() != null && !userDepositVO.getUsesPublicTransport().equals(userInfoDTO.getUsesPublicTransport())) return 1;
+
+            if (userDepositVO.getDoesExercise() != null && !userDepositVO.getDoesExercise().equals(userInfoDTO.getDoesExercise())) return 1;
+
+            if (userDepositVO.getTravelsFrequently() != null && !userDepositVO.getTravelsFrequently().equals(userInfoDTO.getTravelsFrequently())) return 1;
+
+            if (userDepositVO.getHasChildren() != null && !userDepositVO.getHasChildren().equals(userInfoDTO.getHasChildren())) return 1;
+
+            if (userDepositVO.getHasHouse() != null && !userDepositVO.getHasHouse().equals(userInfoDTO.getHasHouse())) return 1;
+            if (userDepositVO.getEmployedAtSme() != null && !userDepositVO.getEmployedAtSme().equals(userInfoDTO.getEmployedAtSme())) return 1;
+            if (userDepositVO.getUsesMicroloan() != null && !userDepositVO.getUsesMicroloan().equals(userInfoDTO.getUsesMicroloan())) return 1;
+            if (userDepositVO.getGender() != null && userInfoDTO.getGender() != null && !userDepositVO.getGender().equals(userInfoDTO.getGender())) return 1;
+
+            // 나이 조건: null이 아닐 때만 비교
+            if (userDepositVO.getMinAge() != null && userAge != null && userAge < userDepositVO.getMinAge()) return 1;
+            if (userDepositVO.getMaxAge() != null && userAge != null && userAge > userDepositVO.getMaxAge()) return 1;
+
 
             return 0;
-        }else return 0;
+        }
+
+        // 상품 VO 타입이 아니면 무조건 통과
+        return 0;
+    }
+
+    /**
+     * 생년월일로 만 나이 계산 (예: 2000-07-22 → 25)
+     */
+    public static Integer calculateUserAge(LocalDate birth) {
+        if (birth == null) return null;
+        return Period.between(birth, LocalDate.now()).getYears();
     }
 
     // 이상적인 현금/예적금, 채권, 주식/펀드, 기타 비율 정의
