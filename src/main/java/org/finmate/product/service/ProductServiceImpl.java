@@ -196,10 +196,10 @@ public class ProductServiceImpl implements ProductService {
         // 거리가 짧은 순으로 정렬
         return allProducts.stream()
                 .sorted(Comparator.comparingDouble(product -> getDistance(product, portfolioDTO, userInfoDTO)))
-                .peek(product -> {
-                    double distance = getDistance(product, portfolioDTO, userInfoDTO);
-                    log.info("--------------------------------Product: {}, Distance: {}", product.getName(), distance);
-                })
+//                .peek(product -> {
+//                    double distance = getDistance(product, portfolioDTO, userInfoDTO);
+//                    log.info("--------------------------------Product: {}, Distance: {}", product.getName(), distance);
+//                })
                 .collect(Collectors.toList());
     }
 
@@ -283,7 +283,6 @@ public class ProductServiceImpl implements ProductService {
         else if(productDTO.getDetail() instanceof DepositVO) w4 = normalized[0];
         else if(productDTO.getDetail() instanceof FundVO) w4 = normalized[2];
         else w4 = 0;
-        log.info("w4: " + w4 + " " + productDTO.getName());
 
         /**
          * 거리 계산
