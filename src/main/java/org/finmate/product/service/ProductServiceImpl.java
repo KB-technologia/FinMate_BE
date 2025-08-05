@@ -128,11 +128,19 @@ public class ProductServiceImpl implements ProductService {
         }
 
         UserInfoVO userInfo = userInfoMapper.getUserInfoById(userId);
+        Long animalId = userInfo.getAnimalId();
         AnimalCharacterVO animalCharacter = animalCharacterMapper.getCharacterById(userId);
+
+        String writer = userInfo.getProfileSummary();
+        if (animalCharacter != null) {
+            writer += " " + animalCharacter.getAnimalName();
+        } else {
+            writer += " (캐릭터 없음)";
+        }
 
         productReviewDTO.setProductId(productId);
         productReviewDTO.setUserId(userId);
-        productReviewDTO.setWriter(userInfo.getProfileSummary() + " " + animalCharacter.getAnimalName());
+        productReviewDTO.setWriter(writer);
 
         ProductReviewVO vo = productReviewDTO.toVO();
 
