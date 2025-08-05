@@ -121,6 +121,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<ProductReviewDTO> getMyReviewsByType(Long userId, String productType) {
+        return productMapper.getProductReviewByUserIdAndType(userId, productType)
+                .stream()
+                .map(ProductReviewDTO::from)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public Long insertProductReview(ProductReviewDTO productReviewDTO, Long productId, Long userId) {
         ProductReviewVO existingReview = productMapper.getProductReviewByProductIdAndUserId(productId, userId);
         if (existingReview != null) {
