@@ -32,6 +32,8 @@ public class ProductReviewDTO {
     private String imageUrl;
     @ApiModelProperty(value = "작성자 이름")
     private String writer;
+    @ApiModelProperty(value = "상품 유형 (DEPOSIT, SAVINGS, FUND)")
+    private String productType;
     @ApiModelProperty(value = "등록일")
     private LocalDateTime createdAt;
 
@@ -45,6 +47,7 @@ public class ProductReviewDTO {
                 .content(vo.getContent())
                 .imageUrl(vo.getImageUrl())
                 .writer(vo.getWriter())
+                .productType(vo.getProductType())
                 .createdAt(vo.getCreatedAt())
                 .build();
     }
@@ -59,6 +62,7 @@ public class ProductReviewDTO {
                 .content(content)
                 .imageUrl(imageUrl)
                 .writer(writer)
+                .productType(productType)
                 .createdAt(createdAt)
                 .build();
     }

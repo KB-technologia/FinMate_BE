@@ -463,12 +463,20 @@
         WHERE product_id = #{productId}
     </select>
     <select id="getProductReviewByUserId" resultType="ProductReviewVO">
-        SELECT *
-        FROM review
-        WHERE user_id = #{userId}
-        ORDER BY created_at DESC
+        SELECT r.*, p.product_type
+        FROM review r
+                 JOIN financial_product p ON r.product_id = p.id
+        WHERE r.user_id = #{userId}
+        ORDER BY r.created_at DESC
     </select>
-
+    <select id="getProductReviewByUserIdAndType" resultType="org.finmate.product.domain.ProductReviewVO">
+        SELECT r.*, p.product_type
+        FROM review r
+                 JOIN financial_product p ON r.product_id = p.id
+        WHERE r.user_id = #{userId}
+          AND p.product_type = #{productType}
+        ORDER BY r.created_at DESC
+    </select>
 
     <!-- ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 즐겨찾기 관련 SQL ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ -->
     <!-- Favorite + Product 네스티드 매핑 -->
