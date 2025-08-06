@@ -27,11 +27,13 @@ import javax.sql.DataSource;
 @PropertySource({"classpath:/application.properties"})
 @MapperScan(basePackages = {
         "org.finmate.member.mapper",
-        "org.finmate.assessment.mapper",
         "org.finmate.product.mapper",
         "org.finmate.portfolio.mapper",
         "org.finmate.quiz.mapper",
-        "org.finmate.attendance.mapper"
+        "org.finmate.attendance.mapper",
+        "org.finmate.character.mapper",
+        "org.finmate.email.mapper",
+        "org.finmate.mypage.mapper"
 })
 @ComponentScan(basePackages={
         "org.finmate.assessment.service",
@@ -40,6 +42,9 @@ import javax.sql.DataSource;
         "org.finmate.adapter",
         "org.finmate.attendance.service",
         "org.finmate.portfolio.service",
+        "org.finmate.character.service",
+        "org.finmate.email.service",
+        "org.finmate.mypage.service",
         "org.finmate.security.handler",
         "org.finmate.quiz.service",
         "org.finmate.security.util"

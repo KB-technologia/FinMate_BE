@@ -1,6 +1,8 @@
 package org.finmate.adapter.mydata.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,14 +19,18 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ApiModel(description = "사용자가 가진 금융 상품 목록 DTO")
 public class MyDataResponseDTO {
 
+    @ApiModelProperty(value = "마이데이터 응답 코드")
     @JsonProperty("rsp_code")
     private String rspCode;
 
+    @ApiModelProperty(value = "마이데이터 응답 메세지")
     @JsonProperty("rsp_msg")
     private String rspMsg;
 
+    @ApiModelProperty(value = "사용자의 금융 상품 리스트")
     @JsonProperty("registered_list")
     private List<MyDataProductDTO> registered_list;
 

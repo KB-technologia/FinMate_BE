@@ -1,0 +1,154 @@
+package org.finmate.member.service;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.finmate.email.domain.EmailAuthVO;
+import org.finmate.email.mapper.EmailAuthMapper;
+import org.finmate.member.domain.UserInfoVO;
+import org.finmate.member.domain.UserVO;
+import org.finmate.member.domain.enums.Gender;
+import org.finmate.member.domain.enums.Provider;
+import org.finmate.member.dto.ChangePasswordRequestDTO;
+import org.finmate.member.dto.FindAccountIdResponseDTO;
+import org.finmate.member.dto.SignupRequestDTO;
+import org.finmate.member.mapper.UserInfoMapper;
+import org.finmate.member.mapper.UserMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+@Service
+@RequiredArgsConstructor
+@Log4j2
+public class MemberServiceImpl implements MemberService {
+
+    private final EmailAuthMapper emailAuthMapper;
+    private final UserMapper userMapper;
+    private final UserInfoMapper userInfoMapper;
+    private final PasswordEncoder passwordEncoder;
+
+    @Override
+    public FindAccountIdResponseDTO findAccountIdByUuid(String uuid) {
+        String email = emailAuthMapper.findEmailByVerifiedUuid(uuid);
+        if (email == null) return null;
+        return userMapper.findAccountIdByEmail(email);
+    }
+
+    @Override
+    public boolean verifyUser(String uuid, String accountId) {
+        String email = emailAuthMapper.findEmailByVerifiedUuid(uuid);
+        if (email == null) return false;
+        return userMapper.existsByAccountIdAndEmail(accountId, email);
+    }
+
+    @Override
+    public void resetPassword(ChangePasswordRequestDTO dto) {
+        String accountId = dto.getAccountId();
+        String uuid = dto.getUuid();
+        String newPassword = dto.getNewPassword();
+
+        EmailAuthVO auth = emailAuthMapper.findByUuid(uuid);
+        if (auth == null || !auth.getIsVerified()) {
+            throw new IllegalArgumentException("유효하지 않은 인증 정보입니다.");
+        }
+
+        if (!userMapper.existsByAccountId(accountId)) {
+            throw new IllegalArgumentException("존재하지 않는 계정입니다.");
+        }
+
+        String encodedPassword = passwordEncoder.encode(newPassword);
+
+        userMapper.updatePassword(accountId, encodedPassword);
+    }
+
+    @Transactional
+    @Override
+    public void withdraw(Long userId) {
+        if (userId == null) {
+            throw new IllegalArgumentException("존재하지 않는 사용자입니다.");
+        }
+
+        userMapper.deleteUserInfoByUserId(userId);
+        userMapper.deleteUserAttendanceByUserId(userId);
+        userMapper.deleteUserById(userId);
+    }
+
+    @Transactional
+    @Override
+    public void signup(SignupRequestDTO dto) {
+
+        try {
+            log.info("[MemberService] 전달받은 provider: {}", dto.getProvider());
+
+            Provider provider = dto.getProvider() != null ? Provider.valueOf(dto.getProvider().toUpperCase()) : Provider.LOCAL;
+
+            if (userMapper.existsByAccountId(dto.getAccountId())) {
+                throw new RuntimeException("이미 사용 중인 아이디입니다.");
+            }
+
+            String encodedPassword;
+            switch(provider){
+                case LOCAL:
+                    if(!dto.getPassword().equals(dto.getPasswordConfirm())){
+                        throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+                    }
+                    encodedPassword = passwordEncoder.encode(dto.getPassword());
+                    break;
+
+                case KAKAO:
+                    encodedPassword = "kakao"; //더미 비밀번호
+                    break;
+
+                default :
+                    throw new IllegalArgumentException("지원하지 않는 provider입니다: " + provider);
+
+            }
+
+            UserVO user = UserVO.builder()
+                    .name(dto.getName())
+                    .accountId(dto.getAccountId())
+                    .email(dto.getEmail())
+                    .password(encodedPassword)
+                    .provider(provider)
+                    .createdAt(LocalDateTime.now())
+                    .build();
+            userMapper.insertUser(user);
+
+            log.debug("User inserted: {}", user);
+
+            UserInfoVO userInfo = UserInfoVO.builder()
+                    .userId(user.getId())
+                    .birth(LocalDate.parse(dto.getBirth()))
+                    .gender(Gender.valueOf(dto.getGender().toUpperCase()))
+                    .isMarried(dto.getIsMarried())
+                    .hasJob(dto.getHasJob())
+                    .usesPublicTransport(dto.getUsesPublicTransport())
+                    .doesExercise(dto.getDoesExercise())
+                    .travelsFrequently(dto.getTravelsFrequently())
+                    .hasChildren(dto.getHasChildren())
+                    .hasHouse(dto.getHasHouse())
+                    .employedAtSme(dto.getEmployedAtSme())
+                    .usesMicroloan(dto.getUsesMicroloan())
+                    .exp(0)
+                    .updatedAt(LocalDateTime.now())
+                    .build();
+            userInfoMapper.insertUserInfo(userInfo);
+            log.debug("UserInfo inserted: {}", userInfo);
+
+        }
+        catch (RuntimeException e) {
+            log.error("회원가입 처리 중 예외 발생: {}", e.getMessage(), e);
+            throw new RuntimeException("회원가입 처리 중 오류가 발생했습니다. 다시 시도해주세요.");
+        }
+
+
+    }
+
+    @Override
+    public boolean isAccountIdDuplicate(String accountId) {
+        return userMapper.existsByAccountId(accountId);
+    }
+}

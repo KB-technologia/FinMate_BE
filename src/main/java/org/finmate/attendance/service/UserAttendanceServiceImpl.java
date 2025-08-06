@@ -18,12 +18,14 @@ public class UserAttendanceServiceImpl implements UserAttendanceService {
     @Scheduled(cron = "0 0 0 * * *") // 매일 0시 0분 0초에 실행
     @Override
     public void resetDailyAttendanceRewards() {
+        //TODO: 예외처리 필요
         userAttendanceMapper.resetAllRewards();
     }
 
     @Transactional
     @Override
-    public UserAttendanceDTO getUserAttendance(Long userId) {
+    public UserAttendanceDTO getUserAttendance(final Long userId) {
+        //TODO: 예외처리 필요
         return UserAttendanceDTO.from(
                 userAttendanceMapper.getAttendanceByUserId(userId)
         );
@@ -31,7 +33,8 @@ public class UserAttendanceServiceImpl implements UserAttendanceService {
 
     @Transactional
     @Override
-    public void checkInAttendance(Long userId) {
+    public void checkInAttendance(final Long userId) {
+        //TODO: 예외처리 필요
         UserAttendanceVO userAttendanceVO = userAttendanceMapper.getAttendanceByUserId(userId);
         LocalDate lastAttendanceDate = userAttendanceVO.getUpdatedAt().toLocalDate();
 
