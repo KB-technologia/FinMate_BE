@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.finmate.character.mapper.CharacterMapper">
+
+    <select id="getCharacterById" resultType="org.finmate.character.domain.CharacterVO">
+        SELECT c.id, animal_name, animal_image_1, animal_image_2, animal_image_3, animal_image_4
+        FROM animal_character c
+        JOIN user_info u ON c.id = u.animal_id
+        WHERE u.user_id = #{userId}
+    </select>
+
+    <select id="randomCharacter" resultType="long">
+        SELECT id
+        FROM animal_character
+        ORDER BY RAND()
+        LIMIT 1
+    </select>
+
+
+</mapper>
+

@@ -6,23 +6,21 @@ import org.finmate.member.domain.enums.SpeedTag;
 import org.finmate.member.domain.enums.StrategyTag;
 import org.finmate.member.domain.enums.ValueTag;
 import org.finmate.member.dto.UserInfoDTO;
-import org.finmate.member.mapper.AnimalCharacterMapper;
+import org.finmate.character.mapper.CharacterMapper;
 import org.finmate.member.mapper.UserInfoMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class AssessmentServiceImpl implements AssessmentService{
 
     private final UserInfoMapper userInfoMapper;
-    private final AnimalCharacterMapper animalCharacterMapper;
+    private final CharacterMapper characterMapper;
 
 
     @Override
@@ -47,7 +45,7 @@ public class AssessmentServiceImpl implements AssessmentService{
         String profileSummary = getSummary(sum);
 
         // user_info 에 저장 및 캐릭터 생성
-        Long randomAnimal = animalCharacterMapper.randomCharacter();
+        Long randomAnimal = characterMapper.randomCharacter();
 
         UserInfoVO userInfoVO = UserInfoVO
                 .builder()
