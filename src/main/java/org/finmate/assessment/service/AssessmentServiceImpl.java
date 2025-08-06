@@ -1,8 +1,6 @@
 package org.finmate.assessment.service;
 
 import lombok.RequiredArgsConstructor;
-import org.finmate.assessment.dto.AssessmentDTO;
-import org.finmate.assessment.mapper.AssessmentMapper;
 import org.finmate.member.domain.UserInfoVO;
 import org.finmate.member.domain.enums.SpeedTag;
 import org.finmate.member.domain.enums.StrategyTag;
@@ -23,27 +21,16 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AssessmentServiceImpl implements AssessmentService{
 
-    private final AssessmentMapper assessmentMapper;
     private final UserInfoMapper userInfoMapper;
     private final AnimalCharacterMapper animalCharacterMapper;
 
-    @Override
-    public List<AssessmentDTO> loadAssessment() {
-
-        return assessmentMapper.getList()
-                .stream()
-                .map(AssessmentDTO::from)
-                .collect(Collectors.toList());
-
-    }
 
     @Override
     @Transactional
-    public Optional<UserInfoDTO> resultAssessment(Long userId, List<Integer> choice) {
+    public UserInfoDTO resultAssessment(final Long userId, final List<Integer> choice) {
 
-        /**
-         * 5대 지표 계산
-         */
+        // 5대 지표 계산
+
         Double adventureScore = (double) ((choice.get(0) + choice.get(1)) / 2.0); // 모험성향
         ValueTag valueTag = ValueTag.fromCode(choice.get(2)); // 가치관 = 투자 목적
         SpeedTag speedTag = SpeedTag.fromCode(choice.get(3)); // 속도 = 투자기간
@@ -51,9 +38,7 @@ public class AssessmentServiceImpl implements AssessmentService{
         Double financeScore = (double) ((choice.get(5))); // 재정체력
 
 
-        /**
-         * 사용자 성향 요약
-         */
+        // 사용자 성향 요약
         // 모든 문항의 합 sum
         double sum = 0;
         for (Integer i : choice) sum += i;
@@ -61,10 +46,7 @@ public class AssessmentServiceImpl implements AssessmentService{
 
         String profileSummary = getSummary(sum);
 
-
-        /**
-         * user_info 에 저장 및 캐릭터 생성
-         */
+        // user_info 에 저장 및 캐릭터 생성
         Long randomAnimal = animalCharacterMapper.randomCharacter();
 
         UserInfoVO userInfoVO = UserInfoVO
@@ -81,8 +63,9 @@ public class AssessmentServiceImpl implements AssessmentService{
                 .updatedAt(LocalDateTime.now())
                 .build();
 
+        //TODO: 예외처리 추가해야됨
         userInfoMapper.insertUserInfo(userInfoVO);
-        return Optional.ofNullable(UserInfoDTO.from(userInfoVO));
+        return UserInfoDTO.from(userInfoVO);
     }
 
     private static String getSummary(double sum) {
