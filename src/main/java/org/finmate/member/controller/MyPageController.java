@@ -90,7 +90,7 @@ public class MyPageController {
         return ResponseEntity.ok().build();
     }
 
-    @ApiOperation(value = "내가 작성한 리뷰 목록 조회", notes = "로그인한 사용자가 작성한 금융 상품 리뷰들을 조회합니다.")
+    @ApiOperation(value = "내가 작성한 리뷰 목록 조회", notes = "로그인한 사용자가 작성한 금융 상품 리뷰들을 조회합니다. (옵션: 상품 유형으로 필터링 가능)")
     @ApiResponses({
             @ApiResponse(code = 200, message = "요청 성공"),
             @ApiResponse(code = 401, message = "인증 실패"),
@@ -98,9 +98,15 @@ public class MyPageController {
             @ApiResponse(code = 500, message = "서버 오류")
     })
     @GetMapping("/review")
-    public ResponseEntity<List<ProductReviewDTO>> getMyReviews(@ApiIgnore @AuthenticationPrincipal CustomUser user) {
+    public ResponseEntity<List<ProductReviewDTO>> getMyReviews(
+            @ApiIgnore @AuthenticationPrincipal CustomUser user,
+            @ApiParam(value = "상품 유형 (DEPOSIT, SAVINGS, FUND)", example = "SAVINGS")
+            @RequestParam(required = false) String productType
+    ) {
         Long userId = user.getUser().getId();
-        List<ProductReviewDTO> reviews = productService.getMyReviews(userId);
+        List<ProductReviewDTO> reviews = (productType == null)
+                ? productService.getMyReviews(userId)
+                : productService.getMyReviewsByType(userId, productType);
         return ResponseEntity.ok(reviews);
     }
 }

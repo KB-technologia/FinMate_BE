@@ -20,5 +20,6 @@ public class ProductReviewVO {
     private String content;
     private String imageUrl;
     private String writer;
+    private String productType;
     private LocalDateTime createdAt;
 }

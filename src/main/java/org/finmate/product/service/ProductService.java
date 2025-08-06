@@ -21,6 +21,8 @@ public interface ProductService {
 
     List<ProductReviewDTO> getMyReviews(Long userId);
 
+    List<ProductReviewDTO> getMyReviewsByType(Long userId, String productType);
+
     Long insertProductReview(ProductReviewDTO productReviewDTO, Long productId, Long userId);
 
     Long deleteProductReview(Long id, Long userId);

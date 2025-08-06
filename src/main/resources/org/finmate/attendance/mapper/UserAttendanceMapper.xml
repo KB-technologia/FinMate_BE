@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.finmate.attendance.mapper.UserAttendanceMapper">
+    <insert id="checkInAttendance">
+        INSERT INTO user_attendance
+        (user_id, consecutive_days, reward_claimed)
+        VALUES
+            (#{userId}, #{consecutiveDays}, #{rewardClaimed})
+        ON DUPLICATE KEY UPDATE
+                             consecutive_days = VALUES(consecutive_days),
+                             reward_claimed = VALUES(reward_claimed),
+                             updated_at = NOW()
+    </insert>
+
+    <select id="getAttendanceByUserId" resultType="org.finmate.attendance.domain.UserAttendanceVO">
+        SELECT *
+        FROM user_attendance
+        WHERE user_id = #{userId}
+    </select>
+
+    <update id="resetAllRewards">
+        UPDATE user_attendance
+        SET reward_claimed = FALSE
+    </update>
+</mapper>

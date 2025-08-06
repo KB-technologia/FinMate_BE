@@ -3,6 +3,8 @@ package org.finmate.member.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.finmate.attendance.domain.UserAttendanceVO;
+import org.finmate.attendance.mapper.UserAttendanceMapper;
 import org.finmate.member.domain.KakaoUser;
 import org.finmate.member.domain.UserVO;
 import org.finmate.member.domain.enums.Provider;
@@ -14,6 +16,7 @@ import org.finmate.security.dto.UserLoginInfoDTO;
 import org.finmate.security.util.JwtProcessor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -35,6 +38,8 @@ public class KakaoService {
     private String REDIRECT_URI;
 
     private final UserMapper userMapper;
+
+    private final UserAttendanceMapper userAttendanceMapper;
 
     // 1. 인가 코드로 access token 받기
     public String getAccessToken(String code){
@@ -115,6 +120,8 @@ public class KakaoService {
         UserVO user = userMapper.selectByAccountId(accountId);
 
         boolean isNewUser = false;
+        boolean rewardClaimed = false;
+        int consecutiveDays = 0;
         if(user == null){
             user = UserVO.builder()
                     .accountId(accountId)
@@ -124,6 +131,11 @@ public class KakaoService {
                     .provider(Provider.KAKAO)
                     .build();
             isNewUser = true;
+        }
+        else {
+            UserAttendanceVO attendanceVO = userAttendanceMapper.getAttendanceByUserId(user.getId());
+            rewardClaimed = attendanceVO.getRewardClaimed();
+            consecutiveDays = attendanceVO.getConsecutiveDays();
         }
 
         String token = jwtProcessor.generateToken(user.getAccountId());
@@ -137,6 +149,6 @@ public class KakaoService {
                 .roles(List.of("ROLE_USER"))
                 .build();
 
-        return new AuthResultDTO(token, userLoginInfoDTO, isNewUser);
+        return new AuthResultDTO(token, userLoginInfoDTO, isNewUser, rewardClaimed, consecutiveDays);
     }
 }
