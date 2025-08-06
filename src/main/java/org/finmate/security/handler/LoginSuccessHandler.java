@@ -2,6 +2,8 @@ package org.finmate.security.handler;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.finmate.attendance.domain.UserAttendanceVO;
+import org.finmate.attendance.mapper.UserAttendanceMapper;
 import org.finmate.member.domain.CustomUser;
 import org.finmate.member.domain.UserVO;
 import org.finmate.security.dto.AuthResultDTO;
@@ -23,6 +25,8 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     private final JwtProcessor jwtProcessor;
 
+    private final UserAttendanceMapper userAttendanceMapper;
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException {
@@ -31,7 +35,11 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
         String token = jwtProcessor.generateToken(userVO.getAccountId());
         UserLoginInfoDTO userInfo = UserLoginInfoDTO.of(userVO);
-        AuthResultDTO result = new AuthResultDTO(token, userInfo, false);
+
+        UserAttendanceVO attendanceVO = userAttendanceMapper.getAttendanceByUserId(userVO.getId());
+        boolean rewardClaimed = attendanceVO.getRewardClaimed();
+        int consecutiveDays = attendanceVO.getConsecutiveDays();
+        AuthResultDTO result = new AuthResultDTO(token, userInfo, false, rewardClaimed, consecutiveDays);
 
         JsonResponse.send(response,result);
     }
