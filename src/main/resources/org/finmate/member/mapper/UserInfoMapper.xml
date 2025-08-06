@@ -91,26 +91,26 @@
                    #{updatedAt}
                )
             ON DUPLICATE KEY UPDATE
-                                 animal_id         = VALUES(animal_id),
-                                 exp               = VALUES(exp),
-                                 is_married        = VALUES(is_married),
-                                 has_job           = VALUES(has_job),
-                                 uses_public_transport = VALUES(uses_public_transport),
-                                 does_exercise     = VALUES(does_exercise),
-                                 travels_frequently = VALUES(travels_frequently),
-                                 has_children      = VALUES(has_children),
-                                 has_house         = VALUES(has_house),
-                                 employed_at_sme   = VALUES(employed_at_sme),
-                                 uses_microloan    = VALUES(uses_microloan),
-                                 profile_summary   = VALUES(profile_summary),
-                                 adventure_score   = VALUES(adventure_score),
-                                 value_tag         = VALUES(value_tag),
-                                 speed_tag         = VALUES(speed_tag),
-                                 strategy_tag      = VALUES(strategy_tag),
-                                 finance_score     = VALUES(finance_score),
-                                 user_level        = VALUES(user_level),
-                                 character_ticket  = VALUES(character_ticket),
-                                 updated_at        = NOW()
+                                animal_id         = COALESCE(VALUES(animal_id), animal_id),
+                                exp               = COALESCE(VALUES(exp), exp),
+                                is_married        = COALESCE(VALUES(is_married), is_married),
+                                has_job           = COALESCE(VALUES(has_job), has_job),
+                                uses_public_transport = COALESCE(VALUES(uses_public_transport), uses_public_transport),
+                                does_exercise     = COALESCE(VALUES(does_exercise), does_exercise),
+                                travels_frequently = COALESCE(VALUES(travels_frequently), travels_frequently),
+                                has_children      = COALESCE(VALUES(has_children), has_children),
+                                has_house         = COALESCE(VALUES(has_house), has_house),
+                                employed_at_sme   = COALESCE(VALUES(employed_at_sme), employed_at_sme),
+                                uses_microloan    = COALESCE(VALUES(uses_microloan), uses_microloan),
+                                profile_summary   = COALESCE(VALUES(profile_summary), profile_summary),
+                                adventure_score   = COALESCE(VALUES(adventure_score), adventure_score),
+                                value_tag         = COALESCE(VALUES(value_tag), value_tag),
+                                speed_tag         = COALESCE(VALUES(speed_tag), speed_tag),
+                                strategy_tag      = COALESCE(VALUES(strategy_tag), strategy_tag),
+                                finance_score     = COALESCE(VALUES(finance_score),finance_score),
+                                user_level        = COALESCE(VALUES(user_level), user_level),
+                                character_ticket  = COALESCE(VALUES(character_ticket), character_ticket),
+                                updated_at        = NOW()
 
     </insert>
 </mapper>
