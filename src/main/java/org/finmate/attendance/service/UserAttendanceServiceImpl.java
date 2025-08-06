@@ -16,6 +16,7 @@ public class UserAttendanceServiceImpl implements UserAttendanceService {
     private final UserAttendanceMapper userAttendanceMapper;
 
     @Scheduled(cron = "0 0 0 * * *") // 매일 0시 0분 0초에 실행
+    @Override
     public void resetDailyAttendanceRewards() {
         //TODO: 예외처리 필요
         userAttendanceMapper.resetAllRewards();
