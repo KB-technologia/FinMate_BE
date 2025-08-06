@@ -235,10 +235,10 @@ public class ProductServiceImpl implements ProductService {
         int currentEtcRatio = (int) ((portfolioDTO.getOther() / portfolioDTO.getTotalAssets()) * 100);
 
         // 이상적인 재무 포트폴리오 - 사용자의 재무 포트폴리오
-        int CashGap = currentCashRatio - standardPortfolio[0];
-        int BondGap = currentBondRatio - standardPortfolio[1];
-        int FundGap = currentFundRatio - standardPortfolio[2];
-        int EtcGap = currentEtcRatio - standardPortfolio[3];
+        int CashGap = standardPortfolio[0] - currentCashRatio;
+        int BondGap = standardPortfolio[1] - currentBondRatio;
+        int FundGap = standardPortfolio[2] - currentFundRatio;
+        int EtcGap = standardPortfolio[3] - currentEtcRatio;
         int[] diff = new int[]{CashGap, BondGap, FundGap, EtcGap};
 
         /**
