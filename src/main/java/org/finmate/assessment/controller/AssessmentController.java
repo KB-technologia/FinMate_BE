@@ -6,7 +6,6 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.finmate.assessment.dto.AssessmentDTO;
 import org.finmate.assessment.dto.AssessmentRequestDTO;
 import org.finmate.assessment.service.AssessmentService;
 import org.finmate.member.domain.CustomUser;
@@ -26,40 +25,32 @@ import java.util.List;
 @Api(tags = "투자 성향 진단 테스트 API")
 public class AssessmentController {
 
-
     private final AssessmentService assessmentService;
-
-    /**
-     * 질문 리스트 반환
-     */
-    @GetMapping("")
-    @ApiOperation(
-            value = "테스트 문항 조회",
-            notes = "스토리텔링 기반 진단 테스트 문항들을 반환합니다."
-    )
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "정상적으로 테스트 문항을 조회했습니다.",
-                    response = AssessmentDTO.class, responseContainer = "List"),
-            @ApiResponse(code = 500, message = "서버 오류")
-    })
-    public ResponseEntity<List<AssessmentDTO>> getList(){
-
-        return ResponseEntity.ok(assessmentService.loadAssessment());
-    }
 
     /**
      * 투자 성향 테스트 결과 user_info 반환 및 저장
      */
-    @PostMapping("")
+    @PostMapping
+    @ApiOperation(
+            value = "테스트 결과 저장",
+            notes = "사용자의 테스트 결과를 저장하고, 해당 결과를 기반으로 한 유저 정보를 반환합니다."
+    )
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "정상적으로 테스트 결과가 저장되었습니다.",
+                    response = UserInfoDTO.class),
+            @ApiResponse(code = 400, message = "잘못된 요청"),
+            @ApiResponse(code = 401, message = "인증 실패"),
+            @ApiResponse(code = 403, message = "권한 없음"),
+            @ApiResponse(code = 404, message = "리소스를 찾을 수 없음"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
     public ResponseEntity<UserInfoDTO> resultAssessment(
-            @ApiIgnore @AuthenticationPrincipal CustomUser customUser,
-            @RequestBody AssessmentRequestDTO requestDTO
+            @ApiIgnore @AuthenticationPrincipal final CustomUser customUser,
+            @RequestBody final AssessmentRequestDTO requestDTO
     ){
         Long userId = customUser.getUser().getId();
         List<Integer> choices = requestDTO.getChoices();
 
-        return ResponseEntity.of(assessmentService.resultAssessment(userId, choices));
+        return ResponseEntity.ok(assessmentService.resultAssessment(userId, choices));
     }
-
-
 }

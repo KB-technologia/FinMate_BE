@@ -6,13 +6,12 @@ import org.finmate.adapter.openai.OpenAiApi;
 import org.finmate.adapter.openai.dto.OpenAiResponseDTO;
 import org.finmate.common.util.PromptLoader;
 import org.finmate.exception.NotFoundException;
-import org.finmate.member.domain.AnimalCharacterVO;
+import org.finmate.character.domain.CharacterVO;
 import org.finmate.member.domain.CustomUser;
 import org.finmate.member.domain.UserInfoVO;
 import org.finmate.member.dto.UserInfoDTO;
-import org.finmate.member.mapper.AnimalCharacterMapper;
+import org.finmate.character.mapper.CharacterMapper;
 import org.finmate.member.mapper.UserInfoMapper;
-import org.finmate.member.mapper.UserMapper;
 import org.finmate.portfolio.domain.InvestmentProfile;
 import org.finmate.portfolio.domain.PortfolioVO;
 import org.finmate.portfolio.dto.PortfolioDTO;
@@ -45,7 +44,7 @@ public class ProductServiceImpl implements ProductService {
 
     private final PortfolioMapper portfolioMapper;
 
-    private final AnimalCharacterMapper animalCharacterMapper;
+    private final CharacterMapper characterMapper;
 
     private final OpenAiApi openAiApi;
     //TODO: 필터링 서비스 구현
@@ -83,7 +82,7 @@ public class ProductServiceImpl implements ProductService {
             UserInfoVO userInfo = userInfoMapper.getUserInfoById(userId);
             PortfolioVO userPortfolio = portfolioMapper.getPortfolio(userId);
             Long animalId = userInfo.getAnimalId();
-            AnimalCharacterVO animalCharacter = animalCharacterMapper.getCharacterById(animalId);
+            CharacterVO animalCharacter = characterMapper.getCharacterById(animalId);
             tone = userInfo.getProfileSummary() + animalCharacter.getAnimalName();
             userData += userInfo.toString();
             userData += userPortfolio.toString();
@@ -137,7 +136,7 @@ public class ProductServiceImpl implements ProductService {
 
         UserInfoVO userInfo = userInfoMapper.getUserInfoById(userId);
         Long animalId = userInfo.getAnimalId();
-        AnimalCharacterVO animalCharacter = animalCharacterMapper.getCharacterById(userId);
+        CharacterVO animalCharacter = characterMapper.getCharacterById(userId);
 
         String writer = userInfo.getProfileSummary();
         if (animalCharacter != null) {

@@ -19,7 +19,7 @@ import java.time.LocalDate;
 
 
 @RestController
-@RequestMapping("/api/member/portfolio")
+@RequestMapping("/api/portfolio")
 @RequiredArgsConstructor
 @Log4j2
 @Api(tags = "재무 포트폴리오 API")
