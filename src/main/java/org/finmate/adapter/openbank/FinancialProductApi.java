@@ -15,8 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -27,8 +25,8 @@ public class FinancialProductApi {
     private final ProductMapper productMapper;
 
 
-    //TODO:주기 설정 바꾸긴해야됨
-    @Scheduled(fixedDelay = 100000)
+
+    @Scheduled(cron = "0 0 1 ? * MON")
     @Transactional
     public void fetchFinancialProducts() {
         try (InputStream is = getClass().getResourceAsStream("/dummy/products/financial_products.json")) {
