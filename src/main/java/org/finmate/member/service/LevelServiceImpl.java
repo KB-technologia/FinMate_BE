@@ -47,15 +47,24 @@ public class LevelServiceImpl implements LevelService{
         int newLevel = totalExp / 1000;
         if (newLevel > maxLevel) newLevel = maxLevel;
 
-        int remainExp = totalExp % 1000;
+        // 기존 사용자의 값
+        int beforeLevel    = userInfoDTO.getUserLevel();
+        int oldTickets     = userInfoDTO.getCharacterTicket();
 
-        // 캐릭터권 지급 횟수 (예: 5, 10, 15...)
-        int oldTicketCount = userInfoDTO.getCharacterTicket();
-        int addTicketCount = (newLevel / 5) - (userInfoDTO.getUserLevel() / 5);
+        // 레벨별 캐릭터 변경권 횟수
+        int totalTicketBefore = beforeLevel / 5;
+        int totalTicketAfter  = newLevel  / 5;
+
+        // 새로 추가할 티켓 수
+        int addTicketCount = totalTicketAfter - totalTicketBefore;
         if (addTicketCount < 0) addTicketCount = 0;
 
-        int newTicketCount = oldTicketCount + addTicketCount;
+        // 최종 보유 티켓 수
+        int newTicketCount = oldTickets + addTicketCount;
+
+        // 지급 여부
         boolean characterTicketAdded = (addTicketCount > 0);
+
 
         // UserInfo DB에 저장
         userInfoDTO.setExp(totalExp);

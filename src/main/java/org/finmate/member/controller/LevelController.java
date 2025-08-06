@@ -10,6 +10,7 @@ import org.finmate.member.service.LevelService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,14 +24,17 @@ public class LevelController {
      * 사용자 레벨 조회
      */
     @GetMapping
-    public ResponseEntity<LevelResponseDTO> getLevel(@AuthenticationPrincipal CustomUser customUser){
+    public ResponseEntity<LevelResponseDTO> getLevel(@ApiIgnore @AuthenticationPrincipal CustomUser customUser){
 
         Long userId = customUser.getUser().getId();
         return ResponseEntity.ok(levelService.getLevel(userId));
     }
 
+    /**
+     * 사용자 경험치에 따른 레벨 증가 및 캐릭터 변경권 반환
+     */
     @PostMapping
-    public ResponseEntity<LevelResponseDTO> processLevelUp(@AuthenticationPrincipal CustomUser customUser, @RequestBody LevelRequestDTO dto){
+    public ResponseEntity<LevelResponseDTO> processLevelUp(@ApiIgnore @AuthenticationPrincipal CustomUser customUser, @RequestBody LevelRequestDTO dto){
 
         Long userId = customUser.getUser().getId();
         return ResponseEntity.ok(levelService.processLevelUp(userId, dto.getExp()));
