@@ -37,8 +37,12 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         UserLoginInfoDTO userInfo = UserLoginInfoDTO.of(userVO);
 
         UserAttendanceVO attendanceVO = userAttendanceMapper.getAttendanceByUserId(userVO.getId());
-        boolean rewardClaimed = attendanceVO.getRewardClaimed();
-        int consecutiveDays = attendanceVO.getConsecutiveDays();
+        boolean rewardClaimed = false;
+        int consecutiveDays = 0;
+        if (attendanceVO != null) {
+            rewardClaimed = attendanceVO.getRewardClaimed();
+            consecutiveDays = attendanceVO.getConsecutiveDays();
+        }
         AuthResultDTO result = new AuthResultDTO(token, userInfo, false, rewardClaimed, consecutiveDays);
 
         JsonResponse.send(response,result);
