@@ -66,6 +66,12 @@ public class RootConfig {
         config.setUsername(username);
         config.setPassword(password);
 
+        config.setMaximumPoolSize(5);    // 동시에 유지할 최대 커넥션 수 줄이기
+        config.setMinimumIdle(1);        // 최소 idle 커넥션 줄이기
+        config.setIdleTimeout(300000);   // 5분 동안 사용 안 하면 정리
+        config.setMaxLifetime(900000);   // 커넥션 최대 생존 시간 15분
+        config.setConnectionTimeout(30000); // 커넥션 요청 최대 대기 시간 30초
+
         HikariDataSource dataSource = new HikariDataSource(config);
         return dataSource;
     }
