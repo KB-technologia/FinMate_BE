@@ -7,5 +7,5 @@ public interface LevelService {
     public LevelResponseDTO getLevel(Long userId);
 
     // 캐릭터 경험치 증가 POST
-    public LevelResponseDTO processLevelUp(Long userId, int gainedExp);
+    public LevelResponseDTO processLevelUp(Long userId, Integer gainedExp);
 }

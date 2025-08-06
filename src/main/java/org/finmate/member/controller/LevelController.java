@@ -9,10 +9,7 @@ import org.finmate.member.mapper.UserInfoMapper;
 import org.finmate.member.service.LevelService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,7 +30,7 @@ public class LevelController {
     }
 
     @PostMapping
-    public ResponseEntity<LevelResponseDTO> processLevelUp(@AuthenticationPrincipal CustomUser customUser, LevelRequestDTO dto){
+    public ResponseEntity<LevelResponseDTO> processLevelUp(@AuthenticationPrincipal CustomUser customUser, @RequestBody LevelRequestDTO dto){
 
         Long userId = customUser.getUser().getId();
         return ResponseEntity.ok(levelService.processLevelUp(userId, dto.getExp()));

@@ -22,38 +22,24 @@ public class LevelServiceImpl implements LevelService{
     public LevelResponseDTO getLevel(Long userId) {
 
         UserInfoDTO userInfoDTO = UserInfoDTO.from(userInfoMapper.getUserInfoById(userId));
-        if(userInfoDTO == null) {
-            // user_id로 select가 안 된 상태
-            log.info("userInfoDTO = {}", userInfoDTO);
-            throw new RuntimeException("userInfoDTO is null!");
-        }
-        if(userInfoDTO.getUserLevel() == null) {
-            // 매핑은 됐으나 userLevel이 null
-            log.info("userInfoDTO = {}", userInfoDTO);
-            throw new RuntimeException("userLevel is null!");
-        }
+
         return LevelResponseDTO
                 .builder()
                 .currentLevel(userInfoDTO.getUserLevel())
-                .totalExp(userInfoDTO.getUserLevel())
+                .totalExp(userInfoDTO.getExp())
                 .characterTicketAdded(false)
                 .characterTicket(userInfoDTO.getCharacterTicket()).build();
     }
 
     @Override
-    public LevelResponseDTO processLevelUp(Long userId, int gainedExp) {
+    public LevelResponseDTO processLevelUp(Long userId, Integer gainedExp) {
 
         UserInfoDTO userInfoDTO = UserInfoDTO.from(userInfoMapper.getUserInfoById(userId));
-        if(userInfoDTO == null) {
-            // user_id로 select가 안 된 상태
-            log.info("userInfoDTO = {}", userInfoDTO);
-            throw new RuntimeException("userInfoDTO is null!");
+
+        if(gainedExp == null) {
+            throw new IllegalArgumentException("경험치(exp) 값은 필수입니다!");
         }
-        if(userInfoDTO.getUserLevel() == null) {
-            // 매핑은 됐으나 userLevel이 null
-            log.info("userInfoDTO = {}", userInfoDTO);
-            throw new RuntimeException("userLevel is null!");
-        }
+
         int maxLevel = 30;
         int totalExp = userInfoDTO.getExp() + gainedExp;
 
