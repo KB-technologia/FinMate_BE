@@ -14,11 +14,11 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ApiModel(value = "출석체크 DTO", description = "현재 유저의 출석 체크 정보입니다.")
+@ApiModel(value = "사용자 출석 정보 DTO", description = "현재 유저의 출석 체크 정보입니다.")
 public class UserAttendanceDTO {
-    @ApiModelProperty(value = "")
+    @ApiModelProperty(value = "첫 로그인인지 확인(출석을 했는지 안했는지 확인)")
     private Boolean rewardClaimed;
-    @ApiModelProperty(value = "")
+    @ApiModelProperty(value = "최대연속 출석일")
     private Integer consecutiveDays;
 
     public static UserAttendanceDTO from(UserAttendanceVO userAttendanceVO) {
