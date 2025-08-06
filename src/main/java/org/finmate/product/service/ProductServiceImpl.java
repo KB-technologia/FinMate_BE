@@ -121,6 +121,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<ProductReviewDTO> getMyReviewsByType(Long userId, String productType) {
+        return productMapper.getProductReviewByUserIdAndType(userId, productType)
+                .stream()
+                .map(ProductReviewDTO::from)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public Long insertProductReview(ProductReviewDTO productReviewDTO, Long productId, Long userId) {
         ProductReviewVO existingReview = productMapper.getProductReviewByProductIdAndUserId(productId, userId);
         if (existingReview != null) {
@@ -128,11 +136,19 @@ public class ProductServiceImpl implements ProductService {
         }
 
         UserInfoVO userInfo = userInfoMapper.getUserInfoById(userId);
+        Long animalId = userInfo.getAnimalId();
         AnimalCharacterVO animalCharacter = animalCharacterMapper.getCharacterById(userId);
+
+        String writer = userInfo.getProfileSummary();
+        if (animalCharacter != null) {
+            writer += " " + animalCharacter.getAnimalName();
+        } else {
+            writer += " (캐릭터 없음)";
+        }
 
         productReviewDTO.setProductId(productId);
         productReviewDTO.setUserId(userId);
-        productReviewDTO.setWriter(userInfo.getProfileSummary() + " " + animalCharacter.getAnimalName());
+        productReviewDTO.setWriter(writer);
 
         ProductReviewVO vo = productReviewDTO.toVO();
 
