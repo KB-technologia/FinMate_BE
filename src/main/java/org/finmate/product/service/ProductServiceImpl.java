@@ -210,12 +210,17 @@ public class ProductServiceImpl implements ProductService {
 
         // 거리가 짧은 순으로 정렬
         return allProducts.stream()
-                .sorted(Comparator.comparingDouble(product -> getDistance(product, portfolioDTO, userInfoDTO)))
+                .sorted(
+                        Comparator.<ProductDTO<?>>comparingDouble(product -> getDistance(product, portfolioDTO, userInfoDTO))
+                                .thenComparingDouble(ProductDTO::getExpectedReturn)
+                                .thenComparing(ProductDTO::getCreatedAt, Comparator.reverseOrder())
+                )
 //                .peek(product -> {
 //                    double distance = getDistance(product, portfolioDTO, userInfoDTO);
 //                    log.info("--------------------------------Product: {}, Distance: {}", product.getName(), distance);
 //                })
                 .collect(Collectors.toList());
+
     }
 
     // 거리 구하는 메소드
@@ -232,6 +237,11 @@ public class ProductServiceImpl implements ProductService {
         Double minFinanceScore = productDTO.getMinFinanceScore() - userInfoDTO.getFinanceScore();
 
         /**
+         * 사용자의 투자 성향 요약
+         */
+        String userProfileSummary = userInfoDTO.getProfileSummary();
+
+        /**
          * 회원 가입 설문
          * 상품이 예적금이면 회원가입 필터 적용
          */
@@ -241,7 +251,7 @@ public class ProductServiceImpl implements ProductService {
          * 이상적인 재무 포트폴리오 - 사용자의 재무 포트폴리오
          */
         // 사용자의 이상적인 포트폴리오 비율
-        int[] standardPortfolio = getRatio(portfolioDTO.getInvestmentProfile());
+        int[] standardPortfolio = getRatio(userProfileSummary);
 
         // 사용자의 현재 재무 포트폴리오 비율
         int currentCashRatio = (int) ((portfolioDTO.getCash() + portfolioDTO.getDeposit() + portfolioDTO.getSavings()) / portfolioDTO.getTotalAssets() * 100);
@@ -255,11 +265,6 @@ public class ProductServiceImpl implements ProductService {
         int FundGap = standardPortfolio[2] - currentFundRatio;
         int EtcGap = standardPortfolio[3] - currentEtcRatio;
         int[] diff = new int[]{CashGap, BondGap, FundGap, EtcGap};
-
-        /**
-         * 사용자의 투자 성향 요약
-         */
-        String userProfileSummary = userInfoDTO.getProfileSummary();
 
 
         /**
@@ -372,17 +377,46 @@ public class ProductServiceImpl implements ProductService {
         return Period.between(birth, LocalDate.now()).getYears();
     }
 
-    // 이상적인 현금/예적금, 채권, 주식/펀드, 기타 비율 정의
-    public static final Map<InvestmentProfile, int[]> standardPortfolio = Map.of(
-            InvestmentProfile.CONSERVATIVE, new int[]{80, 20, 0, 0},  // 안전형
-            InvestmentProfile.CAUTIOUS,     new int[]{50, 30, 20, 0}, // 안정추구형
-            InvestmentProfile.BALANCED,     new int[]{20, 40, 40, 0}, // 위험중립형
-            InvestmentProfile.DYNAMIC,      new int[]{10, 20, 70, 0}, // 적극투자형
-            InvestmentProfile.AGGRESSIVE,   new int[]{0, 10, 80, 10}  // 공격투자형
-    );
+    // 프로필별 비율 상수
+    private static final int[] STABLE    = {80, 20, 0, 0};   // 안전형
+    private static final int[] DELICATE  = {50, 30, 20, 0};  // 안정추구형
+    private static final int[] NEUTRAL   = {20, 40, 40, 0};  // 위험중립형
+    private static final int[] ACTIVE    = {10, 20, 70, 0};  // 적극투자형
+    private static final int[] OFFENSIVE = {0, 10, 80, 10};  // 공격투자형
 
-    // 성향별 이상적인 포트폴리오 비율 가져오는 메소드
-    public static int[] getRatio(InvestmentProfile profile) {
-        return standardPortfolio.get(profile);
+    // 수식어 → 비율 매핑
+    private static final Map<String, int[]> DESCRIPTOR_TO_RATIO;
+    static {
+        Map<String, int[]> m = new HashMap<>();
+        // STABLE 그룹
+        for (String desc : new String[]{"소심한", "느긋한"}) {
+            m.put(desc, STABLE);
+        }
+        // DELICATE 그룹
+        for (String desc : new String[]{"신중한", "섬세한"}) {
+            m.put(desc, DELICATE);
+        }
+        // NEUTRAL 그룹
+        for (String desc : new String[]{"현실적인", "전략적인"}) {
+            m.put(desc, NEUTRAL);
+        }
+        // ACTIVE 그룹
+        for (String desc : new String[]{"도전적인", "과감한"}) {
+            m.put(desc, ACTIVE);
+        }
+        // OFFENSIVE 그룹
+        for (String desc : new String[]{"용맹한", "에너지 넘치는"}) {
+            m.put(desc, OFFENSIVE);
+        }
+
+        // 해당 Map 을 불변으로 만듦.
+        DESCRIPTOR_TO_RATIO = Collections.unmodifiableMap(m);
+    }
+
+    // 사용자 성향에 맞는 이상적인 포트폴리오 비율 반환
+    public static int[] getRatio(String userProfileSummary) {
+
+        // userProfileSummary null 이면 기본값으로 STABLE 반환
+        return DESCRIPTOR_TO_RATIO.getOrDefault(userProfileSummary, STABLE);
     }
 }
