@@ -32,12 +32,7 @@ public class UserAttendanceController {
     )
     @ApiResponses({
             @ApiResponse(code = 200, message = "정상적으로 데이터가 반환되었습니다.",
-                    response = UserAttendanceDTO.class),
-            @ApiResponse(code = 400, message = "잘못된 요청"),
-            @ApiResponse(code = 401, message = "인증 실패"),
-            @ApiResponse(code = 403, message = "권한 없음"),
-            @ApiResponse(code = 404, message = "리소스를 찾을 수 없음"),
-            @ApiResponse(code = 500, message = "서버 오류")
+                    response = UserAttendanceDTO.class)
     })
     public ResponseEntity<UserAttendanceDTO> getUserAttendance(
             @ApiIgnore @AuthenticationPrincipal final CustomUser customUser
@@ -52,12 +47,7 @@ public class UserAttendanceController {
             notes = "사용자의 출석 체크를 진행합니다."
     )
     @ApiResponses({
-            @ApiResponse(code = 200, message = "정상적으로 출석 체크가 진행되었습니다."),
-            @ApiResponse(code = 400, message = "잘못된 요청"),
-            @ApiResponse(code = 401, message = "인증 실패"),
-            @ApiResponse(code = 403, message = "권한 없음"),
-            @ApiResponse(code = 404, message = "리소스를 찾을 수 없음"),
-            @ApiResponse(code = 500, message = "서버 오류")
+            @ApiResponse(code = 200, message = "정상적으로 출석 체크가 진행되었습니다.")
     })
     public ResponseEntity<Void> checkInAttendance(
             @ApiIgnore @AuthenticationPrincipal final CustomUser customUser

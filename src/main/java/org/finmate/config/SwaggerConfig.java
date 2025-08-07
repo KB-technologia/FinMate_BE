@@ -1,13 +1,17 @@
 package org.finmate.config;
 
 
+import io.swagger.models.Response;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.builders.ResponseMessageBuilder;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.ResponseMessage;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -33,9 +37,10 @@ public class SwaggerConfig {
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
-                // JWT 인증
-//                .securityContexts(List.of(this.securityContext())) // SecurityContext 설정
-//                .securitySchemes(List.of(this.apiKey())) // ApiKey 설정
+                .globalResponseMessage(RequestMethod.GET,defaultResponses())
+                .globalResponseMessage(RequestMethod.POST,defaultResponses())
+                .globalResponseMessage(RequestMethod.PATCH,defaultResponses())
+                .globalResponseMessage(RequestMethod.DELETE,defaultResponses())
                 .select()
                 .apis(RequestHandlerSelectors.withClassAnnotation(RestController.class))
                 .paths(PathSelectors.any())
@@ -43,20 +48,15 @@ public class SwaggerConfig {
                 .apiInfo(apiInfo());
     }
 
-//    private SecurityContext securityContext() {
-//        return SecurityContext.builder()
-//                .securityReferences(defaultAuth())
-//                .build();
-//    }
-//    private List<SecurityReference> defaultAuth() {
-//        AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
-//        AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
-//        authorizationScopes[0] = authorizationScope;
-//        return List.of(new SecurityReference("Authorization", authorizationScopes));
-//    }
-//    // ApiKey 정의
-//    private ApiKey apiKey() {
-//        return new ApiKey("Authorization", "Authorization", "header");
-//    }
+    private List<ResponseMessage> defaultResponses() {
+        return List.of(
+                new ResponseMessageBuilder().code(400).message("잘못된 요청").build(),
+                new ResponseMessageBuilder().code(401).message("인증 실패").build(),
+                new ResponseMessageBuilder().code(403).message("권한 없음").build(),
+                new ResponseMessageBuilder().code(404).message("리소스를 찾을 수 없음").build(),
+                new ResponseMessageBuilder().code(500).message("서버 오류").build()
+        );
+    }
+
 
 }

@@ -34,12 +34,7 @@ public class CharacterController {
     )
     @ApiResponses({
             @ApiResponse(code = 200, message = "정상적으로 캐릭터를 조회했습니다.",
-                    response = CharacterResponseDTO.class),
-            @ApiResponse(code = 400, message = "잘못된 요청"),
-            @ApiResponse(code = 401, message = "인증 실패"),
-            @ApiResponse(code = 403, message = "권한 없음"),
-            @ApiResponse(code = 404, message = "리소스를 찾을 수 없음"),
-            @ApiResponse(code = 500, message = "서버 오류")
+                    response = CharacterResponseDTO.class)
     })
     public ResponseEntity<CharacterResponseDTO> getCharacter(@ApiIgnore @AuthenticationPrincipal final CustomUser customUser){
         return ResponseEntity.ok(characterService.getCharacterById(customUser.getUser().getId()));
@@ -55,12 +50,7 @@ public class CharacterController {
     )
     @ApiResponses({
             @ApiResponse(code = 200, message = "정상적으로 캐릭터를 변경했습니다.",
-                    response = CharacterResponseDTO.class),
-            @ApiResponse(code = 400, message = "잘못된 요청"),
-            @ApiResponse(code = 401, message = "인증 실패"),
-            @ApiResponse(code = 403, message = "권한 없음"),
-            @ApiResponse(code = 404, message = "리소스를 찾을 수 없음"),
-            @ApiResponse(code = 500, message = "서버 오류")
+                    response = CharacterResponseDTO.class)
     })
     public ResponseEntity<CharacterResponseDTO> changeCharacter(
             @ApiIgnore @AuthenticationPrincipal final CustomUser customUser,
