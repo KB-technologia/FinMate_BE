@@ -51,10 +51,7 @@ public class FavoriteController {
     }
 
     @ApiOperation(value = "즐겨찾기 삭제", notes = "즐겨찾기 ID로 등록된 항목을 삭제합니다.")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "즐겨찾기 삭제 성공"),
-            @ApiResponse(code = 404, message = "즐겨찾기 항목을 찾을 수 없음")
-    })
+    @ApiResponse(code = 200, message = "즐겨찾기 삭제 성공")
     @DeleteMapping("/{productId}")
     public ResponseEntity<Void> deleteFavorite(
             @ApiIgnore @AuthenticationPrincipal final CustomUser user,
