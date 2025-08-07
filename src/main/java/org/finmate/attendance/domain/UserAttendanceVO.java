@@ -15,4 +15,5 @@ public class UserAttendanceVO {
     private final Integer consecutiveDays;
     private final Boolean rewardClaimed;
     private final LocalDateTime updatedAt;
+    private final Boolean quizSolved;
 }
