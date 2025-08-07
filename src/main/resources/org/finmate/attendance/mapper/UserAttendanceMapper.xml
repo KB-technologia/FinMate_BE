@@ -4,6 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="org.finmate.attendance.mapper.UserAttendanceMapper">
+
     <insert id="checkInAttendance">
         INSERT INTO user_attendance
         (user_id, consecutive_days, reward_claimed)
@@ -23,6 +24,17 @@
 
     <update id="resetAllRewards">
         UPDATE user_attendance
-        SET reward_claimed = FALSE
+        SET reward_claimed = FALSE,
+            quiz_solved = FALSE
+    </update>
+
+    <select id="getQuizSolved" resultType="Boolean">
+        SELECT quiz_solved FROM user_attendance WHERE user_id = #{userId}
+    </select>
+
+    <update id="updateQuizSolved">
+        UPDATE user_attendance
+        SET quiz_solved = true
+        WHERE user_id = #{userId}
     </update>
 </mapper>
