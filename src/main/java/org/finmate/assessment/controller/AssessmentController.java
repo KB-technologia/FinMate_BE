@@ -3,7 +3,6 @@ package org.finmate.assessment.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.finmate.assessment.dto.AssessmentRequestDTO;
@@ -35,15 +34,7 @@ public class AssessmentController {
             value = "테스트 결과 저장",
             notes = "사용자의 테스트 결과를 저장하고, 해당 결과를 기반으로 한 유저 정보를 반환합니다."
     )
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "정상적으로 테스트 결과가 저장되었습니다.",
-                    response = UserInfoDTO.class),
-            @ApiResponse(code = 400, message = "잘못된 요청"),
-            @ApiResponse(code = 401, message = "인증 실패"),
-            @ApiResponse(code = 403, message = "권한 없음"),
-            @ApiResponse(code = 404, message = "리소스를 찾을 수 없음"),
-            @ApiResponse(code = 500, message = "서버 오류")
-    })
+    @ApiResponse(code = 200, message = "정상적으로 테스트 결과가 저장되었습니다.", response = UserInfoDTO.class)
     public ResponseEntity<UserInfoDTO> resultAssessment(
             @ApiIgnore @AuthenticationPrincipal final CustomUser customUser,
             @RequestBody final AssessmentRequestDTO requestDTO

@@ -21,7 +21,7 @@ public class CharacterServiceImpl implements CharacterService {
 
     // 캐릭터 조회
     @Override
-    public Optional<CharacterResponseDTO> getCharacterById(Long userId) {
+    public CharacterResponseDTO getCharacterById(final Long userId) {
 
         // 사용자 레벨 추출
         int userLevel = userInfoMapper.getUserInfoById(userId).getUserLevel();
@@ -30,14 +30,15 @@ public class CharacterServiceImpl implements CharacterService {
         // 사용자 레벨에 맞는 이미지 추출
         String userCharacterImage = getUserCharacterImage(userLevel, userCharacter);
 
-        return Optional.ofNullable(CharacterResponseDTO.from(userCharacter.getAnimalName(), userCharacterImage));
+        //TODO: 예외처리 통일
+        return CharacterResponseDTO.from(userCharacter.getAnimalName(), userCharacterImage);
     }
 
 
     // 캐릭터 변경
     @Transactional
     @Override
-    public Optional<CharacterResponseDTO> changeCharacterById(Long userId, Long characterId) {
+    public CharacterResponseDTO changeCharacterById(final Long userId, final Long characterId) {
 
         // 유저 정보 불러와서 DTO 변환(VO 에는 setter 없기 때문에 DTO 로 변환)
         UserInfoDTO userDTO = UserInfoDTO.from(userInfoMapper.getUserInfoById(userId));
@@ -56,13 +57,14 @@ public class CharacterServiceImpl implements CharacterService {
             String userCharacterImage = getUserCharacterImage(userDTO.getUserLevel(), userCharacter);
 
             // 캐릭터 DTO 반환
-            return Optional.ofNullable(CharacterResponseDTO.from(userCharacter.getAnimalName(), userCharacterImage));
+            return CharacterResponseDTO.from(userCharacter.getAnimalName(), userCharacterImage);
         }else{
+            //TODO: 예외처리 통일
             throw new IllegalStateException("캐릭터 변경권이 부족합니다.");
         }
     }
 
-    private static String getUserCharacterImage(int userLevel, CharacterVO userCharacter) {
+    private static String getUserCharacterImage(final int userLevel, final CharacterVO userCharacter) {
 
         String userCharacterImage;
         if (userLevel >= 30) {

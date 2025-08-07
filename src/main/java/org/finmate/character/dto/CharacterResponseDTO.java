@@ -20,7 +20,7 @@ public class CharacterResponseDTO {
     @ApiModelProperty(value = "동물 캐릭터 이미지 경로")
     private String animalImage;
 
-    public static CharacterResponseDTO from(String userCharacterName, String userCharacterImage) {
+    public static CharacterResponseDTO from(final String userCharacterName, final String userCharacterImage) {
         return CharacterResponseDTO.builder()
                 .animalName(userCharacterName)
                 .animalImage(userCharacterImage)

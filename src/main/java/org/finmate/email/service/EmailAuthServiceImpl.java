@@ -23,7 +23,7 @@ public class EmailAuthServiceImpl implements EmailAuthService {
     //이메일 인증 코드 전송 - 회원가입 / 마이페이지 에서 공통 사용
     @Override
     @Transactional
-    public String sendAuthCode(String email) {
+    public String sendAuthCode(final String email) {
         String uuid = UUID.randomUUID().toString();
         String authCode = String.valueOf((int)(Math.random() * 900000) + 100000); // 6자리
 
@@ -36,6 +36,7 @@ public class EmailAuthServiceImpl implements EmailAuthService {
                 .isVerified(false)
                 .build();
 
+        // TODO: 예외처리하기
         emailAuthMapper.insertAuthCode(auth);
 
         try {
@@ -48,13 +49,14 @@ public class EmailAuthServiceImpl implements EmailAuthService {
 
             mailSender.send(message);
         } catch (MessagingException e) {
+            //TODO: 예외처리 통일하기
             throw new RuntimeException("이메일 전송 실패", e);
         }
 
         return uuid;
     }
 
-    private String buildEmailHtml(String authCode) {
+    private String buildEmailHtml(final String authCode) {
         return """
     <html>
     <body style="font-family: 'Arial'; background-color: #f2f4f6; padding: 40px;">
@@ -85,12 +87,13 @@ public class EmailAuthServiceImpl implements EmailAuthService {
     // 인증 코드 검증 - 회원가입 / 마이페이지에서 공통 사용
     @Override
     @Transactional
-    public boolean verifyCode(String uuid, String inputCode) {
+    public boolean verifyCode(final String uuid, final String inputCode) {
         EmailAuthVO auth = emailAuthMapper.findByUuid(uuid);
         if (auth == null || auth.getIsVerified()) return false;
         if (auth.getExpiredAt().isBefore(LocalDateTime.now())) return false; //3분 이내에 응답
         if (!auth.getAuthCode().equals(inputCode)) return false; //인증코드랑 같은지
 
+        //TODO: 예외처리 필요
         emailAuthMapper.updateVerified(uuid);
         return true;
     }

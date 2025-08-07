@@ -19,13 +19,10 @@ public class EmailAuthController {
     private final EmailAuthService emailAuthService;
 
     @ApiOperation(value = "이메일 인증 요청", notes = "사용자의 이메일로 인증 코드를 전송합니다.")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "인증코드 발송 성공"),
-            @ApiResponse(code = 500, message = "서버 오류")
-    })
-    @PostMapping(value = "/authentication")
+    @ApiResponse(code = 200, message = "인증코드 발송 성공", response = EmailAuthInitResponseDTO.class)
+    @PostMapping( "/authentication")
     public ResponseEntity<EmailAuthInitResponseDTO> sendAuthCode(
-            @RequestBody EmailRequestDTO request
+            @RequestBody final EmailRequestDTO request
     ) {
         String uuid = emailAuthService.sendAuthCode(request.getEmail());
         EmailAuthInitResponseDTO response = new EmailAuthInitResponseDTO(uuid);
@@ -33,13 +30,10 @@ public class EmailAuthController {
     }
 
     @ApiOperation(value = "이메일 인증 코드 검증", notes = "UUID와 인증 코드를 통해 이메일 인증을 검증합니다.")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "인증 성공 여부 반환"),
-            @ApiResponse(code = 500, message = "서버 오류")
-    })
-    @PostMapping(value = "/authentication/verify", produces = "application/json;charset=UTF-8")
+    @ApiResponse(code = 200, message = "인증 성공 여부 반환", response = Boolean.class)
+    @PostMapping( "/authentication/verify")
     public ResponseEntity<Boolean> verifyAuthCode(
-            @RequestBody EmailVerifyRequestDTO request
+            @RequestBody final EmailVerifyRequestDTO request
     ) {
         boolean result = emailAuthService.verifyCode(request.getRequestId(), request.getAuthCode());
         return ResponseEntity.ok(result);

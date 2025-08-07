@@ -7,15 +7,14 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
 public class CharacterVO {
 
-    private Long animalId;
-    private String animalName;
+    private final Long animalId;
+    private final String animalName;
 
-    private String animalImage1;
-    private String animalImage2;
-    private String animalImage3;
-    private String animalImage4;
+    private final String animalImage1;
+    private final String animalImage2;
+    private final String animalImage3;
+    private final String animalImage4;
 }

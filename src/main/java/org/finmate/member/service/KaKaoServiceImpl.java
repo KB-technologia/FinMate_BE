@@ -30,6 +30,7 @@ import java.util.List;
 public class KaKaoServiceImpl implements KakaoService{
 
     private final JwtProcessor jwtProcessor;
+
     @Value("${kakao.client-id}")
     private String CLIENT_ID;
 
@@ -43,7 +44,7 @@ public class KaKaoServiceImpl implements KakaoService{
     // 1. 인가 코드로 access token 받기
     @Override
     @Transactional
-    public String getAccessToken(String code){
+    public String getAccessToken(final String code){
         String url = "https://kauth.kakao.com/oauth/token";
 
         HttpHeaders headers = new HttpHeaders();
@@ -75,7 +76,7 @@ public class KaKaoServiceImpl implements KakaoService{
     // 2. access token으로 사용자 정보 요청
     @Override
     @Transactional
-    public KakaoUser getUserInfo(String accessToken){
+    public KakaoUser getUserInfo(final String accessToken){
         String url = "https://kapi.kakao.com/v2/user/me";
 
         HttpHeaders headers = new HttpHeaders();
@@ -119,7 +120,7 @@ public class KaKaoServiceImpl implements KakaoService{
 
     @Override
     @Transactional
-    public AuthResultDTO getOrCreateUserAndBuildAuthDTO(KakaoUser kakaoUser){
+    public AuthResultDTO getOrCreateUserAndBuildAuthDTO(final KakaoUser kakaoUser){
         String accountId = "kakao_" + kakaoUser.getId();
         UserVO user = userMapper.selectByAccountId(accountId);
 
@@ -138,8 +139,14 @@ public class KaKaoServiceImpl implements KakaoService{
         }
         else {
             UserAttendanceVO attendanceVO = userAttendanceMapper.getAttendanceByUserId(user.getId());
-            rewardClaimed = attendanceVO.getRewardClaimed();
-            consecutiveDays = attendanceVO.getConsecutiveDays();
+            if(attendanceVO != null){
+                rewardClaimed = attendanceVO.getRewardClaimed();
+                consecutiveDays = attendanceVO.getConsecutiveDays();
+            }
+            else {
+                rewardClaimed = false;
+                consecutiveDays = 0;
+            }
         }
 
         String token = jwtProcessor.generateToken(user.getAccountId());

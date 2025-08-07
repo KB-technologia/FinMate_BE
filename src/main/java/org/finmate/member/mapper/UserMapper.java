@@ -25,7 +25,7 @@ public interface UserMapper {
 
     boolean existsByAccountId(@Param("accountId") String accountId);
 
-    FindAccountIdResponseDTO findAccountIdByEmail(String email);
+    UserVO findAccountIdByEmail(String email);
     boolean existsByAccountIdAndEmail(@Param("accountId") String accountId, @Param("email") String email);
     int updatePassword(@Param("accountId") String accountId, @Param("newPassword") String newPassword);
 }
