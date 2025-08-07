@@ -7,5 +7,5 @@ import java.util.List;
 import java.util.Optional;
 
 public interface AssessmentService {
-    UserInfoDTO resultAssessment(final Long userId, final List<Integer> choice);
+    UserInfoDTO resultAssessment(Long userId, List<Integer> choice);
 }

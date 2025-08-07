@@ -21,7 +21,7 @@ public class UserAttendanceDTO {
     @ApiModelProperty(value = "최대연속 출석일")
     private Integer consecutiveDays;
 
-    public static UserAttendanceDTO from(UserAttendanceVO userAttendanceVO) {
+    public static UserAttendanceDTO from(final UserAttendanceVO userAttendanceVO) {
         return UserAttendanceDTO.builder()
                 .consecutiveDays(userAttendanceVO.getConsecutiveDays())
                 .rewardClaimed(userAttendanceVO.getRewardClaimed())
