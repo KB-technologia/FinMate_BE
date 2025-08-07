@@ -215,10 +215,10 @@ public class ProductServiceImpl implements ProductService {
                                 .thenComparingDouble(ProductDTO::getExpectedReturn)
                                 .thenComparing(ProductDTO::getCreatedAt, Comparator.reverseOrder())
                 )
-                .peek(product -> {
-                    double distance = getDistance(product, portfolioDTO, userInfoDTO);
-                    log.info("--------------------------------Product: {}, Distance: {}", product.getName(), distance);
-                })
+//                .peek(product -> {
+//                    double distance = getDistance(product, portfolioDTO, userInfoDTO);
+//                    log.info("--------------------------------Product: {}, Distance: {}", product.getName(), distance);
+//                })
                 .collect(Collectors.toList());
 
     }
