@@ -6,11 +6,10 @@
 <mapper namespace="org.finmate.portfolio.mapper.PortfolioMapper">
     <insert id="insertPortfolio">
         INSERT INTO financial_portfolio (
-            user_id, total_assets, investment_profile, cash, deposit,
+            user_id, total_assets, cash, deposit,
             savings, bond, fund, stock, other
         ) VALUES (
-                     #{userId}, #{totalAssets},
-                     #{investmentProfile}, #{cash}, #{deposit},
+                     #{userId}, #{totalAssets}, #{cash}, #{deposit},
                      #{savings}, #{bond}, #{fund}, #{stock}, #{other}
                  )
     </insert>
@@ -33,7 +32,6 @@
     <update id="updatePortfolio">
         UPDATE financial_portfolio SET
                                        total_assets = #{totalAssets},
-                                       investment_profile = #{investmentProfile},
                                        cash = #{cash},
                                        deposit= #{deposit},
                                        savings = #{savings},

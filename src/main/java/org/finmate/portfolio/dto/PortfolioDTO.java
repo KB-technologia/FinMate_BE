@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.finmate.portfolio.domain.InvestmentProfile;
 import org.finmate.portfolio.domain.PortfolioVO;
 
 import java.time.LocalDateTime;
@@ -26,10 +25,6 @@ public class PortfolioDTO {
 
     @ApiModelProperty(value = "사용자 자산 총액", example="50000000.0")
     private Double totalAssets;
-
-
-    @ApiModelProperty(value = "사용자 투자 성향", example = "CONSERVATIVE")
-    private InvestmentProfile investmentProfile;
 
     @ApiModelProperty(value = "현금", example = "10000000.0")
     private Double cash;
@@ -60,7 +55,6 @@ public class PortfolioDTO {
                 .id(vo.getId())
                 .userId(vo.getUserId())
                 .totalAssets(vo.getTotalAssets())
-                .investmentProfile(vo.getInvestmentProfile())
                 .cash(vo.getCash())
                 .deposit(vo.getDeposit())
                 .savings(vo.getSavings())
@@ -77,7 +71,6 @@ public class PortfolioDTO {
                 .id(id)
                 .userId(userId)
                 .totalAssets(totalAssets)
-                .investmentProfile(investmentProfile)
                 .cash(cash)
                 .deposit(deposit)
                 .savings(savings)
@@ -88,30 +81,5 @@ public class PortfolioDTO {
                 .build();
     }
 
-    /**
-     * InvestmentProfile(투자성향) 계산 & 저장된 자산의 총합을 구하는 메서드 (로직 수정 필요)
-     */
-    public void update() {
-        double deposit = this.deposit == null ? 0.0 : this.deposit;
-        double savings = this.savings == null ? 0.0 : this.savings;
-        double bond = this.bond == null ? 0.0 : this.bond;
-        double fund = this.fund == null ? 0.0 : this.fund;
-        double stock = this.stock == null ? 0.0 : this.stock;
-        double cash = this.cash == null ? 0.0 : this.cash;
-        double other = this.other == null ? 0.0 : this.other;
 
-        this.totalAssets = deposit + savings + bond + fund + stock + cash + other;
-
-        double riskAssets = stock + fund + 0.5 * other;
-        double safeAssets = bond + cash + 0.5 * other;
-
-        double riskAssetsRatio = totalAssets > 0 ? (riskAssets / totalAssets) : 0;
-        double safeAssetsRatio = totalAssets > 0 ? (safeAssets / totalAssets) : 0;
-
-        if (riskAssetsRatio >= 0.6 && safeAssetsRatio <= 0.4) this.investmentProfile = InvestmentProfile.AGGRESSIVE;
-        else if (riskAssetsRatio >= 0.4 && riskAssetsRatio < 0.6 && safeAssetsRatio <= 0.2) this.investmentProfile = InvestmentProfile.DYNAMIC;
-        else if (riskAssetsRatio >= 0.3 && riskAssetsRatio <= 0.5 && safeAssetsRatio <= 0.4) this.investmentProfile = InvestmentProfile.BALANCED;
-        else if (riskAssetsRatio >= 0.2 && riskAssetsRatio < 0.4 && safeAssetsRatio >= 0.4) this.investmentProfile = InvestmentProfile.CAUTIOUS;
-        else this.investmentProfile = InvestmentProfile.CONSERVATIVE;
-    }
 }
