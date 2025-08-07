@@ -12,7 +12,6 @@ import org.finmate.member.domain.UserInfoVO;
 import org.finmate.member.dto.UserInfoDTO;
 import org.finmate.character.mapper.CharacterMapper;
 import org.finmate.member.mapper.UserInfoMapper;
-import org.finmate.portfolio.domain.InvestmentProfile;
 import org.finmate.portfolio.domain.PortfolioVO;
 import org.finmate.portfolio.dto.PortfolioDTO;
 import org.finmate.portfolio.mapper.PortfolioMapper;
