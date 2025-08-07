@@ -9,9 +9,11 @@ import org.finmate.portfolio.domain.PortfolioVO;
 import org.finmate.portfolio.dto.PortfolioDTO;
 import org.finmate.portfolio.dto.PortfolioRequestDTO;
 import org.finmate.portfolio.mapper.PortfolioMapper;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 /**
  * 포트폴리오 서비스 구현 클래스, 사용자의 포트폴리오 생성, 조회, 수정, 삭제, 이력 조회를 처리
@@ -22,7 +24,7 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 public class PortfolioServiceImpl implements PortfolioService {
     private final PortfolioMapper portfolioMapper;
-    private final MyDataApi myDataApi;
+    private final  MyDataApi myDataApi;
     /**
      * 포트폴리오 생성
      * @param userId 유저 아이디
@@ -36,7 +38,7 @@ public class PortfolioServiceImpl implements PortfolioService {
         portfolioDTO.setUserId(userId);
         portfolioDTO.setCash(portfolioRequestDTO.getCash());
         portfolioDTO.setOther(portfolioRequestDTO.getOther());
-        portfolioDTO.update();
+        portfolioDTO.setTotalAssets(calTotalAssets(portfolioDTO));
         portfolioMapper.insertPortfolio(portfolioDTO.toVO());
     }
 
@@ -63,8 +65,11 @@ public class PortfolioServiceImpl implements PortfolioService {
         PortfolioDTO portfolioDTO = getPortfolioByUserId(userId);
         portfolioDTO.setCash(portfolioRequestDTO.getCash());
         portfolioDTO.setOther(portfolioRequestDTO.getOther());
-        portfolioDTO.update();
+
+        portfolioDTO.setTotalAssets(calTotalAssets(portfolioDTO));
+
         PortfolioVO vo = portfolioDTO.toVO();
+
         portfolioMapper.updatePortfolio(vo);
     }
 
@@ -92,5 +97,15 @@ public class PortfolioServiceImpl implements PortfolioService {
             throw new NotFoundException("해당 사용자의 과거 포트폴리오가 존재하지 않습니다.");
         }
         return PortfolioDTO.from(vo);
+    }
+
+    public Double calTotalAssets(PortfolioDTO portfolioDTO){
+        return Optional.ofNullable(portfolioDTO.getCash()).orElse(0.0)
+                + Optional.ofNullable(portfolioDTO.getOther()).orElse(0.0)
+                + Optional.ofNullable(portfolioDTO.getDeposit()).orElse(0.0)
+                + Optional.ofNullable(portfolioDTO.getSavings()).orElse(0.0)
+                + Optional.ofNullable(portfolioDTO.getStock()).orElse(0.0)
+                + Optional.ofNullable(portfolioDTO.getFund()).orElse(0.0)
+                + Optional.ofNullable(portfolioDTO.getBond()).orElse(0.0);
     }
 }
