@@ -210,12 +210,17 @@ public class ProductServiceImpl implements ProductService {
 
         // 거리가 짧은 순으로 정렬
         return allProducts.stream()
-                .sorted(Comparator.comparingDouble(product -> getDistance(product, portfolioDTO, userInfoDTO)))
+                .sorted(
+                        Comparator.<ProductDTO<?>>comparingDouble(product -> getDistance(product, portfolioDTO, userInfoDTO))
+                                .thenComparingDouble(ProductDTO::getExpectedReturn)
+                                .thenComparing(ProductDTO::getCreatedAt, Comparator.reverseOrder())
+                )
                 .peek(product -> {
                     double distance = getDistance(product, portfolioDTO, userInfoDTO);
                     log.info("--------------------------------Product: {}, Distance: {}", product.getName(), distance);
                 })
                 .collect(Collectors.toList());
+
     }
 
     // 거리 구하는 메소드
