@@ -24,14 +24,14 @@ public class MyPageServiceImpl implements MyPageService{
     private final UserInfoMapper userInfoMapper;
 
     @Override
-    public MyPageResponseDTO getMyPageInfo(Long userId) {
+    public MyPageResponseDTO getMyPageInfo(final Long userId) {
         MyPageVO myPageVO = myPageMapper.findMyPageInfo(userId);
         return MyPageResponseDTO.from(myPageVO);
     }
 
     @Override
     @Transactional
-    public void updateMyPageInfo(Long userId, MyPageUpdateRequestDTO dto) {
+    public void updateMyPageInfo(final Long userId, final MyPageUpdateRequestDTO dto) {
         if (dto.getEmail() != null && dto.getEmailVerificationUUID() != null) {
             EmailAuthVO auth = emailAuthMapper.findByUuid(dto.getEmailVerificationUUID());
 
@@ -58,7 +58,7 @@ public class MyPageServiceImpl implements MyPageService{
 
     @Transactional
     @Override
-    public UserStatResponseDTO getStatByUserId(Long userId) {
+    public UserStatResponseDTO getStatByUserId(final Long userId) {
         UserInfoVO vo = userInfoMapper.getUserInfoById(userId);
         return UserStatResponseDTO.builder()
                 .adventureScore(vo.getAdventureScore())

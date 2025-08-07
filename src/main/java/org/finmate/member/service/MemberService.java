@@ -9,7 +9,7 @@ public interface MemberService {
 
     FindAccountIdResponseDTO findAccountIdByUuid(String uuid);
 
-    boolean verifyUser(String uuid, String accountId);
+    void verifyUser(String uuid, String accountId);
 
     void resetPassword(ChangePasswordRequestDTO dto);
 

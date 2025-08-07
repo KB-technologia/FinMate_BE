@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.finmate.email.domain.EmailAuthVO;
 import org.finmate.email.mapper.EmailAuthMapper;
+import org.finmate.exception.NotFoundException;
 import org.finmate.member.domain.UserInfoVO;
 import org.finmate.member.domain.UserVO;
 import org.finmate.member.domain.enums.Gender;
@@ -13,6 +14,7 @@ import org.finmate.member.dto.FindAccountIdResponseDTO;
 import org.finmate.member.dto.SignupRequestDTO;
 import org.finmate.member.mapper.UserInfoMapper;
 import org.finmate.member.mapper.UserMapper;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,25 +33,38 @@ public class MemberServiceImpl implements MemberService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public FindAccountIdResponseDTO findAccountIdByUuid(String uuid) {
+    public FindAccountIdResponseDTO findAccountIdByUuid(final String uuid) {
         String email = emailAuthMapper.findEmailByVerifiedUuid(uuid);
-        if (email == null) return null;
-        return userMapper.findAccountIdByEmail(email);
+        //TODO: 예외처리
+        if (email == null) throw new NotFoundException("해당 유저 없음");
+
+        // TODO: 예외처리
+        UserVO user = userMapper.findAccountIdByEmail(email);
+        if(user == null) throw new NotFoundException("해당 유저 없음");
+        return FindAccountIdResponseDTO.from(user);
     }
 
     @Override
-    public boolean verifyUser(String uuid, String accountId) {
+    public void verifyUser(final String uuid, final String accountId) {
         String email = emailAuthMapper.findEmailByVerifiedUuid(uuid);
-        if (email == null) return false;
-        return userMapper.existsByAccountIdAndEmail(accountId, email);
+        //TODO: 401예외처리
+        if (email == null) throw new RuntimeException();
+
+        boolean existsByAccountIdAndEmail = userMapper.existsByAccountIdAndEmail(accountId, email);
+
+        //TODO: 401예외처리
+        if (!existsByAccountIdAndEmail) {
+            throw new RuntimeException();
+        }
     }
 
     @Override
-    public void resetPassword(ChangePasswordRequestDTO dto) {
+    public void resetPassword(final ChangePasswordRequestDTO dto) {
         String accountId = dto.getAccountId();
         String uuid = dto.getUuid();
         String newPassword = dto.getNewPassword();
 
+        //TODO: 예외처리
         EmailAuthVO auth = emailAuthMapper.findByUuid(uuid);
         if (auth == null || !auth.getIsVerified()) {
             throw new IllegalArgumentException("유효하지 않은 인증 정보입니다.");
@@ -66,11 +81,12 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     @Override
-    public void withdraw(Long userId) {
+    public void withdraw(final Long userId) {
         if (userId == null) {
             throw new IllegalArgumentException("존재하지 않는 사용자입니다.");
         }
 
+        //TODO: 예외처리
         userMapper.deleteUserInfoByUserId(userId);
         userMapper.deleteUserAttendanceByUserId(userId);
         userMapper.deleteUserById(userId);
@@ -78,7 +94,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     @Override
-    public void signup(SignupRequestDTO dto) {
+    public void signup(final SignupRequestDTO dto) {
 
         try {
             log.info("[MemberService] 전달받은 provider: {}", dto.getProvider());
@@ -140,6 +156,7 @@ public class MemberServiceImpl implements MemberService {
 
         }
         catch (RuntimeException e) {
+            //TODO: 예외처리 통일
             log.error("회원가입 처리 중 예외 발생: {}", e.getMessage(), e);
             throw new RuntimeException("회원가입 처리 중 오류가 발생했습니다. 다시 시도해주세요.");
         }
@@ -149,6 +166,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public boolean isAccountIdDuplicate(String accountId) {
+        //TODO: 예외처리
         return userMapper.existsByAccountId(accountId);
     }
 }

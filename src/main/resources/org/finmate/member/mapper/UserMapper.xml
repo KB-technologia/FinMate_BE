@@ -40,7 +40,7 @@
         SELECT COUNT(*) > 0 FROM user WHERE account_id = #{accountId}
     </select>
 
-    <select id="findAccountIdByEmail" resultType="org.finmate.member.dto.FindAccountIdResponseDTO">
+    <select id="findAccountIdByEmail" resultType="org.finmate.member.domain.UserVO">
         SELECT name, account_id FROM user WHERE email = #{email}
     </select>
 

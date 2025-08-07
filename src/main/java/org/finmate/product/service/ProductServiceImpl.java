@@ -58,7 +58,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDTO<?> getProductDetail(Long id) {
+    public ProductDTO<?> getProductDetail(final Long id) {
         return ProductDTO.from(
                 Optional.ofNullable(productMapper.getProductDetail(id))
                         .orElseThrow(() -> new NotFoundException("해당 상품이 존재하지 않습니다."))
@@ -66,7 +66,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductComparisonResultDTO compareProducts(Long id1, Long id2, CustomUser user) {
+    public ProductComparisonResultDTO compareProducts(final Long id1, final Long id2, final CustomUser user) {
         ProductDTO<?> data1 = getProductDetail(id1);
         ProductDTO<?> data2 = getProductDetail(id2);
 
@@ -104,7 +104,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductReviewDTO> getProductReviews(Long id) {
+    public List<ProductReviewDTO> getProductReviews(final Long id) {
         return productMapper.getProductReviewByProductId(id)
                 .stream()
                 .map(ProductReviewDTO::from)
@@ -112,7 +112,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductReviewDTO> getMyReviews(Long userId) {
+    public List<ProductReviewDTO> getMyReviews(final Long userId) {
         return productMapper.getProductReviewByUserId(userId)
                 .stream()
                 .map(ProductReviewDTO::from)
@@ -120,7 +120,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductReviewDTO> getMyReviewsByType(Long userId, String productType) {
+    public List<ProductReviewDTO> getMyReviewsByType(final Long userId, final String productType) {
         return productMapper.getProductReviewByUserIdAndType(userId, productType)
                 .stream()
                 .map(ProductReviewDTO::from)
@@ -128,7 +128,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Long insertProductReview(ProductReviewDTO productReviewDTO, Long productId, Long userId) {
+    public Long insertProductReview(final ProductReviewDTO productReviewDTO, final Long productId, final Long userId) {
         ProductReviewVO existingReview = productMapper.getProductReviewByProductIdAndUserId(productId, userId);
         if (existingReview != null) {
             throw new NotFoundException("이미 등록된 리뷰가 있습니다.");
@@ -159,7 +159,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Long deleteProductReview(Long id, Long userId) {
+    public Long deleteProductReview(final Long id, final Long userId) {
         int result = productMapper.deleteProductReview(id, userId);
         if (result == 0) {
             throw new NotFoundException("해당 글을 삭제할 수 없습니다.");
@@ -168,7 +168,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDTO<?>> getFilteredProducts(ProductFilterDTO filter) {
+    public List<ProductDTO<?>> getFilteredProducts(final ProductFilterDTO filter) {
         // 입력값 검증
         validateFilter(filter);
 
@@ -181,7 +181,7 @@ public class ProductServiceImpl implements ProductService {
                 .collect(Collectors.toList());
     }
 
-    private void validateFilter(ProductFilterDTO filter) {
+    private void validateFilter(final ProductFilterDTO filter) {
 
         // 검색어 전처리
         if (filter.getQuery() != null) {
@@ -194,7 +194,7 @@ public class ProductServiceImpl implements ProductService {
 
     // 사용자 맞춤 추천 상품
     @Override
-    public List<ProductDTO<?>> getCustomizedProducts(Long userId) {
+    public List<ProductDTO<?>> getCustomizedProducts(final Long userId) {
 
         // 사용자 재무포트폴리오 가져오기
         PortfolioDTO portfolioDTO = PortfolioDTO.from(portfolioMapper.getPortfolio(userId));
@@ -219,7 +219,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     // 거리 구하는 메소드
-    public static double getDistance(ProductDTO<?> productDTO, PortfolioDTO portfolioDTO, UserInfoDTO userInfoDTO){
+    public static double getDistance(
+            final ProductDTO<?> productDTO,
+            final PortfolioDTO portfolioDTO,
+            final UserInfoDTO userInfoDTO){
 
 
         /**
