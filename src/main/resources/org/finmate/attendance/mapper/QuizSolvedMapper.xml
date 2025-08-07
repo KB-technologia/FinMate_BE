@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.finmate.attendance.mapper.QuizSolvedMapper">
+    <select id="getQuizSolved" resultType="org.finmate.attendance.domain.UserAttendanceVO">
+            SELECT quiz_solved FROM user_attendance WHERE user_id = #{userId}
+    </select>
+
+    <update id="updateQuizSolved">
+            UPDATE user_attendance
+            SET quiz_solved = true
+            WHERE user_id = #{userId}
+    </update>
+
+</mapper>
