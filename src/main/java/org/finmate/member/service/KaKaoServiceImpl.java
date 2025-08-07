@@ -139,8 +139,14 @@ public class KaKaoServiceImpl implements KakaoService{
         }
         else {
             UserAttendanceVO attendanceVO = userAttendanceMapper.getAttendanceByUserId(user.getId());
-            rewardClaimed = attendanceVO.getRewardClaimed();
-            consecutiveDays = attendanceVO.getConsecutiveDays();
+            if(attendanceVO != null){
+                rewardClaimed = attendanceVO.getRewardClaimed();
+                consecutiveDays = attendanceVO.getConsecutiveDays();
+            }
+            else {
+                rewardClaimed = false;
+                consecutiveDays = 0;
+            }
         }
 
         String token = jwtProcessor.generateToken(user.getAccountId());
