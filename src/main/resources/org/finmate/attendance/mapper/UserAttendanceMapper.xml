@@ -23,6 +23,7 @@
 
     <update id="resetAllRewards">
         UPDATE user_attendance
-        SET reward_claimed = FALSE
+        SET reward_claimed = FALSE,
+            quiz_solved = FALSE
     </update>
 </mapper>
