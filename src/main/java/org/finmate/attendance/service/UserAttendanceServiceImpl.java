@@ -34,9 +34,11 @@ public class UserAttendanceServiceImpl implements UserAttendanceService {
     @Transactional
     @Override
     public void checkInAttendance(final Long userId) {
-        //TODO: 예외처리 필요
         UserAttendanceVO userAttendanceVO = userAttendanceMapper.getAttendanceByUserId(userId);
-        LocalDate lastAttendanceDate = userAttendanceVO.getUpdatedAt().toLocalDate();
+        LocalDate lastAttendanceDate = LocalDate.now();
+        if(userAttendanceVO != null) {
+            lastAttendanceDate = userAttendanceVO.getUpdatedAt().toLocalDate();
+        }
 
         int newConsecutiveDays = 0;
         if(lastAttendanceDate.plusDays(1).equals(LocalDate.now())) {
@@ -48,6 +50,7 @@ public class UserAttendanceServiceImpl implements UserAttendanceService {
                 .consecutiveDays(newConsecutiveDays)
                 .build();
 
+        //TODO: 예외처리 필요
         userAttendanceMapper.checkInAttendance(newUserAttendance);
     }
 }
