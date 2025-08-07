@@ -36,6 +36,7 @@ public class EmailAuthServiceImpl implements EmailAuthService {
                 .isVerified(false)
                 .build();
 
+        // TODO: 예외처리하기
         emailAuthMapper.insertAuthCode(auth);
 
         try {
