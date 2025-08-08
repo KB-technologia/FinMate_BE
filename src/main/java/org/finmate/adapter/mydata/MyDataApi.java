@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -32,19 +33,25 @@ public class MyDataApi {
     private final UserMapper userMapper;
     private final PortfolioMapper portfolioMapper;
 
-    @Scheduled(cron = "0 0 1 * * *")
+    @Scheduled(cron = "0 0 9 * * *", zone="Asia/Seoul")
+    //Todo : (cron = "0 0 1 * * *", zone="Asia/Seoul")
     @Transactional
     public void fetchMyData() {
         List<Long> userList = userMapper.getUserIdAll();
         for(Long userId : userList) {
             PortfolioDTO dto = PortfolioDTO.from(portfolioMapper.getPortfolio(userId));
 
-            PortfolioDTO newDto = getMyData(userId).toPortfolioDTO();
-            newDto.setUserId(userId);
-            newDto.setCash(dto.getCash());
-            newDto.setOther(dto.getOther());
-            newDto.update();
+            if (dto == null) continue;
 
+            PortfolioDTO newDto = getMyData(userId).toPortfolioDTO();
+
+            if(newDto == null) continue;
+
+            newDto.setUserId(userId);
+            newDto.setCash(dto.getCash() != null ? dto.getCash() : 0.0);
+            newDto.setOther(dto.getOther() != null ? dto.getOther() :0.0);
+
+            newDto.update();
             portfolioMapper.insertPortfolio(newDto.toVO());
         }
     }

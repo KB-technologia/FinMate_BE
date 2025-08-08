@@ -9,9 +9,11 @@ import org.finmate.portfolio.domain.PortfolioVO;
 import org.finmate.portfolio.dto.PortfolioDTO;
 import org.finmate.portfolio.dto.PortfolioRequestDTO;
 import org.finmate.portfolio.mapper.PortfolioMapper;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 /**
  * 포트폴리오 서비스 구현 클래스, 사용자의 포트폴리오 생성, 조회, 수정, 삭제, 이력 조회를 처리
@@ -22,7 +24,7 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 public class PortfolioServiceImpl implements PortfolioService {
     private final PortfolioMapper portfolioMapper;
-    private final MyDataApi myDataApi;
+    private final  MyDataApi myDataApi;
     /**
      * 포트폴리오 생성
      * @param userId 유저 아이디
@@ -65,6 +67,7 @@ public class PortfolioServiceImpl implements PortfolioService {
         portfolioDTO.setOther(portfolioRequestDTO.getOther());
         portfolioDTO.update();
         PortfolioVO vo = portfolioDTO.toVO();
+
         portfolioMapper.updatePortfolio(vo);
     }
 
@@ -93,4 +96,5 @@ public class PortfolioServiceImpl implements PortfolioService {
         }
         return PortfolioDTO.from(vo);
     }
+
 }

@@ -12,13 +12,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PortfolioVO {
-    private Long id;                      // 재무포트폴리오 ID (PK)
-    private Long userId;                  // 사용자 ID (FK)
-
-    private Double totalAssets;       // 자산 총액 (DECIMAL(15,2))
-
-    private InvestmentProfile investmentProfile;     // 투자 성향
-
+    private Long id;
+    private Long userId;
+    private Double totalAssets;
     private Double cash;
     private Double deposit;
     private Double savings;
@@ -26,12 +22,11 @@ public class PortfolioVO {
     private Double fund;
     private Double stock;
     private Double other;
-
     private LocalDateTime createdAt;
 
     @Override
     public String toString() {
-        return "총 자산: " + totalAssets + "원\n" + "투자 성향: " + investmentProfile.name() +
+        return "총 자산: " + totalAssets + "원\n" +
                 "현금: " + cash + "원\n" +
                 "예금: " + deposit + "원\n" +
                 "적금: " + savings + "원\n" +
