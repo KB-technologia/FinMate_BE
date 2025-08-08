@@ -81,5 +81,19 @@ public class PortfolioDTO {
                 .build();
     }
 
+    /**
+     * InvestmentProfile(투자성향) 계산 & 저장된 자산의 총합을 구하는 메서드 (로직 수정 필요)
+     */
+    public void update() {
+        double deposit = this.deposit == null ? 0.0 : this.deposit;
+        double savings = this.savings == null ? 0.0 : this.savings;
+        double bond = this.bond == null ? 0.0 : this.bond;
+        double fund = this.fund == null ? 0.0 : this.fund;
+        double stock = this.stock == null ? 0.0 : this.stock;
+        double cash = this.cash == null ? 0.0 : this.cash;
+        double other = this.other == null ? 0.0 : this.other;
 
+        this.totalAssets = deposit + savings + bond + fund + stock + cash + other;
+
+    }
 }
