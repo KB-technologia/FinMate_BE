@@ -16,5 +16,4 @@ public interface PortfolioService {
 
     PortfolioDTO getHistoryPortfolioByUserId(Long userId, LocalDate date);
 
-    Double calTotalAssets(PortfolioDTO dto);
 }

@@ -99,13 +99,4 @@ public class PortfolioServiceImpl implements PortfolioService {
         return PortfolioDTO.from(vo);
     }
 
-    public Double calTotalAssets(PortfolioDTO portfolioDTO){
-        return Optional.ofNullable(portfolioDTO.getCash()).orElse(0.0)
-                + Optional.ofNullable(portfolioDTO.getOther()).orElse(0.0)
-                + Optional.ofNullable(portfolioDTO.getDeposit()).orElse(0.0)
-                + Optional.ofNullable(portfolioDTO.getSavings()).orElse(0.0)
-                + Optional.ofNullable(portfolioDTO.getStock()).orElse(0.0)
-                + Optional.ofNullable(portfolioDTO.getFund()).orElse(0.0)
-                + Optional.ofNullable(portfolioDTO.getBond()).orElse(0.0);
-    }
 }
