@@ -28,6 +28,7 @@ public class LevelServiceImpl implements LevelService{
                 .currentLevel(userInfoDTO.getUserLevel())
                 .totalExp(userInfoDTO.getExp())
                 .characterTicketAdded(false)
+                .profileSummary(userInfoDTO.getProfileSummary())
                 .characterTicket(userInfoDTO.getCharacterTicket()).build();
     }
 

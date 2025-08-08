@@ -25,4 +25,7 @@ public class LevelResponseDTO {
 
     @ApiModelProperty(value = "캐릭터 변경권 횟수", example = "0")
     private Integer characterTicket;
+
+    @ApiModelProperty(value = "사용자 투자 성향 요약", example = "전략적인")
+    private String profileSummary;
 }
