@@ -61,7 +61,7 @@ public class ProductDTO<T> {
     private LocalDateTime updatedAt;
 
     @ApiModelProperty(value = "위험도(모험 성향)")
-    private Integer adventureScore;
+    private Double adventureScore;
 
     @ApiModelProperty(value = "투자 목표 (생존, 안정, 고수익) (가치관)")
     private String valueTag;
@@ -73,7 +73,7 @@ public class ProductDTO<T> {
     private String strategyTag;
 
     @ApiModelProperty(value = "최소 소득/손실 감내도 요구치(최소 재정 체력)")
-    private Integer minFinanceScore;
+    private Double minFinanceScore;
 
     @ApiModelProperty(value = "타입별 금융 상품 데이터")
     private T detail;

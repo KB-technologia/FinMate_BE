@@ -26,11 +26,11 @@ public class ProductVO {
     private String description; //상품 소개 요약
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private Integer adventureScore;
+    private Double adventureScore;
     private String valueTag;
     private String speedTag;
     private String strategyTag;
-    private Integer minFinanceScore;
+    private Double minFinanceScore;
 
     private DepositVO deposit;
     private SavingsVO savings;
