@@ -38,7 +38,7 @@ public class PortfolioServiceImpl implements PortfolioService {
         portfolioDTO.setUserId(userId);
         portfolioDTO.setCash(portfolioRequestDTO.getCash());
         portfolioDTO.setOther(portfolioRequestDTO.getOther());
-        portfolioDTO.setTotalAssets(calTotalAssets(portfolioDTO));
+        portfolioDTO.update();
         portfolioMapper.insertPortfolio(portfolioDTO.toVO());
     }
 
@@ -65,9 +65,7 @@ public class PortfolioServiceImpl implements PortfolioService {
         PortfolioDTO portfolioDTO = getPortfolioByUserId(userId);
         portfolioDTO.setCash(portfolioRequestDTO.getCash());
         portfolioDTO.setOther(portfolioRequestDTO.getOther());
-
-        portfolioDTO.setTotalAssets(calTotalAssets(portfolioDTO));
-
+        portfolioDTO.update();
         PortfolioVO vo = portfolioDTO.toVO();
 
         portfolioMapper.updatePortfolio(vo);
