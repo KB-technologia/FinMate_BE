@@ -33,8 +33,8 @@ public class MyDataApi {
     private final UserMapper userMapper;
     private final PortfolioMapper portfolioMapper;
 
-    @Scheduled(cron = "0 0 9 * * *")
-    //Todo : (cron = "0 0 1 * * *")
+    @Scheduled(cron = "0 0 9 * * *", zone="Asia/Seoul")
+    //Todo : (cron = "0 0 1 * * *", zone="Asia/Seoul")
     @Transactional
     public void fetchMyData() {
         List<Long> userList = userMapper.getUserIdAll();
