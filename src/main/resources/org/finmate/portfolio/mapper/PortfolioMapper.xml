@@ -9,7 +9,7 @@
             user_id, total_assets, cash, deposit,
             savings, bond, fund, stock, other
         ) VALUES (
-                     #{userId}, #{totalAssets}, #{cash}, #{deposit},
+                     #{userId}, #{totalAssets},#{cash}, #{deposit},
                      #{savings}, #{bond}, #{fund}, #{stock}, #{other}
                  )
     </insert>
