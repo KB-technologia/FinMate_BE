@@ -217,7 +217,12 @@ public class ProductServiceImpl implements ProductService {
 //                .peek(product -> {
 //                    double distance = getDistance(product, portfolioDTO, userInfoDTO);
 //                    log.info("--------------------------------Product: {}, Distance: {}", product.getName(), distance);
-//                })
+//                        log.info("--------------------adventureScore: " + product.getAdventureScore());
+//                        log.info("--------------------valueTag: " + product.getValueTag());
+//                        log.info("--------------------speedTage: " + product.getSpeedTag());
+//                        log.info("--------------------strategyTag: " + product.getStrategyTag());
+//                        log.info("--------------------minFinanceScore: " + product.getMinFinanceScore());
+//                    })
                 .collect(Collectors.toList());
 
     }
@@ -232,11 +237,17 @@ public class ProductServiceImpl implements ProductService {
         /**
          * 상품의 5대 지표 - 사용자의 5대 지표
          */
-        Double adventureScore = productDTO.getAdventureScore() - userInfoDTO.getAdventureScore();
-        int valueTag = (productDTO.getValueTag().equals(userInfoDTO.getValueTag().name())) ? 1 : 0;
-        int speedTage = (productDTO.getSpeedTag().equals(userInfoDTO.getSpeedTag().name())) ? 1 : 0;
-        int strategyTag = (productDTO.getStrategyTag().equals(userInfoDTO.getStrategyTag().name())) ? 1 : 0;
-        Double minFinanceScore = productDTO.getMinFinanceScore() - userInfoDTO.getFinanceScore();
+        double adventureScore = Math.abs(productDTO.getAdventureScore() - userInfoDTO.getAdventureScore());
+        int valueTag = Math.abs(
+                VALUE_TAG_MAP.get(productDTO.getValueTag())
+                        - VALUE_TAG_MAP.get(userInfoDTO.getValueTag().name())
+        );
+        int speedTags = Math.abs(
+                SPEED_TAG_MAP.get(productDTO.getSpeedTag())
+                        - SPEED_TAG_MAP.get(userInfoDTO.getSpeedTag().name())
+        );
+        int strategyTag = (productDTO.getStrategyTag().equals(userInfoDTO.getStrategyTag().name())) ? 0 : 1;
+        double minFinanceScore = Math.abs(productDTO.getMinFinanceScore() - userInfoDTO.getFinanceScore());
 
         /**
          * 사용자의 투자 성향 요약
@@ -312,7 +323,7 @@ public class ProductServiceImpl implements ProductService {
          */
         return (Math.sqrt(Math.pow(adventureScore, 2)
                 + Math.pow(valueTag, 2)
-                + Math.pow(speedTage, 2)
+                + Math.pow(speedTags, 2)
                 + Math.pow(strategyTag, 2)
                 + Math.pow(minFinanceScore, 2)
                 + 9999 * n) * w4);
@@ -324,8 +335,11 @@ public class ProductServiceImpl implements ProductService {
         // 1. 유저 나이 계산 (생년월일 → 만 나이)
         Integer userAge = calculateUserAge(userInfoDTO.getBirth());
 
+        // 적금
         if (productDTO.getDetail() instanceof SavingsVO userSavingsVO) {
-            // Boolean 조건들: null이 아닐 때만 비교
+            // Boolean 조건이 null 이 아닐 때만 비교
+            // 조건이 안맞을 경우 거리 멀어질 수 있도록 1을 반환
+
             if (userSavingsVO.getIsMarried() != null && !userSavingsVO.getIsMarried().equals(userInfoDTO.getIsMarried())) return 1;
             if (userSavingsVO.getHasJob() != null && !userSavingsVO.getHasJob().equals(userInfoDTO.getHasJob())) return 1;
             if (userSavingsVO.getUsesPublicTransport() != null && !userSavingsVO.getUsesPublicTransport().equals(userInfoDTO.getUsesPublicTransport())) return 1;
@@ -336,12 +350,15 @@ public class ProductServiceImpl implements ProductService {
             if (userSavingsVO.getEmployedAtSme() != null && !userSavingsVO.getEmployedAtSme().equals(userInfoDTO.getEmployedAtSme())) return 1;
             if (userSavingsVO.getUsesMicroloan() != null && !userSavingsVO.getUsesMicroloan().equals(userInfoDTO.getUsesMicroloan())) return 1;
             if (userSavingsVO.getGender() != null && userInfoDTO.getGender() != null && !userSavingsVO.getGender().equals(userInfoDTO.getGender())) return 1;
-            // 나이 조건: null이 아닐 때만 비교
+
+            // 나이 조건
             if (userSavingsVO.getMinAge() != null && userAge != null && userAge < userSavingsVO.getMinAge()) return 1;
             if (userSavingsVO.getMaxAge() != null && userAge != null && userAge > userSavingsVO.getMaxAge()) return 1;
             return 0;
 
-        } else if (productDTO.getDetail() instanceof DepositVO userDepositVO) {
+        }
+        // 예금
+        else if (productDTO.getDetail() instanceof DepositVO userDepositVO) {
             if (userDepositVO.getIsMarried() != null && !userDepositVO.getIsMarried().equals(userInfoDTO.getIsMarried())) return 1;
 
             if (userDepositVO.getHasJob() != null && !userDepositVO.getHasJob().equals(userInfoDTO.getHasJob())) return 1;
@@ -359,7 +376,7 @@ public class ProductServiceImpl implements ProductService {
             if (userDepositVO.getUsesMicroloan() != null && !userDepositVO.getUsesMicroloan().equals(userInfoDTO.getUsesMicroloan())) return 1;
             if (userDepositVO.getGender() != null && userInfoDTO.getGender() != null && !userDepositVO.getGender().equals(userInfoDTO.getGender())) return 1;
 
-            // 나이 조건: null이 아닐 때만 비교
+            // 나이 조건
             if (userDepositVO.getMinAge() != null && userAge != null && userAge < userDepositVO.getMinAge()) return 1;
             if (userDepositVO.getMaxAge() != null && userAge != null && userAge > userDepositVO.getMaxAge()) return 1;
 
@@ -378,6 +395,20 @@ public class ProductServiceImpl implements ProductService {
         if (birth == null) return null;
         return Period.between(birth, LocalDate.now()).getYears();
     }
+
+    private static final Map<String, Integer> VALUE_TAG_MAP = Map.of(
+            "SURVIVAL", 0,
+            "STABILITY", 1,
+            "GROWTH", 2,
+            "HIGH_RETURN", 3
+    );
+
+    private static final Map<String, Integer> SPEED_TAG_MAP = Map.of(
+            "VERY_SLOW", 0,
+            "SLOW", 1,
+            "MEDIUM", 2,
+            "FAST", 3
+    );
 
     // 프로필별 비율 상수
     private static final int[] STABLE    = {80, 20, 0, 0};   // 안전형
