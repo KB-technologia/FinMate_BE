@@ -3,7 +3,7 @@ package org.finmate.member.mapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.finmate.member.domain.UserVO;
-import org.finmate.member.dto.FindAccountIdResponseDTO;
+import org.finmate.member.dto.UserInfoDTO;
 
 import java.util.List;
 
@@ -19,9 +19,11 @@ public interface UserMapper {
 
     Long findUserIdByAccountId(String accountId);
 
+    UserInfoDTO findById(Long userId);
     void deleteUserInfoByUserId(Long userId);
     void deleteUserAttendanceByUserId(Long userId);
-    void deleteUserById(Long userId);
+    void deletePortfolioByUserId(Long userId);
+    int deleteUserById(Long userId);
 
     boolean existsByAccountId(@Param("accountId") String accountId);
 

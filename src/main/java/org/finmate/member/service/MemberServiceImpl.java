@@ -14,7 +14,7 @@ import org.finmate.member.dto.FindAccountIdResponseDTO;
 import org.finmate.member.dto.SignupRequestDTO;
 import org.finmate.member.mapper.UserInfoMapper;
 import org.finmate.member.mapper.UserMapper;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.dao.DataAccessException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,7 +40,7 @@ public class MemberServiceImpl implements MemberService {
 
         // TODO: 예외처리
         UserVO user = userMapper.findAccountIdByEmail(email);
-        if(user == null) throw new NotFoundException("해당 유저 없음");
+        if (user == null) throw new NotFoundException("해당 유저 없음");
         return FindAccountIdResponseDTO.from(user);
     }
 
@@ -82,14 +82,24 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     @Override
     public void withdraw(final Long userId) {
-        if (userId == null) {
-            throw new IllegalArgumentException("존재하지 않는 사용자입니다.");
+        if (userMapper.findById(userId) == null) {
+            throw new NotFoundException("ID: " + userId + "는 존재하지 않는 사용자입니다.");
         }
+        try {
+            userMapper.deletePortfolioByUserId(userId);
+            userMapper.deleteUserAttendanceByUserId(userId);
+            userMapper.deleteUserInfoByUserId(userId);
 
-        //TODO: 예외처리
-        userMapper.deleteUserInfoByUserId(userId);
-        userMapper.deleteUserAttendanceByUserId(userId);
-        userMapper.deleteUserById(userId);
+            int deletedRows = userMapper.deleteUserById(userId);
+
+            if (deletedRows == 0) {
+                throw new RuntimeException("회원 정보가 정상적으로 삭제되지 않았습니다. (ID: " + userId + ")");
+            }
+
+        } catch (DataAccessException e) {
+            log.error("회원 탈퇴 DB 처리 중 예외 발생. User ID: {}", userId, e);
+            throw new RuntimeException("회원 탈퇴 처리 중 문제가 발생했습니다.", e);
+        }
     }
 
     @Transactional
@@ -106,9 +116,9 @@ public class MemberServiceImpl implements MemberService {
             }
 
             String encodedPassword;
-            switch(provider){
+            switch (provider) {
                 case LOCAL:
-                    if(!dto.getPassword().equals(dto.getPasswordConfirm())){
+                    if (!dto.getPassword().equals(dto.getPasswordConfirm())) {
                         throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
                     }
                     encodedPassword = passwordEncoder.encode(dto.getPassword());
@@ -118,7 +128,7 @@ public class MemberServiceImpl implements MemberService {
                     encodedPassword = "kakao"; //더미 비밀번호
                     break;
 
-                default :
+                default:
                     throw new IllegalArgumentException("지원하지 않는 provider입니다: " + provider);
 
             }
@@ -156,8 +166,7 @@ public class MemberServiceImpl implements MemberService {
             userInfoMapper.insertUserInfo(userInfo);
             log.debug("UserInfo inserted: {}", userInfo);
 
-        }
-        catch (RuntimeException e) {
+        } catch (RuntimeException e) {
             //TODO: 예외처리 통일
             log.error("회원가입 처리 중 예외 발생: {}", e.getMessage(), e);
             throw new RuntimeException("회원가입 처리 중 오류가 발생했습니다. 다시 시도해주세요.");
