@@ -41,6 +41,10 @@
         DELETE FROM financial_portfolio WHERE user_id = #{userId}
     </delete>
 
+    <delete id = "deleteFavoriteByUserId">
+        DELETE FROM product_favorite WHERE user_id = #{userID}
+    </delete>
+
     <delete id="deleteUserById">
         DELETE FROM user WHERE id = #{userId}
     </delete>

@@ -23,6 +23,7 @@ public interface UserMapper {
     void deleteUserInfoByUserId(Long userId);
     void deleteUserAttendanceByUserId(Long userId);
     void deletePortfolioByUserId(Long userId);
+    void deleteFavoriteByUserId(Long userId);
     int deleteUserById(Long userId);
 
     boolean existsByAccountId(@Param("accountId") String accountId);

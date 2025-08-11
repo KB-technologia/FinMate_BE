@@ -89,6 +89,7 @@ public class MemberServiceImpl implements MemberService {
             userMapper.deletePortfolioByUserId(userId);
             userMapper.deleteUserAttendanceByUserId(userId);
             userMapper.deleteUserInfoByUserId(userId);
+            userMapper.deleteFavoriteByUserId(userId);
 
             int deletedRows = userMapper.deleteUserById(userId);
 
