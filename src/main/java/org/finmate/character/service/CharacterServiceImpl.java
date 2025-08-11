@@ -26,6 +26,9 @@ public class CharacterServiceImpl implements CharacterService {
         // 사용자 레벨 추출
         int userLevel = userInfoMapper.getUserInfoById(userId).getUserLevel();
         CharacterVO userCharacter = characterMapper.getCharacterById(userId);
+        if (userCharacter == null) {
+            throw new RuntimeException("사용자의 캐릭터 정보가 존재하지 않습니다. userId=" + userId);
+        }
 
         // 사용자 레벨에 맞는 이미지 추출
         String userCharacterImage = getUserCharacterImage(userLevel, userCharacter);
@@ -42,6 +45,9 @@ public class CharacterServiceImpl implements CharacterService {
 
         // 유저 정보 불러와서 DTO 변환(VO 에는 setter 없기 때문에 DTO 로 변환)
         UserInfoDTO userDTO = UserInfoDTO.from(userInfoMapper.getUserInfoById(userId));
+        if (userDTO == null) {
+            throw new RuntimeException("사용자의 정보가 존재하지 않습니다. userId=" + userId);
+        }
 
         if(userDTO.getCharacterTicket() > 0){
             // 사용자가 선택한 캐릭터 ID 넣기
