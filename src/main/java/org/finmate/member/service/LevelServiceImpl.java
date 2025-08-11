@@ -22,6 +22,9 @@ public class LevelServiceImpl implements LevelService{
     public LevelResponseDTO getLevel(Long userId) {
 
         UserInfoDTO userInfoDTO = UserInfoDTO.from(userInfoMapper.getUserInfoById(userId));
+        if (userInfoDTO == null) {
+            throw new RuntimeException("사용자 정보가 존재하지 않습니다. userId=" + userId);
+        }
 
         return LevelResponseDTO
                 .builder()
