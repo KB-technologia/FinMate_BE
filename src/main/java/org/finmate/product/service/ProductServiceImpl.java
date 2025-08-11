@@ -80,8 +80,7 @@ public class ProductServiceImpl implements ProductService {
             Long userId = user.getUser().getId();
             UserInfoVO userInfo = userInfoMapper.getUserInfoById(userId);
             PortfolioVO userPortfolio = portfolioMapper.getPortfolio(userId);
-            Long animalId = userInfo.getAnimalId();
-            CharacterVO animalCharacter = characterMapper.getCharacterById(animalId);
+            CharacterVO animalCharacter = characterMapper.getCharacterById(userId);
             tone = userInfo.getProfileSummary() + animalCharacter.getAnimalName();
             userData += userInfo.toString();
             userData += userPortfolio.toString();
