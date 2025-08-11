@@ -15,7 +15,7 @@ public interface ProductService {
   
     ProductComparisonResultDTO compareProducts(Long id1, Long id2, CustomUser user);
 
-    List<ProductDTO<?>> getFilteredProducts(ProductFilterDTO filter);
+    List<ProductDTO<?>> getFilteredProducts(ProductFilterDTO filter, CustomUser user);
 
     List<ProductReviewDTO> getProductReviews(Long id);
 

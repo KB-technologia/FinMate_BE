@@ -167,14 +167,34 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDTO<?>> getFilteredProducts(final ProductFilterDTO filter) {
+    public List<ProductDTO<?>> getFilteredProducts(final ProductFilterDTO filter, final CustomUser user) {
         // 입력값 검증
         validateFilter(filter);
 
-        // 상품 조회 (페이징 없이 전체 조회)
+        if ("RECOMMENDED".equals(filter.getSortType()) && user != null) {
+
+            String originalSortType = filter.getSortType();
+            filter.setSortType(null);
+
+            List<org.finmate.product.domain.ProductVO> products = productMapper.getFilteredProductsByType(filter);
+
+            filter.setSortType(originalSortType);
+
+            List<ProductDTO<?>> productDTOs = products.stream()
+                    .map(ProductDTO::from)
+                    .collect(Collectors.toList());
+
+            Long userId = user.getUser().getId();
+            UserInfoDTO userInfoDTO = UserInfoDTO.from(userInfoMapper.getUserInfoById(userId));
+            PortfolioDTO portfolioDTO = PortfolioDTO.from(portfolioMapper.getPortfolio(userId));
+
+            return productDTOs.stream()
+                    .sorted(Comparator.<ProductDTO<?>>comparingDouble(product ->
+                            getDistance(product, portfolioDTO, userInfoDTO)))
+                    .collect(Collectors.toList());
+        }
         List<org.finmate.product.domain.ProductVO> products = productMapper.getFilteredProductsByType(filter);
 
-        // ProductDTO로 변환하여 반환
         return products.stream()
                 .map(ProductDTO::from)
                 .collect(Collectors.toList());
