@@ -3,6 +3,7 @@ package org.finmate.mypage.service;
 import lombok.RequiredArgsConstructor;
 import org.finmate.email.domain.EmailAuthVO;
 import org.finmate.email.mapper.EmailAuthMapper;
+import org.finmate.exception.NotFoundException;
 import org.finmate.member.domain.UserInfoVO;
 import org.finmate.member.mapper.UserInfoMapper;
 import org.finmate.mypage.domain.MyPageVO;
@@ -60,6 +61,11 @@ public class MyPageServiceImpl implements MyPageService{
     @Override
     public UserStatResponseDTO getStatByUserId(final Long userId) {
         UserInfoVO vo = userInfoMapper.getUserInfoById(userId);
+ㅇ        if(vo.getAdventureScore() == null || vo.getValueTag() == null ||
+        vo.getSpeedTag() == null || vo.getStrategyTag() == null || vo.getFinanceScore() == null) {
+            //TODO:예외처리 통일
+            throw new NotFoundException("아직 성향진단테스트하지않음");
+        }
         return UserStatResponseDTO.builder()
                 .adventureScore(vo.getAdventureScore())
                 .valueTag(vo.getValueTag())
