@@ -61,7 +61,7 @@ public class MyPageServiceImpl implements MyPageService{
     @Override
     public UserStatResponseDTO getStatByUserId(final Long userId) {
         UserInfoVO vo = userInfoMapper.getUserInfoById(userId);
-ㅇ        if(vo.getAdventureScore() == null || vo.getValueTag() == null ||
+        if(vo.getAdventureScore() == null || vo.getValueTag() == null ||
         vo.getSpeedTag() == null || vo.getStrategyTag() == null || vo.getFinanceScore() == null) {
             //TODO:예외처리 통일
             throw new NotFoundException("아직 성향진단테스트하지않음");
