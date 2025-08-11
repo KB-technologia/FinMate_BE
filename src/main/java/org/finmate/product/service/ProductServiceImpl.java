@@ -196,15 +196,26 @@ public class ProductServiceImpl implements ProductService {
 
         // 사용자 재무포트폴리오 가져오기
         PortfolioDTO portfolioDTO = PortfolioDTO.from(portfolioMapper.getPortfolio(userId));
+        if (portfolioDTO == null) {
+            throw new RuntimeException("사용자의 재무 포트폴리오가 존재하지 않습니다. userId=" + userId);
+        }
 
         // 사용자 인포
         UserInfoDTO userInfoDTO = UserInfoDTO.from(userInfoMapper.getUserInfoById(userId));
+        if (userInfoDTO == null) {
+            throw new RuntimeException("사용자 정보가 존재하지 않습니다. userId=" + userId);
+        }
+
 
         // 모든 상품 조회
         List<ProductDTO<?>> allProducts = productMapper.getAllProducts()
                 .stream()
                 .map(ProductDTO::from)
                 .collect(Collectors.toList());
+
+        if (allProducts.isEmpty()) {
+            throw new RuntimeException("추천할 금융상품 데이터가 존재하지 않습니다.");
+        }
 
         // 거리가 짧은 순으로 정렬
         return allProducts.stream()
