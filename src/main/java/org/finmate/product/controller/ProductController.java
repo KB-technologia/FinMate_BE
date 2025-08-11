@@ -96,7 +96,7 @@ public class ProductController {
             @RequestParam(required = false) final String query,
 
             @ApiParam(value = "상품 타입", required = false, example = "DEPOSIT", allowableValues = "DEPOSIT,SAVINGS,FUND")
-            @RequestParam(required = false) final String productType,
+            @RequestParam(required = false) final List<String> productType,
 
             @ApiParam(value = "은행명 목록 (복수 선택 가능)", required = false, example = "국민")
             @RequestParam(required = false) final List<String> bankName,
@@ -105,7 +105,10 @@ public class ProductController {
             @RequestParam(required = false) final List<String> fundType,
 
             @ApiParam(value = "정렬 순서", required = false, example = "desc", allowableValues = "asc,desc")
-            @RequestParam(defaultValue = "desc") final String sortOrder) {
+            @RequestParam(defaultValue = "desc") final String sortType,
+
+            @ApiIgnore @AuthenticationPrincipal CustomUser user)
+    {
 
 
         // 필터 DTO 구성
@@ -114,10 +117,10 @@ public class ProductController {
         filter.setProductType(productType);
         filter.setBankName(bankName);
         filter.setFundType(fundType);
-        filter.setSortOrder(sortOrder);
+        filter.setSortType(sortType);
 
         // 필터링 서비스 호출
-        List<ProductDTO<?>> result = productService.getFilteredProducts(filter);
+        List<ProductDTO<?>> result = productService.getFilteredProducts(filter, user);
 
         if (result == null || result.isEmpty()) {
             throw new NotFoundException("조건에 맞는 상품을 찾을 수 없습니다.");

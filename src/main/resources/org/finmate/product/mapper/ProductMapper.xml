@@ -416,8 +416,11 @@
         <include refid="productJoin"/>
         <where>
             <!-- 상품 타입 필터 (선택) - null이면 전체 조회 -->
-            <if test="productType != null and productType != ''">
-                AND p.product_type = #{productType}
+            <if test="productType != null and productType.size() > 0">
+                AND p.product_type IN
+                <foreach item="type" collection="productType" open="(" separator="," close=")">
+                    #{type}
+                </foreach>
             </if>
 
             <!-- 검색어 조건 (선택) -->
@@ -435,7 +438,7 @@
             </if>
 
             <!-- 펀드 종류 필터 (펀드일 때만) -->
-            <if test="productType == 'FUND' and fundType != null and fundType.size() > 0">
+            <if test="fundType != null and fundType.size() > 0">
                 AND f.fund_type IN
                 <foreach item="type" collection="fundType" open="(" separator="," close=")">
                     #{type}
@@ -444,18 +447,24 @@
         </where>
 
         <!-- 정렬: 수익률 기준만 -->
-        ORDER BY
-        (
-        CASE
-        WHEN p.product_type = 'FUND' THEN
-        p.expected_return
-        ELSE
-        p.expected_return + s.bonus_rate
-        END
-        )
         <choose>
-            <when test="sortOrder == 'asc'">ASC</when>
-            <otherwise>DESC</otherwise>
+            <when test="sortType != null and sortType.equals('BASE_RATE_DESC')">
+                ORDER BY p.expected_return DESC
+            </when>
+            <when test="sortType != null and sortType.equals('YIELD_DESC')">
+                ORDER BY
+                (
+                CASE
+                WHEN p.product_type = 'FUND' THEN
+                p.expected_return
+                ELSE
+                p.expected_return + COALESCE(s.bonus_rate, 0)
+                END
+                ) DESC
+            </when>
+            <otherwise>
+                ORDER BY p.id
+            </otherwise>
         </choose>
     </select>
     <select id="getProductReviewByProductId" resultType="ProductReviewVO">
