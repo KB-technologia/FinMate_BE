@@ -12,21 +12,35 @@
       "currency_code": "KRW",
       "start_date": "2023-10-01",
       "end_date": "2024-10-01",
-      "interest_rate": 2.4,
+      "expected_return": 2.4,
       "expected_interest": 72000,
       "withdrawable": false
     },
     {
-      "prod_name": "Toss 투자 펀드",
+      "prod_name": "한국투자삼성그룹증권투자신탁 1(주식)(C-e)",
       "prod_type": "FUND",
-      "bank_name": "토스증권",
+      "bank_name": "KB증권",
       "account_num_masked": "123-****-789012",
       "account_status": "ACTIVE",
       "balance_amt": 1500000,
       "currency_code": "KRW",
       "fund_type": "주식형",
-      "risk_level": 3,
-      "expected_return": 4.5
+      "risk_level": 6,
+      "expected_return": 22.98
+    },
+    {
+      "prod_name": "KB 맑은 하늘 적금",
+      "prod_type": "SAVINGS",
+      "bank_name": "국민은행",
+      "account_num_masked": "110-****-123256",
+      "account_status": "ACTIVE",
+      "balance_amt": 2500000,
+      "currency_code": "KRW",
+      "start_date": "2024-12-01",
+      "end_date": "2025-12-01",
+      "expected_return": 2.45,
+      "expected_interest": 61250,
+      "withdrawable": false
     }
   ]
 }
