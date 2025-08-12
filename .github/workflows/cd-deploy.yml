@@ -1,0 +1,82 @@
+name: Deploy with SG IP Pinning
+
+on:
+  workflow_dispatch: {}
+  workflow_run:
+    workflows: ["Docker Image CI"]
+    types: [completed]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      SECURITY_GROUP_ID: sg-0d6993b211ee0c103   # 🔁 너의 보안그룹 ID로 변경
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # AWS 자격증명 설정 (액세스 키 방식)
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      # save Actions public IP
+      - name: Detect runner public IP
+        id: ip
+        run: echo "RUNNER_IP=$(curl -s https://checkip.amazonaws.com)/32" >> $GITHUB_ENV
+        
+      - name: Authorize SSH from runner IP
+        run: |
+          echo "Authorizing $RUNNER_IP on $SECURITY_GROUP_ID ..."
+          aws ec2 authorize-security-group-ingress \
+            --group-id "$SECURITY_GROUP_ID" \
+            --protocol tcp --port 22 \
+            --cidr "$RUNNER_IP" \
+          || echo "Rule may already exist; continuing."
+
+      # SSH 키 준비 & known_hosts 등록
+      - name: Add EC2 to known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+      - name: Setup SSH key
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.EC2_KEY }}
+
+      # 서버에서 배포 커맨드 실행
+      - name: Deploy on EC2
+        run: |
+          ssh -o StrictHostKeyChecking=yes ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+            set -e
+            cd ~/app   # compose 파일이 있는 디렉토리
+
+            # (선택) GHCR 로그인
+            if [ -n "${GHCR_TOKEN}" ]; then
+              echo "${GHCR_TOKEN}" | docker login ghcr.io -u "${GHCR_USERNAME}" --password-stdin
+            fi
+
+            # 이미지 갱신 후 재기동
+            docker compose pull
+            docker compose up -d
+            docker image prune -f
+          EOF
+        env:
+          GHCR_USERNAME: ${{ secrets.GHCR_USERNAME }}
+          GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
+
+      # 인바운드 규칙 제거
+      - name: Revoke SSH from runner IP
+        if: always()
+        run: |
+          echo "Revoking $RUNNER_IP from $SECURITY_GROUP_ID ..."
+          aws ec2 revoke-security-group-ingress \
+            --group-id "$SECURITY_GROUP_ID" \
+            --protocol tcp --port 22 \
+            --cidr "$RUNNER_IP" \
+          || echo "Rule not found; nothing to revoke."
+
+
