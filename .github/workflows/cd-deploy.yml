@@ -58,8 +58,8 @@ jobs:
               echo "${GHCR_TOKEN}" | docker login ghcr.io -u "${GHCR_USERNAME}" --password-stdin
             fi
 
-            docker compose pull
-            docker compose up -d
+            deploy_api
+            
             docker image prune -f
           EOF
         env:
