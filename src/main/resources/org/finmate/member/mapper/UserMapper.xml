@@ -65,6 +65,11 @@
         SELECT id FROM user;
     </select>
 
+    <select id="existsByEmail" resultType="boolean">
+        SELECT COUNT(*) > 0 FROM user
+        WHERE email = #{email}
+    </select>
+
     <update id="updatePassword">
         UPDATE user
         SET password = #{newPassword}
