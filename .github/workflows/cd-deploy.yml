@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      SECURITY_GROUP_ID: sg-0d6993b211ee0c103   # 🔁 너의 보안그룹 ID로 변경
+      SECURITY_GROUP_ID: sg-0d6993b211ee0c103
 
     steps:
       - uses: actions/checkout@v4
@@ -52,14 +52,12 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=yes ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
             set -e
-            cd ~/app/finmate-be   # compose 파일이 있는 디렉토리
+            cd ~/app/finmate-be
 
-            # (선택) GHCR 로그인
             if [ -n "${GHCR_TOKEN}" ]; then
               echo "${GHCR_TOKEN}" | docker login ghcr.io -u "${GHCR_USERNAME}" --password-stdin
             fi
 
-            # 이미지 갱신 후 재기동
             docker compose pull
             docker compose up -d
             docker image prune -f
