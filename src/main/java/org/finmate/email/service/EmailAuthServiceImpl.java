@@ -3,6 +3,7 @@ package org.finmate.email.service;
 import lombok.RequiredArgsConstructor;
 import org.finmate.email.domain.EmailAuthVO;
 import org.finmate.email.mapper.EmailAuthMapper;
+import org.finmate.member.mapper.UserMapper;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -18,14 +19,30 @@ import java.util.UUID;
 public class EmailAuthServiceImpl implements EmailAuthService {
 
     private final EmailAuthMapper emailAuthMapper;
+    private final UserMapper userMapper;
     private final JavaMailSender mailSender;
 
-    //이메일 인증 코드 전송 - 회원가입 / 마이페이지 에서 공통 사용
+    @Override
+    @Transactional
+    public String sendAuthCodeForSignUp(final String email) {
+        if (userMapper.existsByEmail(email)) {
+            throw new IllegalStateException("이미 가입된 이메일입니다.");
+        }
+        return this.sendEmailWithAuthCode(email);
+    }
+
     @Override
     @Transactional
     public String sendAuthCode(final String email) {
+        if (!userMapper.existsByEmail(email)) {
+            throw new IllegalStateException("해당 이메일로 가입된 계정이 없습니다.");
+        }
+        return this.sendEmailWithAuthCode(email);
+    }
+
+    private String sendEmailWithAuthCode(final String email) {
         String uuid = UUID.randomUUID().toString();
-        String authCode = String.valueOf((int)(Math.random() * 900000) + 100000); // 6자리
+        String authCode = String.valueOf((int) (Math.random() * 900000) + 100000); // 6자리
 
         LocalDateTime expiredAt = LocalDateTime.now().plusMinutes(3);
         EmailAuthVO auth = EmailAuthVO.builder()
@@ -36,7 +53,6 @@ public class EmailAuthServiceImpl implements EmailAuthService {
                 .isVerified(false)
                 .build();
 
-        // TODO: 예외처리하기
         emailAuthMapper.insertAuthCode(auth);
 
         try {
@@ -45,16 +61,15 @@ public class EmailAuthServiceImpl implements EmailAuthService {
 
             helper.setTo(email);
             helper.setSubject("[FinMate] 이메일 인증을 진행해주세요.");
-            helper.setText(buildEmailHtml(authCode), true); // HTML 사용(true)
+            helper.setText(buildEmailHtml(authCode), true);
 
             mailSender.send(message);
         } catch (MessagingException e) {
-            //TODO: 예외처리 통일하기
-            throw new RuntimeException("이메일 전송 실패", e);
+            throw new RuntimeException("이메일 전송에 실패했습니다.", e);
         }
-
         return uuid;
     }
+
 
     private String buildEmailHtml(final String authCode) {
         return """
