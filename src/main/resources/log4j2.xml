@@ -4,7 +4,9 @@
     <!-- Appender, Layout 설정 -->
     <Appenders>
         <Console name="console" target="SYSTEM_OUT">
-            <PatternLayout pattern=" %-5level %c(%M:%L) - %m%n"/>
+            <PatternLayout pattern=" %-5level %c(%M:%L) - %m%n">
+                <Charset>UTF-8</Charset>
+            </PatternLayout>
         </Console>
     </Appenders>
 

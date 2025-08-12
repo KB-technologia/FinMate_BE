@@ -1,0 +1,65 @@
+package org.finmate.product.controller;
+
+import io.swagger.annotations.*;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.finmate.member.domain.CustomUser;
+import org.finmate.product.dto.FavoriteDTO;
+import org.finmate.product.dto.ProductDTO;
+import org.finmate.product.service.FavoriteService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
+
+import java.util.List;
+
+@Log4j2
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/product/favorite")
+@Api(tags = "즐겨찾기 API")
+public class FavoriteController {
+
+    private final FavoriteService favoriteService;
+
+    @ApiOperation(value = "즐겨찾기 조회", notes = "사용자가 즐겨찾기한 상품들 조회")
+    @ApiResponse(code = 200, message = "성공적으로 요청이 처리되었습니다.", response = FavoriteDTO.class)
+    @GetMapping
+    public ResponseEntity<List<FavoriteDTO>> getFavoriteList(
+            @ApiIgnore @AuthenticationPrincipal final CustomUser user
+    ) {
+
+        Long userId = user.getUser().getId();
+        return ResponseEntity.ok(favoriteService.getFavorites(userId));
+    }
+
+    @ApiOperation(value = "즐겨찾기 등록", notes = "사용자가 특정 금융상품을 즐겨찾기에 등록합니다.")
+    @ApiResponse(code = 200, message = "성공적으로 요청이 처리되었습니다.")
+    @PostMapping("/{productId}")
+    public ResponseEntity<Void> enrollFavorite(
+            @ApiIgnore @AuthenticationPrincipal final CustomUser user,
+            @ApiParam(value = "상품 ID", required = true, example = "1")
+            @PathVariable final Long productId
+    ) {
+
+        Long userId = user.getUser().getId();
+        favoriteService.enrollFavorite(userId, productId);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @ApiOperation(value = "즐겨찾기 삭제", notes = "즐겨찾기 ID로 등록된 항목을 삭제합니다.")
+    @ApiResponse(code = 200, message = "즐겨찾기 삭제 성공")
+    @DeleteMapping("/{productId}")
+    public ResponseEntity<Void> deleteFavorite(
+            @ApiIgnore @AuthenticationPrincipal final CustomUser user,
+            @ApiParam(value = "즐겨찾기 ID", required = true, example = "1")
+            @PathVariable final Long productId
+    ) {
+        Long userId = user.getUser().getId();
+        favoriteService.deleteFavorite(userId, productId);
+        return ResponseEntity.ok().build();
+    }
+}

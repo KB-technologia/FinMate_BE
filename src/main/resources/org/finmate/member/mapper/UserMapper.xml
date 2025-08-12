@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.finmate.member.mapper.UserMapper">
+
+
+<insert id="insertUser" parameterType="org.finmate.member.domain.UserVO"
+        useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO user (name, account_id, email, password, provider)
+        VALUES (#{name}, #{accountId}, #{email}, #{password}, #{provider})
+    </insert>
+
+    <select id="findById" parameterType="long" resultType="org.finmate.member.dto.UserInfoDTO">
+        SELECT * FROM user WHERE id = #{userId}
+    </select>
+
+    <delete id="deleteByAccountId" parameterType="String">
+        DELETE FROM user WHERE account_id = #{accountId}
+    </delete>
+    <select id="selectByAccountId" resultType="org.finmate.member.domain.UserVO">
+        SELECT *
+        FROM user
+        WHERE account_id = #{accountId}
+    </select>
+
+    <select id="findUserIdByAccountId" resultType="long">
+        SELECT id FROM user WHERE account_id = #{accountId}
+    </select>
+
+    <delete id="deleteUserInfoByUserId">
+        DELETE FROM user_info WHERE user_id = #{userId}
+    </delete>
+
+    <delete id="deleteUserAttendanceByUserId">
+        DELETE FROM user_attendance WHERE user_id = #{userId}
+    </delete>
+
+    <delete id="deletePortfolioByUserId">
+        DELETE FROM financial_portfolio WHERE user_id = #{userId}
+    </delete>
+
+    <delete id = "deleteFavoriteByUserId">
+        DELETE FROM product_favorite WHERE user_id = #{userID}
+    </delete>
+
+    <delete id="deleteUserById">
+        DELETE FROM user WHERE id = #{userId}
+    </delete>
+
+    <select id="existsByAccountId" resultType="boolean">
+        SELECT COUNT(*) > 0 FROM user WHERE account_id = #{accountId}
+    </select>
+
+    <select id="findAccountIdByEmail" resultType="org.finmate.member.domain.UserVO">
+        SELECT name, account_id FROM user WHERE email = #{email}
+    </select>
+
+    <select id="existsByAccountIdAndEmail" resultType="boolean">
+        SELECT COUNT(*) > 0 FROM user
+        WHERE account_id = #{accountId} AND email = #{email}
+    </select>
+    <select id="getUserIdAll" resultType="java.lang.Long">
+        SELECT id FROM user;
+    </select>
+
+    <select id="existsByEmail" resultType="boolean">
+        SELECT COUNT(*) > 0 FROM user
+        WHERE email = #{email}
+    </select>
+
+    <update id="updatePassword">
+        UPDATE user
+        SET password = #{newPassword}
+        WHERE account_id = #{accountId}
+    </update>
+</mapper>

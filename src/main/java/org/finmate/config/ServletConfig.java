@@ -15,7 +15,18 @@ import org.springframework.web.servlet.view.JstlView;
 @EnableWebMvc
 @ComponentScan(basePackages = {
         "org.finmate.exception",
-        "org.finmate.controller"
+        "org.finmate.auth.controller",
+        "org.finmate.member.controller",
+        "org.finmate.portfolio.controller",
+        "org.finmate.assessment.controller",
+        "org.finmate.product.controller",
+        "org.finmate.signup.controller",
+        "org.finmate.quiz.controller",
+        "org.finmate.attendance.controller",
+        "org.finmate.character.controller",
+        "org.finmate.email.controller",
+        "org.finmate.mypage.controller",
+        "org.finmate.common.controller"
 })
 public class ServletConfig implements WebMvcConfigurer {
 
@@ -30,18 +41,6 @@ public class ServletConfig implements WebMvcConfigurer {
                 .addResourceLocations("classpath:/META-INF/resources/");
         registry.addResourceHandler("/webjars/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
-    }
-
-    // jsp view resolver 설정
-    @Override
-    public void configureViewResolvers(ViewResolverRegistry registry) {
-        InternalResourceViewResolver bean = new InternalResourceViewResolver();
-
-        bean.setViewClass(JstlView.class);
-        bean.setPrefix("/WEB-INF/views/");
-        bean.setSuffix(".jsp");
-
-        registry.viewResolver(bean);
     }
 
     //	Servlet 3.0 파일 업로드 사용시
