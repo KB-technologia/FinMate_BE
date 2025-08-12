@@ -1,0 +1,10 @@
+.gradle
+build
+out
+.git
+.gitignore
+Dockerfile*
+**/*.iml
+**/.idea
+**/.vscode
+.env

@@ -8,7 +8,7 @@ build/
 .env
 setenv.sh
 database.sql
-
+docker-compose.yml
 
 
 ### IntelliJ IDEA ###
