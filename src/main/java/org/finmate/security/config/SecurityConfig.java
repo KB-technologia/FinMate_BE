@@ -93,6 +93,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors()
                 .and()
                 .authorizeRequests()//권한 설정
+                .antMatchers("/healthz", "/healthz/**").permitAll()
                 .antMatchers("/api/assessment").authenticated() //AssessmentController 모든 요청은 로그인 필요(투자 성향 진단 테스트)
                 .antMatchers("/api/member/character/**").authenticated() //캐릭터 조회, 캐릭터 변경
                 .antMatchers("/api/member/emailauthentication/**").permitAll() //이메일 인증 (인증코드 이메일로 전송, 인증코드 검증)

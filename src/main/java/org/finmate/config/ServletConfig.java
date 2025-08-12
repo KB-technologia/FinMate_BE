@@ -25,7 +25,8 @@ import org.springframework.web.servlet.view.JstlView;
         "org.finmate.attendance.controller",
         "org.finmate.character.controller",
         "org.finmate.email.controller",
-        "org.finmate.mypage.controller"
+        "org.finmate.mypage.controller",
+        "org.finmate.common.controller"
 })
 public class ServletConfig implements WebMvcConfigurer {
 
