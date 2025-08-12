@@ -27,5 +27,23 @@ public class MyDataProductDTO {
     @JsonProperty("balance_amt")
     private Double balanceAmount;
 
+    @JsonProperty("bank_name")
+    private String bankName;
+
+    @JsonProperty("fund_type")
+    private String fundType;
+
+    @JsonProperty("risk_level")
+    private String riskLevel;
+
+    @JsonProperty("start_date")
+    private Date startDate;
+
+    @JsonProperty("end_date")
+    private Date endDate;
+
+    @JsonProperty("expected_return")
+    private String expectedReturn;
+
     private Date joinedAt;
 }
