@@ -52,7 +52,7 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=yes ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
             set -e
-            cd ~/app   # compose 파일이 있는 디렉토리
+            cd ~/app/finmate-be   # compose 파일이 있는 디렉토리
 
             # (선택) GHCR 로그인
             if [ -n "${GHCR_TOKEN}" ]; then
