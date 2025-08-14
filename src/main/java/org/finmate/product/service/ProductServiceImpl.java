@@ -81,9 +81,11 @@ public class ProductServiceImpl implements ProductService {
             UserInfoVO userInfo = userInfoMapper.getUserInfoById(userId);
             PortfolioVO userPortfolio = portfolioMapper.getPortfolio(userId);
             CharacterVO animalCharacter = characterMapper.getCharacterById(userId);
-            tone = userInfo.getProfileSummary() + animalCharacter.getAnimalName();
-            userData += userInfo.toString();
-            userData += userPortfolio.toString();
+            if(animalCharacter != null && userInfo != null) {
+                tone = userInfo.getProfileSummary() + animalCharacter.getAnimalName();
+                userData += userInfo.toString();
+                userData += userPortfolio.toString();
+            }
         }
         text = text.formatted(tone, userData, data1.toVO().toString(), data2.toVO().toString());
 
