@@ -3,6 +3,7 @@ package org.finmate.character.service;
 import lombok.RequiredArgsConstructor;
 import org.finmate.character.domain.CharacterVO;
 import org.finmate.character.dto.CharacterResponseDTO;
+import org.finmate.exception.NotFoundException;
 import org.finmate.member.dto.UserInfoDTO;
 import org.finmate.character.mapper.CharacterMapper;
 import org.finmate.member.mapper.UserInfoMapper;
@@ -27,14 +28,13 @@ public class CharacterServiceImpl implements CharacterService {
         int userLevel = userInfoMapper.getUserInfoById(userId).getUserLevel();
         CharacterVO userCharacter = characterMapper.getCharacterById(userId);
         if (userCharacter == null) {
-            throw new RuntimeException("사용자의 캐릭터 정보가 존재하지 않습니다. userId=" + userId);
+            throw new NotFoundException("사용자의 캐릭터 정보가 존재하지 않습니다. userId=" + userId);
         }
 
         // 사용자 레벨에 맞는 이미지 추출
         String userCharacterImage = getUserCharacterImage(userLevel, userCharacter);
 
-        //TODO: 예외처리 통일
-        return CharacterResponseDTO.from(userCharacter.getAnimalName(), userCharacterImage);
+        return CharacterResponseDTO.from(userCharacter.getAnimalName(), userCharacter.getAnimalId(), userCharacterImage);
     }
 
 
@@ -46,7 +46,7 @@ public class CharacterServiceImpl implements CharacterService {
         // 유저 정보 불러와서 DTO 변환(VO 에는 setter 없기 때문에 DTO 로 변환)
         UserInfoDTO userDTO = UserInfoDTO.from(userInfoMapper.getUserInfoById(userId));
         if (userDTO == null) {
-            throw new RuntimeException("사용자의 정보가 존재하지 않습니다. userId=" + userId);
+            throw new NotFoundException("사용자의 정보가 존재하지 않습니다. userId=" + userId);
         }
 
         if(userDTO.getCharacterTicket() > 0){
@@ -63,10 +63,9 @@ public class CharacterServiceImpl implements CharacterService {
             String userCharacterImage = getUserCharacterImage(userDTO.getUserLevel(), userCharacter);
 
             // 캐릭터 DTO 반환
-            return CharacterResponseDTO.from(userCharacter.getAnimalName(), userCharacterImage);
+            return CharacterResponseDTO.from(userCharacter.getAnimalName(), userCharacter.getAnimalId(), userCharacterImage);
         }else{
-            //TODO: 예외처리 통일
-            throw new IllegalStateException("캐릭터 변경권이 부족합니다.");
+            throw new RuntimeException("캐릭터 변경권이 부족합니다.");
         }
     }
 
