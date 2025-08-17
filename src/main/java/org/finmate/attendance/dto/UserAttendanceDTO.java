@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ApiModel(value = "사용자 출석 정보 DTO", description = "현재 유저의 출석 체크 정보입니다.")
+@ApiModel(description = "현재 사용자의 출석 체크에 관련된 DTO입니다.")
 public class UserAttendanceDTO {
     @ApiModelProperty(value = "첫 로그인인지 확인(출석을 했는지 안했는지 확인)")
     private Boolean rewardClaimed;

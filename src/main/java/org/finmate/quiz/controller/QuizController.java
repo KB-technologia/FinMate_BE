@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @Log4j2
 @Slf4j
 @RequestMapping("/api/quiz")
-@Api(tags = "Quiz API 컨트롤러")
+@Api(tags = "퀴즈 API")
 public class QuizController {
 
     private final QuizService quizService;

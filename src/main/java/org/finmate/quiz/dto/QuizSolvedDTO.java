@@ -9,7 +9,7 @@ import org.finmate.attendance.domain.UserAttendanceVO;
 @AllArgsConstructor
 @Builder
 @Data
-@ApiModel(value ="퀴즈 풀이 체크 DTO", description = "유저의 퀴즈 풀이 여부 DTO")
+@ApiModel(description = "유저의 퀴즈 풀이 여부 DTO")
 public class QuizSolvedDTO {
     @ApiModelProperty(value = "유저가 오늘 퀴즈를 풀었는지 확인")
     private Boolean quizSolved;
