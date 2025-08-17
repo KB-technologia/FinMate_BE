@@ -348,17 +348,12 @@ public class ProductServiceImpl implements ProductService {
          * 상품 유형 별로 가중치 w4 추출
          */
         double w4 = 0.0;
-        if(portfolioDTO == null) {
-            log.info("null 실행!!!!!!!!!!!!!!!!!!!");
-            w4 = 1;
-        }
+        if(portfolioDTO == null) w4 = 1;
         else if(productDTO.getDetail() instanceof SavingsVO) w4 =  normalized[0];
         else if(productDTO.getDetail() instanceof DepositVO) w4 = normalized[0];
         else if(productDTO.getDetail() instanceof FundVO) w4 = normalized[2];
 
 
-        log.info("---------------------------------------- w4: " + w4);
-        log.info("---------------------------------------- portfolioDTO: " + portfolioDTO);
         /**
          * 거리 계산
          * double
