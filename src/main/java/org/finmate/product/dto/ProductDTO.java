@@ -81,6 +81,9 @@ public class ProductDTO<T> {
     @ApiModelProperty(value = "예/적금일 경우 기간별 금리 데이터")
     private ProductRateVO productRate;
 
+    @ApiModelProperty(value = "상세보기 AI 추천 이유 추가")
+    private String aiExplanation;
+
     public static ProductDTO<?> from(ProductVO vo) {
         var builder = builder()
                 .id(vo.getId())

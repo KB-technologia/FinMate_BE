@@ -14,7 +14,7 @@ import org.finmate.member.domain.enums.ValueTag;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "사용자 스탯 요청", description = "등록된 사용자 스탯 정보 DTO")
+@ApiModel(description = "등록된 사용자 스탯 정보 DTO")
 public class UserStatResponseDTO {
     @ApiModelProperty(value = "모험 성향(위험 감수도)", example = "0")
     private Double adventureScore;

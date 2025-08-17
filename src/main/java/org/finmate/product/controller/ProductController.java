@@ -48,8 +48,9 @@ public class ProductController {
     @GetMapping("/{id}")
     public ResponseEntity<ProductDTO<?>> getProductDetail(
             @ApiParam(value = "상품 ID", required = true, example = "1")
-            @PathVariable final Long id) {
-        return ResponseEntity.ok(productService.getProductDetail(id));
+            @PathVariable final Long id,
+            @ApiIgnore @AuthenticationPrincipal CustomUser user) {
+        return ResponseEntity.ok(productService.getProductDetail(id, user));
     }
 
     @ApiOperation(value = "금융 상품 리뷰 보기", notes = "금융 상품 ID로 금융 상품 리븊 불러오는 API")
