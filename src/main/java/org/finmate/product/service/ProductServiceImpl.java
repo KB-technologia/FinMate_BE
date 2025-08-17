@@ -453,8 +453,8 @@ public class ProductServiceImpl implements ProductService {
     );
 
     // 프로필별 비율 상수
-    private static final int[] STABLE    = {80, 20, 0, 0};   // 안전형
-    private static final int[] DELICATE  = {50, 30, 20, 0};  // 안정추구형
+    private static final int[] STABLE    = {100, 0, 0, 0};   // 안전형
+    private static final int[] DELICATE  = {70, 20, 10, 0};  // 안정추구형
     private static final int[] NEUTRAL   = {30, 40, 30, 0};  // 위험중립형
     private static final int[] ACTIVE    = {20, 20, 60, 0};  // 적극투자형
     private static final int[] OFFENSIVE = {0, 10, 80, 10};  // 공격투자형
