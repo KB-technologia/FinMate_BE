@@ -237,9 +237,9 @@ public class ProductServiceImpl implements ProductService {
 
         // 사용자 재무포트폴리오 가져오기
         PortfolioDTO portfolioDTO = PortfolioDTO.from(portfolioMapper.getPortfolio(userId));
-        if (portfolioDTO == null) {
-            throw new RuntimeException("사용자의 재무 포트폴리오가 존재하지 않습니다. userId=" + userId);
-        }
+//        if (portfolioDTO == null) {
+//            throw new RuntimeException("사용자의 재무 포트폴리오가 존재하지 않습니다. userId=" + userId);
+//        }
 
         // 사용자 인포
         UserInfoDTO userInfoDTO = UserInfoDTO.from(userInfoMapper.getUserInfoById(userId));
@@ -314,21 +314,25 @@ public class ProductServiceImpl implements ProductService {
         /**
          * 이상적인 재무 포트폴리오 - 사용자의 재무 포트폴리오
          */
-        // 사용자의 이상적인 포트폴리오 비율
-        int[] standardPortfolio = getRatio(userProfileSummary);
+        int[] diff = new int[4];
+        if(portfolioDTO != null){
+            // 사용자의 이상적인 포트폴리오 비율
+            int[] standardPortfolio = getRatio(userProfileSummary);
 
-        // 사용자의 현재 재무 포트폴리오 비율
-        int currentCashRatio = (int) ((portfolioDTO.getCash() + portfolioDTO.getDeposit() + portfolioDTO.getSavings()) / portfolioDTO.getTotalAssets() * 100);
-        int currentBondRatio = (int) ((portfolioDTO.getBond() / portfolioDTO.getTotalAssets()) * 100);
-        int currentFundRatio = (int) ((portfolioDTO.getFund() + portfolioDTO.getStock()) / portfolioDTO.getTotalAssets() * 100);
-        int currentEtcRatio = (int) ((portfolioDTO.getOther() / portfolioDTO.getTotalAssets()) * 100);
+            // 사용자의 현재 재무 포트폴리오 비율
+            int currentCashRatio = (int) ((portfolioDTO.getCash() + portfolioDTO.getDeposit() + portfolioDTO.getSavings()) / portfolioDTO.getTotalAssets() * 100);
+            int currentBondRatio = (int) ((portfolioDTO.getBond() / portfolioDTO.getTotalAssets()) * 100);
+            int currentFundRatio = (int) ((portfolioDTO.getFund() + portfolioDTO.getStock()) / portfolioDTO.getTotalAssets() * 100);
+            int currentEtcRatio = (int) ((portfolioDTO.getOther() / portfolioDTO.getTotalAssets()) * 100);
 
-        // 이상적인 재무 포트폴리오 - 사용자의 재무 포트폴리오
-        int CashGap = standardPortfolio[0] - currentCashRatio;
-        int BondGap = standardPortfolio[1] - currentBondRatio;
-        int FundGap = standardPortfolio[2] - currentFundRatio;
-        int EtcGap = standardPortfolio[3] - currentEtcRatio;
-        int[] diff = new int[]{CashGap, BondGap, FundGap, EtcGap};
+            // 이상적인 재무 포트폴리오 - 사용자의 재무 포트폴리오
+            int CashGap = standardPortfolio[0] - currentCashRatio;
+            int BondGap = standardPortfolio[1] - currentBondRatio;
+            int FundGap = standardPortfolio[2] - currentFundRatio;
+            int EtcGap = standardPortfolio[3] - currentEtcRatio;
+
+            diff = new int[]{CashGap, BondGap, FundGap, EtcGap};
+        }
 
 
         /**
@@ -363,10 +367,11 @@ public class ProductServiceImpl implements ProductService {
          * 상품 유형 별로 가중치 w4 추출
          */
         double w4 = 0.0;
-        if(productDTO.getDetail() instanceof SavingsVO) w4 =  normalized[0];
+        if(portfolioDTO == null) w4 = 1;
+        else if(productDTO.getDetail() instanceof SavingsVO) w4 =  normalized[0];
         else if(productDTO.getDetail() instanceof DepositVO) w4 = normalized[0];
         else if(productDTO.getDetail() instanceof FundVO) w4 = normalized[2];
-        else w4 = 0;
+
 
         /**
          * 거리 계산
@@ -462,10 +467,10 @@ public class ProductServiceImpl implements ProductService {
     );
 
     // 프로필별 비율 상수
-    private static final int[] STABLE    = {80, 20, 0, 0};   // 안전형
-    private static final int[] DELICATE  = {50, 30, 20, 0};  // 안정추구형
-    private static final int[] NEUTRAL   = {20, 40, 40, 0};  // 위험중립형
-    private static final int[] ACTIVE    = {10, 20, 70, 0};  // 적극투자형
+    private static final int[] STABLE    = {100, 0, 0, 0};   // 안전형
+    private static final int[] DELICATE  = {70, 20, 10, 0};  // 안정추구형
+    private static final int[] NEUTRAL   = {30, 40, 30, 0};  // 위험중립형
+    private static final int[] ACTIVE    = {20, 20, 60, 0};  // 적극투자형
     private static final int[] OFFENSIVE = {0, 10, 80, 10};  // 공격투자형
 
     // 수식어 → 비율 매핑
