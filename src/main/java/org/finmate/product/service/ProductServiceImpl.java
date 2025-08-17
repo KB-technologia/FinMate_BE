@@ -190,8 +190,11 @@ public class ProductServiceImpl implements ProductService {
             PortfolioDTO portfolioDTO = PortfolioDTO.from(portfolioMapper.getPortfolio(userId));
 
             return productDTOs.stream()
-                    .sorted(Comparator.<ProductDTO<?>>comparingDouble(product ->
-                            getDistance(product, portfolioDTO, userInfoDTO)))
+                    .sorted(
+                            Comparator.<ProductDTO<?>>comparingDouble(product -> getDistance(product, portfolioDTO, userInfoDTO))
+                                    .thenComparingDouble(ProductDTO::getExpectedReturn)
+                                    .thenComparing(ProductDTO::getCreatedAt, Comparator.reverseOrder())
+                    )
                     .collect(Collectors.toList());
         }
         List<org.finmate.product.domain.ProductVO> products = productMapper.getFilteredProductsByType(filter);
