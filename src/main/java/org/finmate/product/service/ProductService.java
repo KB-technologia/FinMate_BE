@@ -9,7 +9,7 @@ import org.finmate.product.dto.ProductReviewDTO;
 import java.util.List;
 
 public interface ProductService {
-    ProductDTO<?> getProductDetail(Long id);
+    ProductDTO<?> getProductDetail(Long id, CustomUser user);
   
     List<ProductDTO<?>> getAllProducts();
   

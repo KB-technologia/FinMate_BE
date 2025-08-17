@@ -57,17 +57,36 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDTO<?> getProductDetail(final Long id) {
-        return ProductDTO.from(
+    public ProductDTO<?> getProductDetail(final Long id, final CustomUser user) {
+        ProductDTO<?> data = ProductDTO.from(
                 Optional.ofNullable(productMapper.getProductDetail(id))
                         .orElseThrow(() -> new NotFoundException("해당 상품이 존재하지 않습니다."))
         );
+
+        String text = PromptLoader.load("/prompts/product_recommend.txt");
+        if(user != null) {
+            String userData = "";
+            String tone = "귀여운 키위새";
+            Long userId = user.getUser().getId();
+            UserInfoVO userInfo = userInfoMapper.getUserInfoById(userId);
+            PortfolioVO userPortfolio = portfolioMapper.getPortfolio(userId);
+            CharacterVO animalCharacter = characterMapper.getCharacterById(userId);
+            if(animalCharacter != null && userInfo != null) {
+                tone = userInfo.getProfileSummary() + " " + animalCharacter.getAnimalName();
+                userData += userInfo.toString();
+            }
+            if(userPortfolio != null) userData += userPortfolio.toString();
+            text = text.formatted(tone, userData, data.toVO().toString());
+            OpenAiResponseDTO result = openAiApi.callResponses(text);
+            data.setAiExplanation(result.getOutput().get(0).getContent().get(0).getText());
+        }
+        return data;
     }
 
     @Override
     public ProductComparisonResultDTO compareProducts(final Long id1, final Long id2, final CustomUser user) {
-        ProductDTO<?> data1 = getProductDetail(id1);
-        ProductDTO<?> data2 = getProductDetail(id2);
+        ProductDTO<?> data1 = getProductDetail(id1, null);
+        ProductDTO<?> data2 = getProductDetail(id2, null);
 
         //비교 프롬프트 텍스트 로드
         String text = PromptLoader.load("/prompts/product_compare.txt");
@@ -82,10 +101,10 @@ public class ProductServiceImpl implements ProductService {
             PortfolioVO userPortfolio = portfolioMapper.getPortfolio(userId);
             CharacterVO animalCharacter = characterMapper.getCharacterById(userId);
             if(animalCharacter != null && userInfo != null) {
-                tone = userInfo.getProfileSummary() + animalCharacter.getAnimalName();
+                tone = userInfo.getProfileSummary()+ " " + animalCharacter.getAnimalName();
                 userData += userInfo.toString();
-                userData += userPortfolio.toString();
             }
+            if(userPortfolio != null) userData += userPortfolio.toString();
         }
         text = text.formatted(tone, userData, data1.toVO().toString(), data2.toVO().toString());
 
