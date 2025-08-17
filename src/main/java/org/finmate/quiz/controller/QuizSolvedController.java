@@ -1,6 +1,7 @@
 package org.finmate.quiz.controller;
 
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -19,6 +20,7 @@ import springfox.documentation.annotations.ApiIgnore;
 @RequiredArgsConstructor
 @Log4j2
 @RequestMapping("/api/quizsolved")
+@Api(tags = "퀴즈 풀이 여부 확인 API")
 public class QuizSolvedController {
 
     private final QuizService quizService;
