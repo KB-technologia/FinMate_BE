@@ -239,16 +239,21 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductDTO<?>> getCustomizedProducts(final Long userId) {
 
         // 사용자 재무포트폴리오 가져오기
-        PortfolioDTO portfolioDTO = PortfolioDTO.from(portfolioMapper.getPortfolio(userId));
-//        if (portfolioDTO == null) {
-//            throw new RuntimeException("사용자의 재무 포트폴리오가 존재하지 않습니다. userId=" + userId);
-//        }
+        PortfolioVO portfolioVO = portfolioMapper.getPortfolio(userId);
+        if(portfolioVO == null){
+            throw new RuntimeException("사용자의 재무 포트폴리오가 존재하지 않습니다. userId=" + userId);
+        }
+        PortfolioDTO portfolioDTO = PortfolioDTO.from(portfolioVO);
+
+
 
         // 사용자 인포
-        UserInfoDTO userInfoDTO = UserInfoDTO.from(userInfoMapper.getUserInfoById(userId));
-        if (userInfoDTO == null) {
+        UserInfoVO userInfoVo = userInfoMapper.getUserInfoById(userId);
+        if(userInfoVo == null){
             throw new RuntimeException("사용자 정보가 존재하지 않습니다. userId=" + userId);
         }
+        UserInfoDTO userInfoDTO = UserInfoDTO.from(userInfoVo);
+
 
 
         // 모든 상품 조회
