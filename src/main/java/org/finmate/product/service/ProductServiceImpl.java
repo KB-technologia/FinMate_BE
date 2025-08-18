@@ -265,6 +265,7 @@ public class ProductServiceImpl implements ProductService {
         if (allProducts.isEmpty()) {
             throw new RuntimeException("추천할 금융상품 데이터가 존재하지 않습니다.");
         }
+        if(portfolioDTO == null && userInfoDTO == null) return allProducts;
 
         // 거리가 짧은 순으로 정렬
         return allProducts.stream()

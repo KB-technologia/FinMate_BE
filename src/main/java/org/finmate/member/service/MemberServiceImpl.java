@@ -161,7 +161,7 @@ public class MemberServiceImpl implements MemberService {
                     .employedAtSme(dto.getEmployedAtSme())
                     .usesMicroloan(dto.getUsesMicroloan())
                     .exp(0)
-                    .userLevel(1)
+                    .userLevel(0)
                     .characterTicket(0)
                     .updatedAt(LocalDateTime.now())
                     .build();
