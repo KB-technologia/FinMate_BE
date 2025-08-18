@@ -210,16 +210,22 @@ public class ProductServiceImpl implements ProductService {
             PortfolioVO portfolioVO = portfolioMapper.getPortfolio(userId);
             // 사용자 인포
             UserInfoVO userInfoVo = userInfoMapper.getUserInfoById(userId);
-            if(portfolioVO == null || userInfoVo == null) return productDTOs;
+            if(userInfoVo == null) return productDTOs;
 
 
-            PortfolioDTO portfolioDTO = PortfolioDTO.from(portfolioVO);
+            PortfolioDTO portfolioDTO = null;
+            if(portfolioVO != null){
+                portfolioDTO = portfolioDTO.from(portfolioVO);
+            }
+
+
             UserInfoDTO userInfoDTO = UserInfoDTO.from(userInfoVo);
 
 
+            PortfolioDTO finalPortfolioDTO = portfolioDTO;
             return productDTOs.stream()
                     .sorted(
-                            Comparator.<ProductDTO<?>>comparingDouble(product -> getDistance(product, portfolioDTO, userInfoDTO))
+                            Comparator.<ProductDTO<?>>comparingDouble(product -> getDistance(product, finalPortfolioDTO, userInfoDTO))
                                     .thenComparingDouble(ProductDTO::getExpectedReturn)
                                     .thenComparing(ProductDTO::getCreatedAt, Comparator.reverseOrder())
                     )
@@ -265,10 +271,10 @@ public class ProductServiceImpl implements ProductService {
 
         if(portfolioVO == null && userInfoVo == null) return allProducts;
 
-        if(portfolioVO == null){
-            throw new RuntimeException("사용자의 재무 포트폴리오가 존재하지 않습니다. userId=" + userId);
+        PortfolioDTO portfolioDTO = null;
+        if(portfolioVO != null){
+            portfolioDTO = PortfolioDTO.from(portfolioVO);
         }
-        PortfolioDTO portfolioDTO = PortfolioDTO.from(portfolioVO);
 
 
 
@@ -280,9 +286,10 @@ public class ProductServiceImpl implements ProductService {
 
 
         // 거리가 짧은 순으로 정렬
+        PortfolioDTO finalPortfolioDTO = portfolioDTO;
         return allProducts.stream()
                 .sorted(
-                        Comparator.<ProductDTO<?>>comparingDouble(product -> getDistance(product, portfolioDTO, userInfoDTO))
+                        Comparator.<ProductDTO<?>>comparingDouble(product -> getDistance(product, finalPortfolioDTO, userInfoDTO))
                                 .thenComparingDouble(ProductDTO::getExpectedReturn)
                                 .thenComparing(ProductDTO::getCreatedAt, Comparator.reverseOrder())
                 )
