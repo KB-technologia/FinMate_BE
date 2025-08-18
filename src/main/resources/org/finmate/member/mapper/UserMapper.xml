@@ -42,7 +42,11 @@
     </delete>
 
     <delete id = "deleteFavoriteByUserId">
-        DELETE FROM product_favorite WHERE user_id = #{userID}
+        DELETE FROM product_favorite WHERE user_id = #{userId}
+    </delete>
+
+    <delete id="deleteReviewByUserId">
+        DELETE FROM review WHERE user_id = #{userId}
     </delete>
 
     <delete id="deleteUserById">
