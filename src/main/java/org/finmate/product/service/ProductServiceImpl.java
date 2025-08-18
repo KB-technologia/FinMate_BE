@@ -211,7 +211,7 @@ public class ProductServiceImpl implements ProductService {
             // 사용자 인포
             UserInfoVO userInfoVo = userInfoMapper.getUserInfoById(userId);
             if(userInfoVo == null) return productDTOs;
-
+            if(userInfoVo.getAdventureScore() == null) return productDTOs;
 
             PortfolioDTO portfolioDTO = null;
             if(portfolioVO != null){
