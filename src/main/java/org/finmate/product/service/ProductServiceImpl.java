@@ -205,8 +205,17 @@ public class ProductServiceImpl implements ProductService {
                     .collect(Collectors.toList());
 
             Long userId = user.getUser().getId();
-            UserInfoDTO userInfoDTO = UserInfoDTO.from(userInfoMapper.getUserInfoById(userId));
-            PortfolioDTO portfolioDTO = PortfolioDTO.from(portfolioMapper.getPortfolio(userId));
+
+            // 사용자 재무포트폴리오 가져오기
+            PortfolioVO portfolioVO = portfolioMapper.getPortfolio(userId);
+            // 사용자 인포
+            UserInfoVO userInfoVo = userInfoMapper.getUserInfoById(userId);
+            if(portfolioVO == null && userInfoVo == null) return productDTOs;
+
+
+            PortfolioDTO portfolioDTO = PortfolioDTO.from(portfolioVO);
+            UserInfoDTO userInfoDTO = UserInfoDTO.from(userInfoVo);
+
 
             return productDTOs.stream()
                     .sorted(
@@ -238,13 +247,22 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductDTO<?>> getCustomizedProducts(final Long userId) {
 
+        // 모든 상품 조회
+        List<ProductDTO<?>> allProducts = productMapper.getAllProducts()
+                .stream()
+                .map(ProductDTO::from)
+                .collect(Collectors.toList());
+
+        if (allProducts.isEmpty()) {
+            throw new RuntimeException("추천할 금융상품 데이터가 존재하지 않습니다.");
+        }
+
         // 사용자 재무포트폴리오 가져오기
         PortfolioVO portfolioVO = portfolioMapper.getPortfolio(userId);
         if(portfolioVO == null){
             throw new RuntimeException("사용자의 재무 포트폴리오가 존재하지 않습니다. userId=" + userId);
         }
         PortfolioDTO portfolioDTO = PortfolioDTO.from(portfolioVO);
-
 
 
         // 사용자 인포
@@ -255,17 +273,6 @@ public class ProductServiceImpl implements ProductService {
         UserInfoDTO userInfoDTO = UserInfoDTO.from(userInfoVo);
 
 
-
-        // 모든 상품 조회
-        List<ProductDTO<?>> allProducts = productMapper.getAllProducts()
-                .stream()
-                .map(ProductDTO::from)
-                .collect(Collectors.toList());
-
-        if (allProducts.isEmpty()) {
-            throw new RuntimeException("추천할 금융상품 데이터가 존재하지 않습니다.");
-        }
-        if(portfolioDTO == null && userInfoDTO == null) return allProducts;
 
         // 거리가 짧은 순으로 정렬
         return allProducts.stream()
