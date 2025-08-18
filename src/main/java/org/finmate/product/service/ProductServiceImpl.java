@@ -210,7 +210,7 @@ public class ProductServiceImpl implements ProductService {
             PortfolioVO portfolioVO = portfolioMapper.getPortfolio(userId);
             // 사용자 인포
             UserInfoVO userInfoVo = userInfoMapper.getUserInfoById(userId);
-            if(portfolioVO == null && userInfoVo == null) return productDTOs;
+            if(portfolioVO == null || userInfoVo == null) return productDTOs;
 
 
             PortfolioDTO portfolioDTO = PortfolioDTO.from(portfolioVO);
@@ -259,14 +259,19 @@ public class ProductServiceImpl implements ProductService {
 
         // 사용자 재무포트폴리오 가져오기
         PortfolioVO portfolioVO = portfolioMapper.getPortfolio(userId);
+
+        // 사용자 인포
+        UserInfoVO userInfoVo = userInfoMapper.getUserInfoById(userId);
+
+        if(portfolioVO == null && userInfoVo == null) return allProducts;
+
         if(portfolioVO == null){
             throw new RuntimeException("사용자의 재무 포트폴리오가 존재하지 않습니다. userId=" + userId);
         }
         PortfolioDTO portfolioDTO = PortfolioDTO.from(portfolioVO);
 
 
-        // 사용자 인포
-        UserInfoVO userInfoVo = userInfoMapper.getUserInfoById(userId);
+
         if(userInfoVo == null){
             throw new RuntimeException("사용자 정보가 존재하지 않습니다. userId=" + userId);
         }
