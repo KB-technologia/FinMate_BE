@@ -67,7 +67,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("http://localhost:5173");
+        config.setAllowedOriginPatterns(java.util.Arrays.asList("https://*.finmate.site", "http://localhost:*"));
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
 
